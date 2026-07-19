@@ -222,7 +222,7 @@
             cursor: pointer;
         }
 
-        /* СЕТКА КЕЙСОВ */
+        /* СЕТКА КЕЙСОВ И КАРТИНКИ */
         .cases-grid-wrapper { flex: 1; overflow-y: auto; }
         .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-bottom: 15px; }
 
@@ -237,7 +237,14 @@
             cursor: pointer;
         }
 
-        .case-icon-placeholder { font-size: 30px; margin-bottom: 4px; }
+        .case-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
         .tier-bronze { border: 2px solid var(--bronze); }
         .tier-silver { border: 2px solid var(--silver); }
         .tier-gold { border: 2px solid var(--accent-gold); }
@@ -325,25 +332,28 @@
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 <div class="case-card tier-bronze" data-name="Деревянный" data-price="10" data-jackpot="30">
-                    <div class="case-icon-placeholder">📦</div>
+                    <img src="IMG_20260719_181100.png" class="case-img" alt="Деревянный">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">🪙 10 монет</div>
                     <div class="case-jackpot">Куш: <span>30</span></div>
                 </div>
+
                 <div class="case-card tier-bronze" data-name="Бронзовый" data-price="25" data-jackpot="80">
-                    <div class="case-icon-placeholder">🟫</div>
+                    <img src="IMG_20260719_181706.png" class="case-img" alt="Бронзовый">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">🪙 25 монет</div>
                     <div class="case-jackpot">Куш: <span>80</span></div>
                 </div>
+
                 <div class="case-card tier-silver" data-name="Стальной" data-price="50" data-jackpot="180">
-                    <div class="case-icon-placeholder">🔗</div>
+                    <img src="IMG_20260719_183142.png" class="case-img" alt="Стальной">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">🪙 50 монет</div>
                     <div class="case-jackpot">Куш: <span>180</span></div>
                 </div>
+
                 <div class="case-card tier-gold" data-name="Золотой" data-price="100" data-jackpot="400">
-                    <div class="case-icon-placeholder">🥇</div>
+                    <img src="IMG_20260719_183338.png" class="case-img" alt="Золотой">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">🪙 100 монет</div>
                     <div class="case-jackpot">Куш: <span>400</span></div>
@@ -446,7 +456,6 @@
     </div>
 
 </div>
-
 <script>
 window.onload = function() {
     if (window.Telegram && window.Telegram.WebApp) {
@@ -454,7 +463,6 @@ window.onload = function() {
         window.Telegram.WebApp.expand();
     }
 
-    // --- СОХРАНЕНИЕ ПРОГРЕССА В LOCALSTORAGE ---
     var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
     var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
     var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
@@ -474,7 +482,6 @@ window.onload = function() {
 
     updateUI();
 
-    // Экранные переменные
     var screens = {
         main: document.getElementById('mainMenuScreen'),
         cases: document.getElementById('casesScreen'),
@@ -498,7 +505,6 @@ window.onload = function() {
         targetScreen.style.display = 'flex';
     }
 
-        // УНИВЕРСАЛЬНЫЙ ТАП (Pointer Events)
     function bindTap(elementId, callback) {
         var el = document.getElementById(elementId);
         if (!el) return;
@@ -516,7 +522,6 @@ window.onload = function() {
         }
     }
 
-    // НАВИГАЦИЯ
     bindTap('btnGoToCases', function() { showScreen(screens.cases); });
     bindTap('btnBackToMenuFromCases', function() { showScreen(screens.main); });
     bindTap('btnBackToCases', function() { showScreen(screens.cases); });
@@ -529,7 +534,6 @@ window.onload = function() {
 
     bindTap('triggerGear', function() { settingsWrapper.classList.toggle('open'); });
 
-    // ИГРОВАЯ ЛОГИКА
     var currentSecretCode = [];
     var currentDrumValues = [1, 1, 1, 1, 1];
     var currentJackpot = 0;
@@ -542,7 +546,6 @@ window.onload = function() {
             var jackpot = parseInt(card.getAttribute('data-jackpot'));
             var name = card.getAttribute('data-name');
 
-            // Списание монет за попытку
             if (userCoins < price) {
                 alert("Недостаточно монет для взлома!");
                 return;
@@ -554,7 +557,6 @@ window.onload = function() {
             currentJackpot = jackpot;
             document.getElementById('gameScreenTitle').innerText = name;
 
-            // Генерируем 5-значный код
             currentSecretCode = [];
             for (var i = 0; i < 5; i++) {
                 currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
@@ -579,7 +581,6 @@ window.onload = function() {
         }
     });
 
-    // Управление барабанами
     var drumButtons = document.querySelectorAll('.drum-btn');
     drumButtons.forEach(function(btn) {
         var drumHandler = function(e) {
@@ -602,7 +603,6 @@ window.onload = function() {
         }
     });
 
-    // Проверка кода
     bindTap('btnCheckCode', function() {
         var exactMatches = 0;
         for (var i = 0; i < 5; i++) {
@@ -618,7 +618,6 @@ window.onload = function() {
             radar.innerText = "УСПЕХ 100%";
             radar.style.color = "var(--radar-green)";
 
-            // Начисляем Куш
             userCoins += currentJackpot;
             saveProgress();
 
@@ -634,13 +633,12 @@ window.onload = function() {
         }
     });
 
-    // ГЕНЕРАЦИЯ ДЕЙЛИК КАЛЕНДАРЯ ПО ТЕКУЩЕЙ ДАТЕ
     function renderDailyGrid() {
         var grid = document.getElementById('dailyGrid');
         grid.innerHTML = "";
 
         var now = new Date();
-        var todayDate = now.getDate(); // Текущий день месяца
+        var todayDate = now.getDate();
         var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
         for (var d = 1; d <= daysInMonth; d++) {
@@ -678,7 +676,6 @@ window.onload = function() {
         }
     }
 
-    // PVP заглушки
     bindTap('btnPublicPvp', function() { alert("Поиск публичной дуэли в процессе разработки!"); });
     bindTap('btnPrivatePvp', function() { alert("Ссылка для друга скопирована!"); });
 };

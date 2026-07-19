@@ -26,6 +26,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2); /* Красивая фирменная обводка при тапе */
         }
 
         body {
@@ -586,7 +587,6 @@
 </div>
 
 <script>
-    // Ждем полной готовности DOM дерева, чтобы избежать любых сбоев загрузки скрипта
     window.addEventListener('DOMContentLoaded', function() {
         var userCoins = 0;
         var userStars = 0;
@@ -601,4 +601,4 @@
         function showScreen(screen) {
             mainMenuScreen.style.display = 'none';
             casesScreen.style.display = 'none';
-            gamePlayScreen.style.display =
+            gamePlayS

@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #0a0e17;
-            --panel-bg: #131a26;
+            --panel-bg: rgba(19, 26, 38, 0.6);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -31,7 +31,7 @@
             padding: 15px;
         }
 
-        /* Контейнер приложения (под мобильный экран) */
+        /* Контейнер приложения */
         .app-container {
             width: 100%;
             max-width: 390px;
@@ -46,7 +46,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
-        /* 1. Верхний блок с круглыми кнопками справа (вертикальный стек) */
+        /* Верхний блок с круглыми кнопками справа */
         .right-sidebar {
             position: absolute;
             top: 20px;
@@ -61,7 +61,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background-color: var(--panel-bg);
+            background-color: #131a26;
             border: 2px solid #243147;
             color: var(--text-main);
             font-size: 20px;
@@ -69,28 +69,33 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        /* 2. Центральная большая плита (Главная кнопка) */
+        /* Центральная большая плита (Главная кнопка с СЕЙФОМ) */
         .main-action-zone {
-            margin-top: 150px; /* Отступ сверху, чтобы не перекрывать боковые кнопки */
+            margin-top: 150px;
             margin-bottom: 20px;
         }
 
         .main-button {
             width: 100%;
-            height: 140px;
-            background-color: var(--panel-bg);
+            height: 160px;
             border: 2px solid var(--accent-blue);
             border-radius: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 8px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            
+            /* Подключаем твое фото из репозитория Гитхаба */
+            background-image: linear-gradient(rgba(10, 14, 23, 0.4), rgba(10, 14, 23, 0.7)), 
+                              url('IMG_20260719_172011_593.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .main-button .title {
@@ -99,10 +104,11 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+            z-index: 2;
         }
 
-        /* 3. Средний блок (Придумай сам и PVP) */
+        /* Средний блок (Скоро и PVP) */
         .middle-zone {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -112,7 +118,7 @@
 
         .mid-button {
             height: 100px;
-            background-color: var(--panel-bg);
+            background-color: #131a26;
             border: 2px solid #243147;
             border-radius: 16px;
             display: flex;
@@ -130,6 +136,7 @@
             border-color: #1c2535;
             color: var(--text-muted);
             cursor: not-allowed;
+            background-color: rgba(19, 26, 38, 0.3);
         }
 
         .btn-pvp {
@@ -138,17 +145,17 @@
             box-shadow: 0 0 10px rgba(255, 193, 7, 0.1);
         }
 
-        /* 4. Нижний блок (Дейлик и Магазин) */
+        /* Нижний блок (Дейлик и Магазин) */
         .bottom-zone {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: auto; /* Жестко прижимает к самому низу экрана */
+            margin-top: auto;
         }
 
         .bottom-button {
             height: 85px;
-            background-color: var(--panel-bg);
+            background-color: #131a26;
             border: 2px solid #243147;
             border-radius: 16px;
             display: flex;
@@ -202,4 +209,3 @@
 
 </body>
 </html>
-

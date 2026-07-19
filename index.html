@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarVault</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body { background: #0d1117; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 15px; user-select: none; }
+        .header-stats { display: flex; justify-content: space-around; background: #161b22; padding: 10px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #30363d; }
+        .stat-box { font-size: 15px; font-weight: bold; }
+        .jackpot { color: #ffdf00; text-shadow: 0 0 10px #ffdf00; }
+        .coins { color: #58a6ff; }
+        .tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
+        .tab { background: #21262d; border: 1px solid #30363d; color: #fff; padding: 8px 4px; border-radius: 8px; cursor: pointer; flex: 1; font-size: 11px; font-weight: bold; }
+        .tab.active { background: #238636; border-color: #2ea44f; }
+        .safe-zone { background: #161b22; border: 3px solid #30363d; border-radius: 15px; padding: 25px 10px; margin: 15px auto; max-width: 320px; }
+        .digits { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
+        .digit-btn { display: flex; flex-direction: column; align-items: center; font-size: 26px; font-weight: bold; }
+        .arrow { background: #21262d; border: none; color: #fff; padding: 8px 16px; cursor: pointer; font-size: 20px; border-radius: 5px; }
+        .num { margin: 8px 0; min-width: 25px; background: #0d1117; padding: 2px 8px; border-radius: 5px; border: 1px solid #30363d; }
+        .main-btn { background: #238636; border: none; color: #fff; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 90%; text-transform: uppercase; box-shadow: 0 4px 12px rgba(35,134,54,0.4); }
+        .hint-box { margin-top: 15px; color: #8b949e; min-height: 45px; font-size: 14px; padding: 0 10px; }
+        .promo-zone { margin-top: 15px; }
+        .promo-input { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 8px; border-radius: 6px; width: 50%; text-align: center; }
+        .promo-btn { background: #21262d; border: 1px solid #30363d; color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header-stats">
+        <div class="stat-box jackpot">⭐️ БАНК: <span id="bank-counter">4,250</span></div>
+        <div class="stat-box coins" id="coins-display" style="display:none;">🪙 МОНЕТЫ: <span id="user-coins">100</span></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="changeSafe('bronze', 5)">БРОНЗА<br>5 ⭐️</button>
+        <button class="tab" onclick="changeSafe('silver', 50)">СЕРЕБРО<br>50 ⭐️</button>
+        <button class="tab" onclick="changeSafe('gold', 500)">ЗОЛОТО<br>500 ⭐️</button>
+        <button class="tab" onclick="changeSafe('friend', 0)">С ДРУГОМ<br>(Монеты)</button>
+    </div>
+
+    <div class="safe-zone">
+        <div class="digits">
+            <div class="digit-btn"><button class="arrow" onclick="move(0,1)">▲</button><span class="num" id="d0">0</span><button class="arrow" onclick="move(0,-1)">▼</button></div>
+            <div class="digit-btn"><button class="arrow" onclick="move(1,1)">▲</button><span class="num" id="d1">0</span><button class="arrow" onclick="move(1,-1)">▼</button></div>
+            <div class="digit-btn"><button class="arrow" onclick="move(2,1)">▲</button><span class="num" id="d2">0</span><button class="arrow" onclick="move(2,-1)">▼</button></div>
+            <div class="digit-btn"><button class="arrow" onclick="move(3,1)">▲</button><span class="num" id="d3">0</span><button class="arrow" onclick="move(3,-1)">▼</button></div>
+        </div>
+        <button class="main-btn" id="action-btn" onclick="checkCode()">ВЗЛОМАТЬ ЗА 5 ⭐️</button>
+    </div>
+
+    <div class="hint-box" id="hint">Подсказка: крути стрелочки, код зафиксирован на сервере!</div>
+
+    <div class="promo-zone" id="promo-area" style="display:none;">
+        <input type="text" class="promo-input" id="promo-field" placeholder="Промокод">
+        <button class="promo-btn" onclick="activatePromo()">OK</button>
+    </div>
+
+    <script>
+        let vaultCodes = {
+            bronze: Array.from({length: 4}, () => Math.floor(Math.random() * 10)),
+            silver: Array.from({length: 4}, () => Math.floor(Math.random() * 10)),
+            gold: Array.from({length: 4}, () => Math.floor(Math.random() * 10)),
+            friend: Array.from({length: 4}, () => Math.floor(Math.random() * 10))
+        };
+        
+        let currentCode =;
+        let currentMode = 'bronze';
+        let currentCost = 5;
+        let coins = 100;
+
+        function move(idx, dir) {
+            currentCode[idx] = (currentCode[idx] + dir + 10) % 10;
+            document.getElementById('d' + idx).innerText = currentCode[idx];
+        }
+
+        function changeSafe(type, cost) {
+            currentMode = type;
+            currentCost = cost;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            if(type === 'friend') {
+                document.getElementById('action-btn').innerText = `ИГРАТЬ (10 🪙)`;
+                document.getElementById('coins-display').style.display = 'block';
+                document.getElementById('promo-area').style.display = 'block';
+                document.getElementById('hint').innerText = "Режим с другом активирован! Подсказка стоит 10 монет.";
+            } else {
+                document.getElementById('action-btn').innerText = `ВЗЛОМАТЬ ЗА ${cost} ⭐️`;
+                document.getElementById('coins-display').style.display = 'none';
+                document.getElementById('promo-area').style.display = 'none';
+                let fakeBank = type === 'bronze' ? 4250 : (type === 'silver' ? 45300 : 258000);
+                document.getElementById('bank-counter').innerText = fakeBank.toLocaleString();
+                document.getElementById('hint').innerText = "Код этого сейфа заперт. Каждая попытка приближает к джекпоту!";
+            }
+        }
+
+        function checkCode() {
+            let targetCode = vaultCodes[currentMode];
+            
+            if(currentMode === 'friend') {
+                if(coins < 10) {
+                    document.getElementById('hint').innerText = "❌ Не хватает монет для игры с другом! Введи промокод.";
+                    return;
+                }
+                coins -= 10;
+                document.getElementById('user-coins').innerText = coins;
+            }
+
+            let correctDigits = 0;
+            let correctPositions = 0;
+            
+            for(let i=0; i<4; i++) {
+                if(currentCode[i] === targetCode[i]) correctPositions++;
+                if(targetCode.includes(currentCode[i])) correctDigits++;
+            }
+
+            if(correctPositions === 4) {
+                if(currentMode === 'friend') {
+                    coins += 100;
+                    document.getElementById('user-coins').innerText = coins;
+                    document.getElementById('hint').innerHTML = "<span style='color:#58a6ff; font-weight:bold;'>💥 ПОБЕДА! Вы обыграли друга и получили +100 монет!</span>";
+                } else {
+                    document.getElementById('hint').innerHTML = "<span style='color:#ffdf00; font-weight:bold;'>💥 БУМ! СЕЙФ ВЗОРВАН! Вы забрали весь БАНК ЗВЁЗД!</span>";
+                    alert("ДЖЕКПОТ! Вы взломали сейф!");
+                }
+                vaultCodes[currentMode] = Array.from({length: 4}, () => Math.floor(Math.random() * 10));
+            } else {
+                document.getElementById('hint').innerText = `Результат: угадано цифр: ${correctDigits}, на своих местах: ${correctPositions}`;
+            }
+        }
+
+        function activatePromo() {
+            let input = document.getElementById('promo-field').value.trim().toUpperCase();
+            if(input === 'STAR' || input === 'BONUS') {
+                coins += 50;
+                document.getElementById('user-coins').innerText = coins;
+                document.getElementById('hint').innerText = "✅ Код принят! Получено +50 монет для игры с друзьями.";
+                document.getElementById('promo-field').value = "";
+            } else {
+                document.getElementById('hint').innerText = "❌ Неверный промокод!";
+            }
+        }
+    </script>
+</body>
+</html>
+

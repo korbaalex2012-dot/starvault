@@ -17,6 +17,11 @@
             --bronze: #cd7f32;
             --silver: #c0c0c0;
             --gold: #ffd700;
+
+            /* Цвета радара */
+            --radar-red: #ff3d71;
+            --radar-yellow: #ffaa00;
+            --radar-green: #00e676;
         }
 
         * {
@@ -63,6 +68,38 @@
 
         .screen.active {
             display: flex;
+        }
+
+        /* Общий заголовок для внутренних экранов */
+        .screen-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .btn-back {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .screen-title {
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-blue);
         }
 
         /* ================= ЭКРАН 1: ГЛАВНОЕ МЕНЮ ================= */
@@ -196,35 +233,6 @@
         }
 
         /* ================= ЭКРАН 2: ВЫБОР КЕЙСОВ ================= */
-        .cases-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .btn-back {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background-color: var(--panel-bg);
-            border: 2px solid #243147;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cases-title {
-            font-size: 20px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-blue);
-        }
-
         .cases-grid-wrapper {
             flex: 1;
             overflow-y: auto;
@@ -258,6 +266,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             transition: transform 0.1s ease;
             position: relative;
+            backdrop-filter: blur(4px);
         }
 
         .case-card:active {
@@ -303,11 +312,122 @@
         .case-jackpot span {
             color: var(--accent-gold);
         }
+
+        /* ================= ЭКРАН 3: ЭКРАН ПОДБОРА КОДА ================= */
+        .game-screen-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+        }
+
+        /* Процентный радар сверху */
+        .radar-panel {
+            width: 100%;
+            background-color: rgba(15, 22, 36, 0.9);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .radar-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .radar-value {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        /* Контейнер с барабанами */
+        .lock-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 25px 0;
+            width: 100%;
+        }
+
+        .drum-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(10, 15, 26, 0.85);
+            border: 2px solid #1f293d;
+            border-radius: 14px;
+            padding: 8px 4px;
+            flex: 1;
+            max-width: 55px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .drum-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid #2d3d5a;
+            background: #162032;
+            color: var(--accent-blue);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .drum-btn:active {
+            background: var(--accent-blue);
+            color: #000;
+        }
+
+        .drum-display {
+            font-size: 26px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            width: 40px;
+            text-align: center;
+            user-select: none;
+        }
+
+        /* Кнопка Ввод / Проверить */
+        .btn-action-submit {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, #00b0ff, #00e5ff);
+            border: none;
+            border-radius: 16px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            transition: transform 0.1s ease;
+        }
+
+        .btn-action-submit:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-container" id="appContainer">
 
     <div id="mainMenuScreen" class="screen active">
         <div class="right-sidebar">
@@ -340,91 +460,141 @@
     </div>
 
     <div id="casesScreen" class="screen">
-        <div class="cases-header">
+        <div class="screen-header">
             <button class="btn-back" onclick="openScreen('mainMenuScreen')">⬅</button>
-            <div class="cases-title">Выбор хранилища</div>
+            <div class="screen-title">Выбор хранилища</div>
         </div>
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze">
+                <div class="case-card tier-bronze" onclick="startDecryption('Деревянный', 'IMG_20260719_180634.png')">
                     <img src="IMG_20260719_180634.png" alt="Деревянный кейс" class="case-img">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-1">140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze">
+                <div class="case-card tier-bronze" onclick="startDecryption('Бронзовый', 'IMG_20260719_181100.png')">
                     <img src="IMG_20260719_181100.png" alt="Бронзовый кейс" class="case-img">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-2">420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze">
+                <div class="case-card tier-bronze" onclick="startDecryption('Медный', 'IMG_20260719_181706.png')">
                     <img src="IMG_20260719_181706.png" alt="Медный кейс" class="case-img">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-3">890</span></div>
                 </div>
 
-                <div class="case-card tier-silver">
+                <div class="case-card tier-silver" onclick="startDecryption('Стальной', 'IMG_20260719_183142.png')">
                     <img src="IMG_20260719_183142.png" alt="Стальной кейс" class="case-img">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-4">1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver">
+                <div class="case-card tier-silver" onclick="startDecryption('Железный', 'IMG_20260719_183244.png')">
                     <img src="IMG_20260719_183244.png" alt="Железный кейс" class="case-img">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-5">3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver">
+                <div class="case-card tier-silver" onclick="startDecryption('Серебряный', 'IMG_20260719_183338.png')">
                     <img src="IMG_20260719_183338.png" alt="Серебряный кейс" class="case-img">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-6">7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold">
+                <div class="case-card tier-gold" onclick="startDecryption('Золотой', 'IMG_20260719_183351.png')">
                     <img src="IMG_20260719_183351.png" alt="Золотой кейс" class="case-img">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-7">15000</span></div>
                 </div>
 
-                <div class="case-card tier-gold">
+                <div class="case-card tier-gold" onclick="startDecryption('Платиновый', 'IMG_20260719_183406.png')">
                     <img src="IMG_20260719_183406.png" alt="Платиновый кейс" class="case-img">
                     <div class="case-name">Платиновый</div>
                     <div class="case-price">⭐ 250 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-8">38000</span></div>
                 </div>
 
-                <div class="case-card tier-gold">
+                <div class="case-card tier-gold" onclick="startDecryption('Кибер-кейс', 'IMG_20260719_183425.png')">
                     <img src="IMG_20260719_183425.png" alt="Кибер-кейс" class="case-img">
                     <div class="case-name">Кибер-кейс</div>
                     <div class="case-price">⭐ 500 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>...</span></div>
+                    <div class="case-jackpot">Куш: <span id="jackpot-9">95000</span></div>
                 </div>
 
             </div>
         </div>
     </div>
 
+    <div id="gamePlayScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="exitGameScreen()">⬅</button>
+            <div class="screen-title" id="gameScreenTitle">Подбор кода</div>
+        </div>
+
+        <div class="game-screen-content">
+            <div class="radar-panel">
+                <div class="radar-title">Синхронизация с замком</div>
+                <div class="radar-value" id="radarDisplay">---</div>
+            </div>
+
+            <div class="lock-container">
+                <div class="drum-column">
+                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
+                    <div class="drum-display" id="drum-0">1</div>
+                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
+                </div>
+                <div class="drum-column">
+                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
+                    <div class="drum-display" id="drum-1">1</div>
+                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
+                </div>
+                <div class="drum-column">
+                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
+                    <div class="drum-display" id="drum-2">1</div>
+                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
+                </div>
+                <div class="drum-column">
+                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
+                    <div class="drum-display" id="drum-3">1</div>
+                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
+                </div>
+                <div class="drum-column">
+                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
+                    <div class="drum-display" id="drum-4">1</div>
+                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
+                </div>
+            </div>
+
+            <button class="btn-action-submit" onclick="checkCombination()">Ввести код</button>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    // Базовый менеджер экранов
     function openScreen(screenId) {
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.remove('active');
         });
         document.getElementById(screenId).classList.add('active');
     }
-</script>
 
-</body>
-</html>
+    // Игровая логика
+    let currentSecretCode = [];
+    let currentDrumValues = [1, 1, 1, 1, 1];
+    let currentSafeName = "";
+
+    // Функция генерации случайного кода из 5 цифр (от 1 до 9)
+    function generateNewSecretCode() {
+        let code = 

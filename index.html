@@ -65,10 +65,6 @@
             z-index: 5;
         }
 
-        .screen.active {
-            display: flex;
-        }
-
         .screen-header {
             display: flex;
             align-items: center;
@@ -355,7 +351,7 @@
 
 <div class="app-container" id="appContainer">
 
-    <div id="mainMenuScreen" class="screen active">
+    <div id="mainMenuScreen" class="screen" style="display: flex;">
         <div class="right-sidebar">
             <div class="circle-button">⚙️</div>
             <div class="circle-button">🏆</div>
@@ -363,7 +359,7 @@
         </div>
 
         <div class="main-action-zone">
-            <div class="main-button" id="btnOpenSafes">
+            <div class="main-button" onclick="goToCases()">
                 <span class="title">Открыть сейф</span>
             </div>
         </div>
@@ -381,56 +377,56 @@
 
     <div id="casesScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenu">⬅</button>
+            <button class="btn-back" onclick="goToMenu()">⬅</button>
             <div class="screen-title">Выбор хранилища</div>
         </div>
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" data-name="Деревянный" data-bg="IMG_20260719_180634.png">
+                <div class="case-card tier-bronze" onclick="selectCase('Деревянный', 'IMG_20260719_180634.png')">
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Бронзовый" data-bg="IMG_20260719_181100.png">
+                <div class="case-card tier-bronze" onclick="selectCase('Бронзовый', 'IMG_20260719_181100.png')">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Медный" data-bg="IMG_20260719_181706.png">
+                <div class="case-card tier-bronze" onclick="selectCase('Медный', 'IMG_20260719_181706.png')">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Стальной" data-bg="IMG_20260719_183142.png">
+                <div class="case-card tier-silver" onclick="selectCase('Стальной', 'IMG_20260719_183142.png')">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Железный" data-bg="IMG_20260719_183244.png">
+                <div class="case-card tier-silver" onclick="selectCase('Железный', 'IMG_20260719_183244.png')">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Серебряный" data-bg="IMG_20260719_183338.png">
+                <div class="case-card tier-silver" onclick="selectCase('Серебряный', 'IMG_20260719_183338.png')">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold" data-name="Золотой" data-bg="IMG_20260719_183351.png">
+                <div class="case-card tier-gold" onclick="selectCase('Золотой', 'IMG_20260719_183351.png')">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
@@ -443,7 +439,7 @@
 
     <div id="gamePlayScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" id="btnBackToCases">⬅</button>
+            <button class="btn-back" onclick="backToCases()">⬅</button>
             <div class="screen-title" id="gameScreenTitle">Подбор кода</div>
         </div>
 
@@ -455,43 +451,49 @@
 
             <div class="lock-container">
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="0" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
                     <div class="drum-display" id="drum-0">1</div>
-                    <button class="drum-btn" data-drum="0" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="1" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
                     <div class="drum-display" id="drum-1">1</div>
-                    <button class="drum-btn" data-drum="1" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="2" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
                     <div class="drum-display" id="drum-2">1</div>
-                    <button class="drum-btn" data-drum="2" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="3" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
                     <div class="drum-display" id="drum-3">1</div>
-                    <button class="drum-btn" data-drum="3" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="4" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
                     <div class="drum-display" id="drum-4">1</div>
-                    <button class="drum-btn" data-drum="4" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
                 </div>
             </div>
 
-            <button class="btn-action-submit" id="btnSubmitCode">Ввести код</button>
+            <button class="btn-action-submit" onclick="checkCodeSubmit()">Ввести код</button>
         </div>
     </div>
 
 </div>
 
 <script>
-    const mainMenuScreen = document.getElementById('mainMenuScreen');
-    const casesScreen = document.getElementById('casesScreen');
-    const gamePlayScreen = document.getElementById('gamePlayScreen');
-    const appContainer = document.getElementById('appContainer');
+    // Отлавливаем любые скрытые ошибки скрипта на телефонах
+    window.onerror = function(message, source, lineno, colno, error) {
+        alert("Ошибка в коде: " + message + " на строке " + lineno);
+        return true;
+    };
+
+    var mainMenuScreen = document.getElementById('mainMenuScreen');
+    var casesScreen = document.getElementById('casesScreen');
+    var gamePlayScreen = document.getElementById('gamePlayScreen');
+    var appContainer = document.getElementById('appContainer');
 
     function showScreen(screen) {
         mainMenuScreen.style.display = 'none';
@@ -500,71 +502,64 @@
         screen.style.display = 'flex';
     }
 
-    document.getElementById('btnOpenSafes').addEventListener('click', () => showScreen(casesScreen));
-    document.getElementById('btnBackToMenu').addEventListener('click', () => showScreen(mainMenuScreen));
+    function goToCases() {
+        showScreen(casesScreen);
+    }
+
+    function goToMenu() {
+        showScreen(mainMenuScreen);
+    }
     
-    document.getElementById('btnBackToCases').addEventListener('click', () => {
+    function backToCases() {
         appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
         showScreen(casesScreen);
-    });
+    }
 
-    let currentSecretCode = [1, 2, 3, 4, 5];
-    let currentDrumValues = [1, 1, 1, 1, 1];
+    var currentSecretCode = [1, 2, 3, 4, 5];
+    var currentDrumValues = [1, 1, 1, 1, 1];
 
-    document.querySelectorAll('.case-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const name = card.getAttribute('data-name');
-            const bgImg = card.getAttribute('data-bg');
-            
-            document.getElementById('gameScreenTitle').innerText = name;
-            
-            if(bgImg) {
-                appContainer.style.backgroundImage = "linear-gradient(rgba(7, 10, 18, 0.75), rgba(7, 10, 18, 0.95)), url('" + bgImg + "')";
-            }
-            
-            // Генерируем 5 случайных цифр от 1 до 9
-            currentSecretCode = [];
-            for(let i=0; i<5; i++) {
-                currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
-            }
-            
-            currentDrumValues = [1, 1, 1, 1, 1];
-            for(let i=0; i<5; i++) {
-                document.getElementById('drum-' + i).innerText = "1";
-            }
-            
-            const radar = document.getElementById('radarDisplay');
-            radar.innerText = "---";
-            radar.style.color = "var(--text-muted)";
-            
-            showScreen(gamePlayScreen);
-        });
-    });
+    function selectCase(name, bgImg) {
+        document.getElementById('gameScreenTitle').innerText = name;
+        
+        if(bgImg) {
+            appContainer.style.backgroundImage = "linear-gradient(rgba(7, 10, 18, 0.75), rgba(7, 10, 18, 0.95)), url('" + bgImg + "')";
+        }
+        
+        currentSecretCode = [];
+        for(var i=0; i<5; i++) {
+            currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
+        }
+        
+        currentDrumValues = [1, 1, 1, 1, 1];
+        for(var i=0; i<5; i++) {
+            document.getElementById('drum-' + i).innerText = "1";
+        }
+        
+        var radar = document.getElementById('radarDisplay');
+        radar.innerText = "---";
+        radar.style.color = "var(--text-muted)";
+        
+        showScreen(gamePlayScreen);
+    }
 
-    document.querySelectorAll('.drum-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const idx = parseInt(btn.getAttribute('data-drum'));
-            const dir = parseInt(btn.getAttribute('data-dir'));
-            
-            let val = currentDrumValues[idx] + dir;
-            if (val > 9) val = 1;
-            if (val < 1) val = 9;
-            
-            currentDrumValues[idx] = val;
-            document.getElementById('drum-' + idx).innerText = val;
-        });
-    });
+    function changeDrum(idx, dir) {
+        var val = currentDrumValues[idx] + dir;
+        if (val > 9) val = 1;
+        if (val < 1) val = 9;
+        
+        currentDrumValues[idx] = val;
+        document.getElementById('drum-' + idx).innerText = val;
+    }
 
-    document.getElementById('btnSubmitCode').addEventListener('click', () => {
-        let exactMatches = 0;   // Цифра совпала на своем месте
-        let partialMatches = 0; // Цифра просто присутствует в коде
+    function checkCodeSubmit() {
+        var exactMatches = 0;   
+        var partialMatches = 0; 
 
-        // Копии кодов для безопасного поштучного сравнения
-        let sCopy = [currentSecretCode[0], currentSecretCode[1], currentSecretCode[2], currentSecretCode[3], currentSecretCode[4]];
-        let dCopy = [currentDrumValues[0], currentDrumValues[1], currentDrumValues[2], currentDrumValues[3], currentDrumValues[4]];
+        var sCopy = [currentSecretCode[0], currentSecretCode[1], currentSecretCode[2], currentSecretCode[3], currentSecretCode[4]];
+        var dCopy = [currentDrumValues[0], currentDrumValues[1], currentDrumValues[2], currentDrumValues[3], currentDrumValues[4]];
 
         // 1. Ищем идеальные совпадения
-        for (let i = 0; i < 5; i++) {
+        for (var i = 0; i < 5; i++) {
             if (dCopy[i] === sCopy[i]) {
                 exactMatches++;
                 sCopy[i] = 0; 
@@ -572,25 +567,44 @@
             }
         }
 
-        // 2. Ищем частичные совпадения (цифра угадана, но стоит в другом барабане)
-        for (let i = 0; i < 5; i++) {
+        // 2. Ищем частичные совпадения без indexOf
+        for (var i = 0; i < 5; i++) {
             if (dCopy[i] !== -1) {
-                let found = sCopy.indexOf(dCopy[i]);
-                if (found !== -1) {
-                    partialMatches++;
-                    sCopy[found] = 0;
+                for (var j = 0; j < 5; j++) {
+                    if (sCopy[j] === dCopy[i]) {
+                        partialMatches++;
+                        sCopy[j] = 0;
+                        break;
+                    }
                 }
             }
         }
 
-        // Подсчет сигнала радара (точный барабан даёт больше очков, неточный — меньше)
-        let totalScore = (exactMatches * 20) + (partialMatches * 8);
+        var totalScore = (exactMatches * 20) + (partialMatches * 8);
         if (totalScore > 100) totalScore = 100;
 
-        const radar = document.getElementById('radarDisplay');
+        var radar = document.getElementById('radarDisplay');
         
         if (exactMatches === 5) {
             radar.innerText = "100% ДОСТУП";
             radar.style.color = "var(--radar-green)";
             alert("🔥 Успешный взлом! Сейф открыт.");
-            appContainer.style.backgroundImag
+            appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
+            showScreen(casesScreen);
+        } else {
+            radar.innerText = "СИГНАЛ: " + totalScore + "%";
+            
+            if (totalScore >= 60) {
+                radar.style.color = "var(--radar-green)";
+            } else if (totalScore >= 30) {
+                radar.style.color = "var(--radar-yellow)";
+            } else {
+                radar.style.color = "var(--radar-red)";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

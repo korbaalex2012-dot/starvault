@@ -31,17 +31,13 @@
             padding: 15px;
         }
 
-        /* Контейнер приложения с твоим новым красивым кибер-фоном */
         .app-container {
             width: 100%;
             max-width: 390px;
             height: 700px;
-            
-            /* Подключаем твое точное название картинки фона */
             background-image: url('IMG_20260719_173450.png');
             background-size: cover;
             background-position: center;
-            
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -52,7 +48,6 @@
             overflow: hidden;
         }
 
-        /* Верхний блок с круглыми кнопками справа */
         .right-sidebar {
             position: absolute;
             top: 20px;
@@ -79,7 +74,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
-        /* Центральная большая плита (Главная кнопка с СЕЙФОМ) */
         .main-action-zone {
             margin-top: 150px;
             margin-bottom: 20px;
@@ -97,8 +91,6 @@
             align-items: center;
             cursor: pointer;
             box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
-            
-            /* Картинка твоего сейфа */
             background-image: linear-gradient(rgba(10, 14, 23, 0.2), rgba(10, 14, 23, 0.6)), 
                               url('IMG_20260719_172011_593.jpg');
             background-size: cover;
@@ -114,4 +106,107 @@
             text-transform: uppercase;
             color: #fff;
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
-            
+            z-index: 2;
+        }
+
+        .middle-zone {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            z-index: 5;
+        }
+
+        .mid-button {
+            height: 100px;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-locked {
+            border-color: #1c2535;
+            color: var(--text-muted);
+            cursor: not-allowed;
+            background-color: rgba(19, 26, 38, 0.4);
+        }
+
+        .btn-pvp {
+            border-color: var(--accent-gold);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+        }
+
+        .bottom-zone {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: auto;
+            z-index: 5;
+        }
+
+        .bottom-button {
+            height: 85px;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .bottom-button span:first-child {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="right-sidebar">
+        <div class="circle-button">⚙️</div>
+        <div class="circle-button">🏆</div>
+        <div class="circle-button">🌐</div>
+    </div>
+
+    <div class="main-action-zone">
+        <div class="main-button">
+            <span class="title">Хакнуть систему</span>
+        </div>
+    </div>
+
+    <div class="middle-zone">
+        <div class="mid-button btn-locked">Скоро...</div>
+        <div class="mid-button btn-pvp">PVP Дуэли</div>
+    </div>
+
+    <div class="bottom-zone">
+        <div class="bottom-button">
+            <span>🎁</span>
+            <span>Дейли</span>
+        </div>
+        <div class="bottom-button">
+            <span>🛒</span>
+            <span>Магазин</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

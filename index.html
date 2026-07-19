@@ -63,11 +63,6 @@
             height: 100%;
             width: 100%;
             z-index: 5;
-            pointer-events: none;
-        }
-
-        .screen[style*="display: flex"] {
-            pointer-events: auto;
         }
 
         .screen-header {
@@ -98,7 +93,7 @@
             color: var(--accent-blue);
         }
 
-        /* ОБНОВЛЕННЫЙ ВЫДВИЖНОЙ БЛОК НАСТРОЕК */
+        /* МЕНЮ НАСТРОЕК (РАЗДЕЛЬНЫЕ КНОПКИ) */
         .settings-menu-wrapper {
             position: absolute;
             top: 15px;
@@ -109,43 +104,46 @@
             z-index: 1000;
         }
 
-        .main-toggle-btn {
-            width: 44px;
-            height: 54px;
-            border-radius: 22px;
+        .gear-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 2px;
+            font-size: 18px;
             cursor: pointer;
             color: #fff;
         }
 
-        .main-toggle-btn .gear {
-            font-size: 18px;
-        }
-
-        .main-toggle-btn .arrow {
+        .arrow-btn {
+            width: 24px;
+            height: 18px;
+            background-color: rgba(19, 26, 38, 0.5);
+            border: 1px solid #243147;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 10px;
             color: var(--accent-blue);
+            cursor: pointer;
             transition: transform 0.3s ease;
+            margin-top: -2px; /* Легкое перекрытие для слитного вида */
         }
 
-        /* Поворот стрелочки при открытии */
-        .settings-menu-wrapper.open .main-toggle-btn .arrow {
+        .settings-menu-wrapper.open .arrow-btn {
             transform: rotate(180deg);
         }
 
-        /* Контейнер для выпадающих кнопок */
         .settings-dropdown {
             display: flex;
             flex-direction: column;
             gap: 8px;
             margin-top: 8px;
-            width: 44px;
+            width: 42px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
@@ -159,8 +157,8 @@
         }
 
         .sub-button {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
@@ -429,10 +427,8 @@
 <div class="app-container" id="appContainer">
 
     <div class="settings-menu-wrapper" id="settingsWrapper">
-        <div class="main-toggle-btn" onclick="toggleSettingsMenu()">
-            <span class="gear">⚙️</span>
-            <span class="arrow">▼</span>
-        </div>
+        <div class="gear-btn" onclick="toggleSettingsMenu()">⚙️</div>
+        <div class="arrow-btn" onclick="toggleSettingsMenu()">▼</div>
         <div class="settings-dropdown">
             <div class="sub-button" onclick="alert('Рейтинг игроков скоро появится!')">🏆</div>
             <div class="sub-button" onclick="alert('Смена языка станет доступна в следующем обновлении')">🌐</div>
@@ -600,4 +596,4 @@
     var mainMenuScreen = document.getElementById('mainMenuScreen');
     var casesScreen = document.getElementById('casesScreen');
     var gamePlayScreen = document.getElementById('gamePlayScreen');
-    var assetsScreen =
+    var assetsScr

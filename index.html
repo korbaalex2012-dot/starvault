@@ -164,12 +164,12 @@
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
+            cursor: pointer;
         }
 
-        .btn-locked {
-            color: var(--text-muted);
-            background-color: rgba(19, 26, 38, 0.4);
-            border-color: #1c2535;
+        .btn-assets {
+            border-color: var(--accent-blue);
+            color: #fff;
         }
 
         .btn-pvp {
@@ -345,6 +345,26 @@
             text-transform: uppercase;
             cursor: pointer;
         }
+
+        /* АКТИВЫ */
+        .assets-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: rgba(15, 22, 36, 0.85);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .balance-item {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -365,7 +385,7 @@
         </div>
 
         <div class="middle-zone">
-            <div class="mid-button btn-locked">Скоро...</div>
+            <div class="mid-button btn-assets" onclick="goToAssets()">Активы</div>
             <div class="mid-button btn-pvp">PVP Дуэли</div>
         </div>
 
@@ -481,9 +501,36 @@
         </div>
     </div>
 
+    <div id="assetsScreen" class="screen" style="background-image: url('IMG_20260719_173450.png'); background-size: cover; background-position: center;">
+        <div class="screen-header">
+            <button class="btn-back" onclick="goToMenu()">⬅</button>
+            <div class="screen-title">Ваши Активы</div>
+        </div>
+        
+        <div class="assets-content">
+            <div class="balance-item">
+                <span>🪙 Монеты:</span>
+                <span id="coinBal" style="color: var(--accent-blue);">0</span>
+            </div>
+            <div class="balance-item">
+                <span>⭐ Звёзды (на вывод):</span>
+                <span id="starBal" style="color: var(--accent-gold);">0</span>
+            </div>
+
+            <div style="margin-top: auto; padding: 15px; border: 2px solid #243147; background: rgba(10, 15, 26, 0.85); border-radius: 12px; text-align: center;">
+                <p style="font-size: 14px; margin-bottom: 12px; color: var(--text-main);">Приглашай друзей и получай 🪙 10 монет за каждого!</p>
+                <button onclick="shareInviteLink()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #00ffcc, #00b0ff); border: none; border-radius: 10px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer;">Пригласить друга</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    // 2. Глобальные переменные валют
+    var userCoins = 0;
+    var userStars = 0;
+
     window.onerror = function(message, source, lineno, colno, error) {
         alert("Ошибка в коде: " + message + " на строке " + lineno);
         return true;
@@ -492,12 +539,15 @@
     var mainMenuScreen = document.getElementById('mainMenuScreen');
     var casesScreen = document.getElementById('casesScreen');
     var gamePlayScreen = document.getElementById('gamePlayScreen');
+    var assetsScreen = document.getElementById('assetsScreen');
     var appContainer = document.getElementById('appContainer');
 
+    // 6. Обновленная функция переключения экранов
     function showScreen(screen) {
         mainMenuScreen.style.display = 'none';
         casesScreen.style.display = 'none';
         gamePlayScreen.style.display = 'none';
+        assetsScreen.style.display = 'none';
         screen.style.display = 'flex';
     }
 
@@ -507,6 +557,13 @@
 
     function goToMenu() {
         showScreen(mainMenuScreen);
+    }
+    
+    // Переход на экран активов с обновлением текста баланса
+    function goToAssets() {
+        document.getElementById('coinBal').innerText = userCoins;
+        document.getElementById('starBal').innerText = userStars;
+        showScreen(assetsScreen);
     }
     
     function backToCases() {
@@ -541,79 +598,4 @@
             document.getElementById('drum-' + i).innerText = "1";
         }
         
-        var radar = document.getElementById('radarDisplay');
-        radar.innerText = "---";
-        radar.style.color = "var(--text-muted)";
-        
-        showScreen(gamePlayScreen);
-    }
-
-    function changeDrum(idx, dir) {
-        var val = currentDrumValues[idx] + dir;
-        if (val > 9) val = 1;
-        if (val < 1) val = 9;
-        
-        currentDrumValues[idx] = val;
-        document.getElementById('drum-' + idx).innerText = val;
-    }
-
-    function checkCodeSubmit() {
-        var exactMatches = 0;   
-        var partialMatches = 0; 
-
-        var sCopy = [currentSecretCode[0], currentSecretCode[1], currentSecretCode[2], currentSecretCode[3], currentSecretCode[4]];
-        var dCopy = [currentDrumValues[0], currentDrumValues[1], currentDrumValues[2], currentDrumValues[3], currentDrumValues[4]];
-
-        for (var i = 0; i < 5; i++) {
-            if (dCopy[i] === sCopy[i]) {
-                exactMatches++;
-                sCopy[i] = 0; 
-                dCopy[i] = -1;
-            }
-        }
-
-        for (var i = 0; i < 5; i++) {
-            if (dCopy[i] !== -1) {
-                for (var j = 0; j < 5; j++) {
-                    if (sCopy[j] === dCopy[i]) {
-                        partialMatches++;
-                        sCopy[j] = 0;
-                        break;
-                    }
-                }
-            }
-        }
-
-        var totalScore = 0;
-        if (gameDifficulty === "easy") {
-            totalScore = exactMatches * 20;
-        } else {
-            totalScore = (exactMatches * 20) + (partialMatches * 8);
-        }
-
-        if (totalScore > 100) totalScore = 100;
-
-        var radar = document.getElementById('radarDisplay');
-        
-        if (exactMatches === 5) {
-            radar.innerText = "100% ДОСТУП";
-            radar.style.color = "var(--radar-green)";
-            alert("🔥 Успешный взлом! Сейф открыт.");
-            appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
-            showScreen(casesScreen);
-        } else {
-            radar.innerText = "СИГНАЛ: " + totalScore + "%";
-            
-            if (totalScore >= 60) {
-                radar.style.color = "var(--radar-green)";
-            } else if (totalScore >= 30) {
-                radar.style.color = "var(--radar-yellow)";
-            } else {
-                radar.style.color = "var(--radar-red)";
-            }
-        }
-    }
-</script>
-
-</body>
-    
+        var radar

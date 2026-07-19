@@ -1,4 +1,147 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>StarVault VIP</title><script src="https://telegram.org"></script><style>*{ -webkit-tap-highlight-color:transparent!important; -webkit-touch-callout:none!important; outline:none!important; box-spacing:border-box; } body{ background:#020617; color:#f8fafc; font-family:sans-serif; text-align:center; margin:0; padding:0; user-select:none; min-height:100vh; display:flex; justify-content:center; align-items:center; overflow:hidden; } .window{ width:100vw; height:100vh; max-width:450px; position:relative; overflow:hidden; display:none; } .window.active{ display:block; } #menu-screen{ background:url('IMG_20260719_114541_492.jpg') no-repeat center center; background-size:cover; } .menu-grid { position:absolute; bottom:6.5%; left:5%; width:90%; height:25%; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:15px; } .invisible-btn{ background:rgba(255,255,255,0.001); border:none; cursor:pointer; border-radius:14px; } .invisible-btn:active { transform:scale(0.95); } .live-bank-overlay { position:absolute; top:33.5%; left:50%; transform:translateX(-50%); background:#090d16; border:2px solid #fbbf24; border-radius:12px; padding:6px 14px; font-size:24px; font-weight:900; color:#fbbf24; text-shadow:0 0 15px rgba(251,191,36,0.8); font-family:monospace; min-width:160px; box-shadow:0 0 20px rgba(0,0,0,0.8), inset 0 2px 6px rgba(0,0,0,0.5); }
-  #game-screen, #pvp-screen{ background:radial-gradient(circle at center,#0f172a,#020617); padding:20px; display:flex; flex-direction:column; justify-content:space-between; height:100vh; } .back-btn{ position:absolute; top:20px; left:20px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer; font-size:13px; } .back-btn:active{ transform:scale(0.95); background:rgba(255,255,255,0.1); } .game-header{ margin-top:65px; } .game-title{ font-size:12px; color:#fbbf24; text-transform:uppercase; letter-spacing:2px; font-weight:800; margin-bottom:5px; } .game-jackpot{ font-size:42px; font-weight:900; color:#fbbf24; text-shadow:0 0 25px rgba(251,191,36,0.6); font-family:'Impact',sans-serif; } .center-container{ flex-grow:1; display:flex; align-items:center; justify-content:center; width:100%; } .3d-vault-disc{ background:radial-gradient(circle at center,#1e293b,#090d16); border:4px solid #334155; box-shadow:0 20px 50px rgba(0,0,0,0.7); border-radius:24px; padding:30px 15px; width:100%; max-width:320px; border-style:outset; } .gold-scoreboard{ background:#020617; border:2px solid #fbbf24; box-shadow:0 0 20px rgba(251,191,36,0.3); border-radius:16px; padding:15px 10px; display:flex; justify-content:center; gap:10px; } .digit-slot{ display:flex; flex-direction:column; align-items:center; } .arrow{ background:rgba(255,255,255,0.02); color:#fbbf24; font-size:18px; cursor:pointer; width:44px; height:36px; border-radius:8px; font-weight:900; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.05); } .num-slot{ font-size:38px; font-weight:900; font-family:monospace; color:#fbbf24; text-shadow:0 0 15px rgba(251,191,36,0.8); width:44px; height:50px; display:flex; align-items:center; justify-content:center; margin:8px 0; } .bottom-container{ margin-bottom:20px; width:100%; display:flex; flex-direction:column; align-items:center; gap:15px; } .action-submit{ background:linear-gradient(135deg,#10b981,#047857); border:none; color:#fff; padding:18px; font-size:16px; font-weight:800; border-radius:16px; cursor:pointer; width:100%; max-width:320px; text-transform:uppercase; letter-spacing:1px; box-shadow:0 8px 24px rgba(16,185,129,0.4); } .status-msg{ color:#94a3b8; font-size:13px; min-height:50px; padding:12px; background:rgba(15,23,42,0.6); border-radius:14px; border:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:center; width:100%; max-width:320px; line-height:1.4; } .pvp-lobby{ width:100%; max-width:340px; background:rgba(15,23,42,0.5); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:15px; height:280px; overflow-y:auto; margin-top:20px; display:flex; flex-direction:column; gap:10px; } .pvp-card{ background:linear-gradient(135deg,#1e293b,#0f172a); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px; display:flex; justify-content:space-between; align-items:center; text-align:left; } .pvp-card-info{ flex-grow:1; } .pvp-card-user{ font-size:14px; font-weight:800; color:#fff; margin-bottom:2px; } .pvp-card-meta{ font-size:11px; color:#64748b; } .pvp-card-stake{ font-size:16px; font-weight:900; color:#fbbf24; text-align:right; margin-right:15px; } .pvp-join-btn{ background:#fbbf24; border:none; color:#000; padding:8px 12px; font-size:12px; font-weight:800; border-radius:8px; cursor:pointer; }</style></head><body><div id="menu-screen" class="window active"><div class="live-bank-overlay"><span id="main-menu-bank">257,312</span> ★</div><div class="menu-grid"><button class="invisible-btn" onclick="openGame('bronze',5)"></button><button class="invisible-btn" onclick="openGame('friend',0)"></button><button class="invisible-btn" onclick="openPvp()"></button><button class="invisible-btn" onclick="alert('⚙️ Настройки: Язык установлен на RU')"></button></div></div><div id="game-screen" class="window"><button class="back-btn" onclick="openMenu()">◀ Меню</button><div class="game-header"><div class="game-title" id="vault-title-text">👑 БРОНЗОВЫЙ СЕЙФ 👑</div><div class="game-jackpot" id="vault-jackpot-text"><span id="bank-counter">257,312</span> ★</div></div><div class="center-container"><div class="3d-vault-disc"><div style="font-size:10px;font-weight:800;color:#64748b;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">Подбор шифр</div><div class="gold-scoreboard"><div class="digit-slot"><button class="arrow" onclick="move(0,1)">▲</button><span class="num-slot" id="d0">0</span><button class="arrow" onclick="move(0,-1)">▼</button></div><div class="digit-slot"><button class="arrow" onclick="move(1,1)">▲</button><span class="num-slot" id="d1">0</span><button class="arrow" onclick="move(1,-1)">▼</button></div><div class="digit-slot"><button class="arrow" onclick="move(2,1)">▲</button><span class="num-slot" id="d2">0</span><button class="arrow" onclick="move(2,-1)">▼</button></div><div class="digit-slot"><button class="arrow" onclick="move(3,1)">▲</button><span class="num-slot" id="d3">0</span><button class="arrow" onclick="move(3,-1)">▼</button></div></div></div></div><div class="bottom-container"><button class="action-submit" id="submit-btn" onclick="checkCode()">ВЗЛОМАТЬ ЗА 5 ★</button><div class="status-msg" id="hint">Крути стрелочки и подбирай код логикой. Каждая попытка дает точный анализ совпадений!</div></div></div><div id="pvp-screen" class="window"><button class="back-btn" onclick="openMenu()">◀ Меню</button><div class="game-header"><div class="game-title">⚔️ PVP АРЕНА ДУЭЛЕЙ ⚔️</div><div style="font-size:13px;color:#94a3b8;margin-top:5px;">Создавай сейфы или взламывай чужие куши!</div></div><div class="center-container" style="flex-direction:column;"><button class="action-submit" style="background:linear-gradient(135deg,#fbbf24,#d97706);color:#000;box-shadow:0 6px 20px rgba(251,191,36,0.3);" onclick="createDuelPrompt()">＋ Создать Свою Дуэль</button><div class="pvp-lobby" id="lobby-list"><div class="pvp-card"><div class="pvp-card-info"><div class="pvp-card-user">@crypto_king</div><div class="pvp-card-meta">Таймер: 04:12</div></div><div class="pvp-card-stake">20 ★</div><button class="pvp-join-btn" onclick="alert('Вы приняли вызов! Оплачено 20 звезд. Перенаправление на взлом...')">В бой</button></div><div class="pvp-card"><div class="pvp-card-info"><div class="pvp-card-user">@shark_pro</div><div class="pvp-card-meta">Таймер: 02:45</div></div><div class="pvp-card-stake">50 ★</div><button class="pvp-join-btn" onclick="alert('Вы приняли вызов! Оплачено 50 звезд. Перенаправление на взлом...')">В бой</button></div><div class="pvp-card"><div class="pvp-card-info"><div class="pvp-card-user">@tapper2026</div><div class="pvp-card-meta">Таймер: 01:19</div></div><div class="pvp-card-stake">10 ★</div><button class="pvp-join-btn" onclick="alert('Вы приняли вызов! Оплачено 10 звезд. Перенаправление на взлом...')">В бой</button></div></div></div><div class="bottom-container"><div class="status-msg" style="min-height:40px;font-size:11px;">⚠️ Комиссия автора бота составляет 10% от общего банка каждой дуэли.</div></div></div>
-  <script>let liveBank=257312;let vaultCodes={"bronze":[5,2,9,1],"friend":[3,7,2,8]};let currentCode=[0,0,0,0];let currentMode='bronze';setInterval(()=>{liveBank+=Math.floor(Math.random()*6)+2;let formatted=liveBank.toLocaleString();if(document.getElementById('main-menu-bank'))document.getElementById('main-menu-bank').innerText=formatted;if(document.getElementById('bank-counter'))document.getElementById('bank-counter').innerText=formatted;},1500);function move(idx,dir){currentCode[idx]=(currentCode[idx]+dir+10)%10;document.getElementById('d'+idx).innerText=currentCode[idx];if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.HapticFeedback.impactOccurred('light');}}function openGame(mode,cost){currentMode=mode;currentCode=[0,0,0,0];for(let i=0;i<4;i++)document.getElementById('d'+i).innerText=0;document.getElementById('menu-screen').classList.remove('active');document.getElementById('game-screen').classList.add('active');}function openPvp(){document.getElementById('menu-screen').classList.remove('active');document.getElementById('pvp-screen').classList.add('active');}function openMenu(){document.getElementById('game-screen').classList.remove('active');document.getElementById('pvp-screen').classList.remove('active');document.getElementById('menu-screen').classList.add('active');}function createDuelPrompt(){let stake=prompt("Введите ставку дуэли (в звёздах):","10");if(!stake)return;let code=prompt("Придумайте секретный 4-значный код сейфа:","1234");if(code&&code.length===4){alert(`🔥 Дуэль создана!\nСтавка: ${stake} звезд.\nКод заперт на сервере. Ожидайте соперников!`);}else{alert("❌ Ошибка! Код должен состоять строго из 4 цифр.");}}function checkCode(){let targetCode=vaultCodes[currentMode];let correctDigits=0;let correctPositions=0;for(let i=0;i<4;i++){if(currentCode[i]===targetCode[i])correctPositions++;if(targetCode.includes(currentCode[i]))correctDigits++;}let hintElement=document.getElementById('hint');if(correctPositions===4){hintElement.innerHTML="<span style='color:#fbbf24;font-weight:bold;'>💥 СЕЙФ ВЗОРВАН! ДЖЕКПОТ ТВОЙ!</span>";alert("БАНК ВЗЛОМАН!");}else{hintElement.innerHTML=`⚙️ <b>Анализ:</b> угадано: <span style='color:#fff'>${correctDigits}</span> | на местах: <span style='color:#fbbf24'>${correctPositions}</span>`;}}</script></body></html>
-  
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лобби Дуэлей — Сейфы</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --accent-color: #58a6ff;
+            --star-color: #e3b341;
+            --text-color: #c9d1d9;
+            --button-disabled: #30363d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lobby-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--panel-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Список сейфов (плиты) */
+        .duel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .duel-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .duel-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .duel-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nickname {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .meta-data {
+            font-size: 14px;
+            color: #8b949e;
+        }
+
+        .stake {
+            color: var(--star-color);
+            font-weight: bold;
+        }
+
+        /* Кнопка В бой (Пока некликабельная) */
+        .btn-battle {
+            background-color: var(--button-disabled);
+            color: #8b949e;
+            border: 1px solid #484f58;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: not-allowed;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        /* Эффект заглушки, показывающий, что кнопка ждет логики */
+        .btn-battle::after {
+            content: ' 🔒';
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="lobby-container">
+    <h1>Общий список дуэлей (Лобби)</h1>
+    
+    <div class="duel-list">
+        <div class="duel-card">
+            <div class="duel-info">
+                <div class="nickname">@cryptohacker_x</div>
+                <div class="meta-data">Время: <span style="color: #ff7b72;">03:45</span></div>
+                <div class="meta-data">Ставка: <span class="stake">50 ★</span></div>
+            </div>
+            <button class="btn-battle" disabled>В бой</button>
+        </div>
+
+        <div class="duel-card">
+            <div class="duel-info">
+                <div class="nickname">@cyber_alex</div>
+                <div class="meta-data">Время: <span style="color: #ff7b72;">01:20</span></div>
+                <div class="meta-data">Ставка: <span class="stake">150 ★</span></div>
+            </div>
+            <button class="btn-battle" disabled>В бой</button>
+        </div>
+
+        <div class="duel-card">
+            <div class="duel-info">
+                <div class="nickname">@shadow_user</div>
+                <div class="meta-data">Время: <span style="color: #ff7b72;">04:55</span></div>
+                <div class="meta-data">Ставка: <span class="stake">50 ★</span></div>
+            </div>
+            <button class="btn-battle" disabled>В бой</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

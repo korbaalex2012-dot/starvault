@@ -2,8 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StarVault - Меню</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -26,7 +27,9 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         body {
@@ -38,13 +41,14 @@
             justify-content: center;
             align-items: center;
             padding: 15px;
+            overflow: hidden;
         }
 
         .app-container {
             width: 100%;
             max-width: 390px;
-            height: 700px;
-            background: linear-gradient(135deg, #070a12 0%, #03050a 100%);
+            height: 680px;
+            background: linear-gradient(135deg, #0b101d 0%, #03050a 100%);
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -60,7 +64,6 @@
             flex-direction: column;
             height: 100%;
             width: 100%;
-            z-index: 1;
         }
 
         .screen-header {
@@ -129,30 +132,19 @@
             font-size: 10px;
             color: var(--accent-blue);
             cursor: pointer;
-            transition: transform 0.3s ease;
             margin-top: -2px;
         }
 
-        .settings-menu-wrapper.open .arrow-btn {
-            transform: rotate(180deg);
-        }
-
         .settings-dropdown {
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 8px;
             margin-top: 8px;
             width: 42px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
 
         .settings-menu-wrapper.open .settings-dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            display: flex;
         }
 
         .sub-button {
@@ -170,21 +162,21 @@
         }
 
         .main-action-zone {
-            margin-top: 140px;
+            margin-top: 130px;
             margin-bottom: 20px;
         }
 
         .main-button {
             width: 100%;
-            height: 160px;
+            height: 150px;
             border: 2px solid var(--accent-blue);
             border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
-            background: linear-gradient(135deg, #131a26 0%, #0d131d 100%);
+            background: linear-gradient(135deg, #182235 0%, #0d1420 100%);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
         }
 
         .main-button .title {
@@ -202,7 +194,7 @@
         }
 
         .mid-button {
-            height: 100px;
+            height: 90px;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
             border-radius: 16px;
@@ -215,15 +207,8 @@
             cursor: pointer;
         }
 
-        .btn-assets {
-            border-color: var(--accent-blue);
-            color: #fff;
-        }
-
-        .btn-pvp {
-            border-color: var(--accent-gold);
-            color: #fff;
-        }
+        .btn-assets { border-color: var(--accent-blue); color: #fff; }
+        .btn-pvp { border-color: var(--accent-gold); color: #fff; }
 
         .bottom-zone {
             display: grid;
@@ -233,7 +218,7 @@
         }
 
         .bottom-button {
-            height: 85px;
+            height: 80px;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
             border-radius: 16px;
@@ -241,7 +226,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -272,8 +257,8 @@
         }
 
         .case-icon-placeholder {
-            font-size: 36px;
-            margin-bottom: 8px;
+            font-size: 34px;
+            margin-bottom: 6px;
         }
 
         .tier-bronze { border: 2px solid var(--bronze); }
@@ -296,14 +281,8 @@
             border-radius: 6px;
         }
 
-        .case-jackpot {
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .case-jackpot span {
-            color: var(--accent-gold);
-        }
+        .case-jackpot { font-size: 12px; font-weight: 800; }
+        .case-jackpot span { color: var(--accent-gold); }
 
         /* ИГРА */
         .game-screen-content {
@@ -331,17 +310,13 @@
             margin-bottom: 5px;
         }
 
-        .radar-value {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--text-muted);
-        }
+        .radar-value { font-size: 26px; font-weight: 900; color: var(--text-muted); }
 
         .lock-container {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin: 25px 0;
+            gap: 6px;
+            margin: 20px 0;
             width: 100%;
         }
 
@@ -349,13 +324,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: rgba(10, 15, 26, 0.9);
             border: 2px solid #1f293d;
             border-radius: 14px;
-            padding: 8px 4px;
+            padding: 6px 4px;
             flex: 1;
-            max-width: 55px;
+            max-width: 52px;
         }
 
         .drum-btn {
@@ -373,16 +348,11 @@
             align-items: center;
         }
 
-        .drum-display {
-            font-size: 26px;
-            font-weight: 900;
-            width: 40px;
-            text-align: center;
-        }
+        .drum-display { font-size: 24px; font-weight: 900; width: 40px; text-align: center; }
 
         .btn-action-submit {
             width: 100%;
-            height: 60px;
+            height: 55px;
             background: linear-gradient(135deg, #00b0ff, #00e5ff);
             border: none;
             border-radius: 16px;
@@ -453,56 +423,48 @@
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
-                
                 <div class="case-card tier-bronze" data-name="Деревянный">
                     <div class="case-icon-placeholder">📦</div>
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
-
                 <div class="case-card tier-bronze" data-name="Бронзовый">
                     <div class="case-icon-placeholder">🟫</div>
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
-
                 <div class="case-card tier-bronze" data-name="Медный">
                     <div class="case-icon-placeholder">🪙</div>
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
-
                 <div class="case-card tier-silver" data-name="Стальной">
                     <div class="case-icon-placeholder">🔗</div>
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
-
                 <div class="case-card tier-silver" data-name="Железный">
                     <div class="case-icon-placeholder">⚙️</div>
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
-
                 <div class="case-card tier-silver" data-name="Серебряный">
                     <div class="case-icon-placeholder">🥈</div>
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
-
                 <div class="case-card tier-gold" data-name="Золотой">
                     <div class="case-icon-placeholder">🥇</div>
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
                     <div class="case-jackpot">Куш: <span>15000</span></div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -563,13 +525,13 @@
                 <span id="coinBal">0</span>
             </div>
             <div class="balance-item">
-                <span>⭐ Звёзды (на вывод):</span>
+                <span>⭐ Звёзды:</span>
                 <span id="starBal">0</span>
             </div>
 
             <div style="margin-top: auto; padding: 15px; border: 2px solid #243147; background: rgba(10, 15, 26, 0.85); border-radius: 12px; text-align: center;">
-                <p style="font-size: 14px; margin-bottom: 12px; color: var(--text-main);">Приглашай друзей и получай 🪙 10 монет за каждого!</p>
-                <button id="btnInviteFriend" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #00ffcc, #00b0ff); border: none; border-radius: 10px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer;">Пригласить друга</button>
+                <p style="font-size: 14px; margin-bottom: 12px;">Приглашай друзей и получай 🪙 10 монет!</p>
+                <button id="btnInviteFriend" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #00ffcc, #00b0ff); border: none; border-radius: 10px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer;">Пригласить</button>
             </div>
         </div>
     </div>
@@ -577,7 +539,12 @@
 </div>
 
 <script>
-    // Скрипт в самом низу страницы гарантирует, что все ID уже считаны браузером устройства
+    // Сообщаем Telegram WebApp, что приложение готово к отрисовке и приему кликов
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand(); // Разворачиваем на весь экран смартфона
+    }
+
     var userCoins = 0;
     var userStars = 0;
 
@@ -585,7 +552,6 @@
     var casesScreen = document.getElementById('casesScreen');
     var gamePlayScreen = document.getElementById('gamePlayScreen');
     var assetsScreen = document.getElementById('assetsScreen');
-    var appContainer = document.getElementById('appContainer');
     var settingsWrapper = document.getElementById('settingsWrapper');
 
     function showScreen(screen) {
@@ -600,27 +566,32 @@
             settingsWrapper.style.display = 'none';
             settingsWrapper.classList.remove('open');
         }
-
         screen.style.display = 'flex';
     }
 
-    // НАСТРОЙКИ
-    document.getElementById('triggerGear').addEventListener('click', function() {
-        settingsWrapper.classList.toggle('open');
-    });
+    // Универсальная функция для мобильных тапов (убирает 300мс задержку Webview)
+    function bindTap(elementId, callback) {
+        var el = document.getElementById(elementId);
+        if (!el) return;
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            callback();
+        });
+    }
 
-    document.getElementById('triggerArrow').addEventListener('click', function() {
-        settingsWrapper.classList.toggle('open');
+    // Навигация
+    bindTap('btnGoToCases', function() { showScreen(casesScreen); });
+    bindTap('btnBackToMenuFromCases', function() { showScreen(mainMenuScreen); });
+    bindTap('btnBackToCases', function() { showScreen(casesScreen); });
+    
+    bindTap('btnGoToAssets', function() {
+        document.getElementById('coinBal').innerText = userCoins;
+        document.getElementById('starBal').innerText = userStars;
+        showScreen(assetsScreen);
     });
+    bindTap('btnBackToMenuFromAssets', function() { showScreen(mainMenuScreen); });
 
-    document.getElementById('btnCup').addEventListener('click', function() {
-        settingsWrapper.classList.remove('open');
-    });
-
-    document.getElementById('btnLang').addEventListener('click', function() {
-        settingsWrapper.classList.remove('open');
-    });
-
-    // НАВИГАЦИЯ
-    document.getElementById('btnGoToCases').addEventListener('click', function() {
-   
+    // Верхние настройки
+    bindTap('triggerGear', function() { settingsWrapper.classList.toggle('open'); });
+    bindTap('triggerArrow', function() { settingsWrapper.classList.toggle('open'); });
+    bindTap('btnCup'

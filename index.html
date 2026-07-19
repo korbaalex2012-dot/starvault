@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --panel-bg: rgba(19, 26, 38, 0.75);
+            --panel-bg: rgba(19, 26, 38, 0.85);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -63,11 +63,11 @@
             height: 100%;
             width: 100%;
             z-index: 5;
-            pointer-events: none; /* Блокируем клики сквозь скрытые экраны */
+            pointer-events: none;
         }
 
         .screen[style*="display: flex"] {
-            pointer-events: auto; /* Разрешаем клики только на активном экране */
+            pointer-events: auto;
         }
 
         .screen-header {
@@ -98,7 +98,7 @@
             color: var(--accent-blue);
         }
 
-        /* КОМПАКТНОЕ ВЫДВИЖНОЕ МЕНЮ НАСТРОЕК */
+        /* ОБНОВЛЕННЫЙ ВЫДВИЖНОЙ БЛОК НАСТРОЕК */
         .settings-menu-wrapper {
             position: absolute;
             top: 15px;
@@ -109,40 +109,68 @@
             z-index: 1000;
         }
 
-        .circle-button {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
+        .main-toggle-btn {
+            width: 44px;
+            height: 54px;
+            border-radius: 22px;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
-            color: var(--text-main);
-            font-size: 18px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 2px;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            color: #fff;
         }
 
-        .circle-button:active {
-            transform: scale(0.9);
+        .main-toggle-btn .gear {
+            font-size: 18px;
         }
 
-        /* Выдвижная панель под шестерёнкой */
+        .main-toggle-btn .arrow {
+            font-size: 10px;
+            color: var(--accent-blue);
+            transition: transform 0.3s ease;
+        }
+
+        /* Поворот стрелочки при открытии */
+        .settings-menu-wrapper.open .main-toggle-btn .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Контейнер для выпадающих кнопок */
         .settings-dropdown {
             display: flex;
             flex-direction: column;
             gap: 8px;
             margin-top: 8px;
-            max-height: 0;
+            width: 44px;
             opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
 
         .settings-menu-wrapper.open .settings-dropdown {
-            max-height: 200px;
             opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .sub-button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .main-action-zone {
@@ -401,10 +429,13 @@
 <div class="app-container" id="appContainer">
 
     <div class="settings-menu-wrapper" id="settingsWrapper">
-        <div class="circle-button" onclick="toggleSettingsMenu()">⚙️</div>
+        <div class="main-toggle-btn" onclick="toggleSettingsMenu()">
+            <span class="gear">⚙️</span>
+            <span class="arrow">▼</span>
+        </div>
         <div class="settings-dropdown">
-            <div class="circle-button">🏆</div>
-            <div class="circle-button">🌐</div>
+            <div class="sub-button" onclick="alert('Рейтинг игроков скоро появится!')">🏆</div>
+            <div class="sub-button" onclick="alert('Смена языка станет доступна в следующем обновлении')">🌐</div>
         </div>
     </div>
 
@@ -569,31 +600,4 @@
     var mainMenuScreen = document.getElementById('mainMenuScreen');
     var casesScreen = document.getElementById('casesScreen');
     var gamePlayScreen = document.getElementById('gamePlayScreen');
-    var assetsScreen = document.getElementById('assetsScreen');
-    var appContainer = document.getElementById('appContainer');
-    var settingsWrapper = document.getElementById('settingsWrapper');
-
-    // Функция открытия/закрытия выезжающих настроек
-    function toggleSettingsMenu() {
-        settingsWrapper.classList.toggle('open');
-    }
-
-    function showScreen(screen) {
-        mainMenuScreen.style.display = 'none';
-        casesScreen.style.display = 'none';
-        gamePlayScreen.style.display = 'none';
-        assetsScreen.style.display = 'none';
-        
-        // Показываем шестерёнку настроек ТОЛЬКО на главном экране
-        if (screen === mainMenuScreen) {
-            settingsWrapper.style.display = 'flex';
-        } else {
-            settingsWrapper.style.display = 'none';
-            settingsWrapper.classList.remove('open');
-        }
-
-        screen.style.display = 'flex';
-    }
-
-    function goToCases() {
-        showScr
+    var assetsScreen =

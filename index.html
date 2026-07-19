@@ -26,7 +26,6 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent; /* Убирает системную серую обводку при тапе */
         }
 
         body {
@@ -570,11 +569,11 @@
         <div class="assets-content">
             <div class="balance-item">
                 <span>🪙 Монеты:</span>
-                <span id="coinBal" style="color: var(--accent-blue);">0</span>
+                <span id="coinBal">0</span>
             </div>
             <div class="balance-item">
                 <span>⭐ Звёзды (на вывод):</span>
-                <span id="starBal" style="color: var(--accent-gold);">0</span>
+                <span id="starBal">0</span>
             </div>
 
             <div style="margin-top: auto; padding: 15px; border: 2px solid #243147; background: rgba(10, 15, 26, 0.85); border-radius: 12px; text-align: center;">
@@ -587,18 +586,19 @@
 </div>
 
 <script>
-    var userCoins = 0;
-    var userStars = 0;
+    // Ждем полной готовности DOM дерева, чтобы избежать любых сбоев загрузки скрипта
+    window.addEventListener('DOMContentLoaded', function() {
+        var userCoins = 0;
+        var userStars = 0;
 
-    var mainMenuScreen = document.getElementById('mainMenuScreen');
-    var casesScreen = document.getElementById('casesScreen');
-    var gamePlayScreen = document.getElementById('gamePlayScreen');
-    var assetsScreen = document.getElementById('assetsScreen');
-    var appContainer = document.getElementById('appContainer');
-    var settingsWrapper = document.getElementById('settingsWrapper');
+        var mainMenuScreen = document.getElementById('mainMenuScreen');
+        var casesScreen = document.getElementById('casesScreen');
+        var gamePlayScreen = document.getElementById('gamePlayScreen');
+        var assetsScreen = document.getElementById('assetsScreen');
+        var appContainer = document.getElementById('appContainer');
+        var settingsWrapper = document.getElementById('settingsWrapper');
 
-    function showScreen(screen) {
-        mainMenuScreen.style.display = 'none';
-        casesScreen.style.display = 'none';
-        gamePlayScreen.style.display = 'none';
-        assetsS
+        function showScreen(screen) {
+            mainMenuScreen.style.display = 'none';
+            casesScreen.style.display = 'none';
+            gamePlayScreen.style.display =

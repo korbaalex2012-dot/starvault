@@ -63,6 +63,11 @@
             height: 100%;
             width: 100%;
             z-index: 5;
+            pointer-events: none; /* Блокируем клики сквозь скрытые экраны */
+        }
+
+        .screen[style*="display: flex"] {
+            pointer-events: auto; /* Разрешаем клики только на активном экране */
         }
 
         .screen-header {
@@ -93,28 +98,51 @@
             color: var(--accent-blue);
         }
 
-        /* МЕНЮ */
-        .right-sidebar {
+        /* КОМПАКТНОЕ ВЫДВИЖНОЕ МЕНЮ НАСТРОЕК */
+        .settings-menu-wrapper {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            z-index: 10;
+            align-items: center;
+            z-index: 1000;
         }
 
         .circle-button {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background-color: var(--panel-bg);
             border: 2px solid #243147;
             color: var(--text-main);
-            font-size: 20px;
+            font-size: 18px;
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .circle-button:active {
+            transform: scale(0.9);
+        }
+
+        /* Выдвижная панель под шестерёнкой */
+        .settings-dropdown {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .settings-menu-wrapper.open .settings-dropdown {
+            max-height: 200px;
+            opacity: 1;
         }
 
         .main-action-zone {
@@ -196,6 +224,7 @@
             gap: 6px;
             font-size: 14px;
             font-weight: 600;
+            cursor: pointer;
         }
 
         /* КЕЙСЫ */
@@ -371,13 +400,15 @@
 
 <div class="app-container" id="appContainer">
 
-    <div id="mainMenuScreen" class="screen" style="display: flex; position: relative; z-index: 999;">
-        <div class="right-sidebar">
-            <div class="circle-button">⚙️</div>
+    <div class="settings-menu-wrapper" id="settingsWrapper">
+        <div class="circle-button" onclick="toggleSettingsMenu()">⚙️</div>
+        <div class="settings-dropdown">
             <div class="circle-button">🏆</div>
             <div class="circle-button">🌐</div>
         </div>
+    </div>
 
+    <div id="mainMenuScreen" class="screen" style="display: flex; position: relative; z-index: 999;">
         <div class="main-action-zone">
             <div class="main-button" onclick="goToCases()">
                 <span class="title">Открыть сейф</span>
@@ -527,7 +558,6 @@
 </div>
 
 <script>
-    // 2. Глобальные переменные валют
     var userCoins = 0;
     var userStars = 0;
 
@@ -541,61 +571,29 @@
     var gamePlayScreen = document.getElementById('gamePlayScreen');
     var assetsScreen = document.getElementById('assetsScreen');
     var appContainer = document.getElementById('appContainer');
+    var settingsWrapper = document.getElementById('settingsWrapper');
 
-    // 6. Обновленная функция переключения экранов
+    // Функция открытия/закрытия выезжающих настроек
+    function toggleSettingsMenu() {
+        settingsWrapper.classList.toggle('open');
+    }
+
     function showScreen(screen) {
         mainMenuScreen.style.display = 'none';
         casesScreen.style.display = 'none';
         gamePlayScreen.style.display = 'none';
         assetsScreen.style.display = 'none';
+        
+        // Показываем шестерёнку настроек ТОЛЬКО на главном экране
+        if (screen === mainMenuScreen) {
+            settingsWrapper.style.display = 'flex';
+        } else {
+            settingsWrapper.style.display = 'none';
+            settingsWrapper.classList.remove('open');
+        }
+
         screen.style.display = 'flex';
     }
 
     function goToCases() {
-        showScreen(casesScreen);
-    }
-
-    function goToMenu() {
-        showScreen(mainMenuScreen);
-    }
-    
-    // Переход на экран активов с обновлением текста баланса
-    function goToAssets() {
-        document.getElementById('coinBal').innerText = userCoins;
-        document.getElementById('starBal').innerText = userStars;
-        showScreen(assetsScreen);
-    }
-    
-    function backToCases() {
-        appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
-        showScreen(casesScreen);
-    }
-
-    var currentSecretCode = [1, 2, 3, 4, 5];
-    var currentDrumValues = [1, 1, 1, 1, 1];
-    var gameDifficulty = "hard";
-
-    function selectCase(name, bgImg) {
-        document.getElementById('gameScreenTitle').innerText = name;
-        
-        if (name === "Деревянный" || name === "Бронзовый" || name === "Медный") {
-            gameDifficulty = "easy";
-        } else {
-            gameDifficulty = "hard";
-        }
-
-        if(bgImg) {
-            appContainer.style.backgroundImage = "linear-gradient(rgba(7, 10, 18, 0.75), rgba(7, 10, 18, 0.95)), url('" + bgImg + "')";
-        }
-        
-        currentSecretCode = [];
-        for(var i=0; i<5; i++) {
-            currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
-        }
-        
-        currentDrumValues = [1, 1, 1, 1, 1];
-        for(var i=0; i<5; i++) {
-            document.getElementById('drum-' + i).innerText = "1";
-        }
-        
-        var radar
+        showScr

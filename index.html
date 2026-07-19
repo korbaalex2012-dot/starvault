@@ -26,6 +26,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent; /* Убирает системную серую обводку при тапе */
         }
 
         body {
@@ -62,7 +63,7 @@
             flex-direction: column;
             height: 100%;
             width: 100%;
-            z-index: 5;
+            z-index: 1;
         }
 
         .screen-header {
@@ -93,7 +94,7 @@
             color: var(--accent-blue);
         }
 
-        /* МЕНЮ НАСТРОЕК (РАЗДЕЛЬНЫЕ КНОПКИ) */
+        /* НАСТРОЙКИ */
         .settings-menu-wrapper {
             position: absolute;
             top: 15px;
@@ -101,7 +102,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            z-index: 1000;
+            width: 44px;
+            z-index: 100;
         }
 
         .gear-btn {
@@ -121,7 +123,7 @@
         .arrow-btn {
             width: 24px;
             height: 18px;
-            background-color: rgba(19, 26, 38, 0.5);
+            background-color: rgba(19, 26, 38, 0.7);
             border: 1px solid #243147;
             border-radius: 0 0 8px 8px;
             display: flex;
@@ -131,7 +133,7 @@
             color: var(--accent-blue);
             cursor: pointer;
             transition: transform 0.3s ease;
-            margin-top: -2px; /* Легкое перекрытие для слитного вида */
+            margin-top: -2px;
         }
 
         .settings-menu-wrapper.open .arrow-btn {
@@ -172,7 +174,7 @@
         }
 
         .main-action-zone {
-            margin-top: 150px;
+            margin-top: 140px;
             margin-bottom: 20px;
         }
 
@@ -427,84 +429,84 @@
 <div class="app-container" id="appContainer">
 
     <div class="settings-menu-wrapper" id="settingsWrapper">
-        <div class="gear-btn" onclick="toggleSettingsMenu()">⚙️</div>
-        <div class="arrow-btn" onclick="toggleSettingsMenu()">▼</div>
+        <div class="gear-btn" id="triggerGear">⚙️</div>
+        <div class="arrow-btn" id="triggerArrow">▼</div>
         <div class="settings-dropdown">
-            <div class="sub-button" onclick="alert('Рейтинг игроков скоро появится!')">🏆</div>
-            <div class="sub-button" onclick="alert('Смена языка станет доступна в следующем обновлении')">🌐</div>
+            <div class="sub-button" id="btnCup">🏆</div>
+            <div class="sub-button" id="btnLang">🌐</div>
         </div>
     </div>
 
-    <div id="mainMenuScreen" class="screen" style="display: flex; position: relative; z-index: 999;">
+    <div id="mainMenuScreen" class="screen" style="display: flex;">
         <div class="main-action-zone">
-            <div class="main-button" onclick="goToCases()">
+            <div class="main-button" id="btnGoToCases">
                 <span class="title">Открыть сейф</span>
             </div>
         </div>
 
         <div class="middle-zone">
-            <div class="mid-button btn-assets" onclick="goToAssets()">Активы</div>
-            <div class="mid-button btn-pvp">PVP Дуэли</div>
+            <div class="mid-button btn-assets" id="btnGoToAssets">Активы</div>
+            <div class="mid-button btn-pvp" id="btnPvpStub">PVP Дуэли</div>
         </div>
 
         <div class="bottom-zone">
-            <div class="bottom-button"><span>🎁</span><span>Дейли</span></div>
-            <div class="bottom-button"><span>🛒</span><span>Магазин</span></div>
+            <div class="bottom-button" id="btnDailyStub"><span>🎁</span><span>Дейли</span></div>
+            <div class="bottom-button" id="btnShopStub"><span>🛒</span><span>Магазин</span></div>
         </div>
     </div>
 
     <div id="casesScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" onclick="goToMenu()">⬅</button>
+            <button class="btn-back" id="btnBackToMenuFromCases">⬅</button>
             <div class="screen-title">Выбор хранилища</div>
         </div>
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" onclick="selectCase('Деревянный', 'IMG_20260719_180634.png')">
+                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" onclick="selectCase('Бронзовый', 'IMG_20260719_181100.png')">
+                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" onclick="selectCase('Медный', 'IMG_20260719_181706.png')">
+                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="selectCase('Стальной', 'IMG_20260719_183142.png')">
+                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="selectCase('Железный', 'IMG_20260719_183244.png')">
+                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="selectCase('Серебряный', 'IMG_20260719_183338.png')">
+                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold" onclick="selectCase('Золотой', 'IMG_20260719_183351.png')">
+                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
@@ -517,7 +519,7 @@
 
     <div id="gamePlayScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" onclick="backToCases()">⬅</button>
+            <button class="btn-back" id="btnBackToCases">⬅</button>
             <div class="screen-title" id="gameScreenTitle">Подбор кода</div>
         </div>
 
@@ -529,39 +531,39 @@
 
             <div class="lock-container">
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
+                    <button class="drum-btn" data-drum="0" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-0">1</div>
-                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
+                    <button class="drum-btn" data-drum="0" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
+                    <button class="drum-btn" data-drum="1" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-1">1</div>
-                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
+                    <button class="drum-btn" data-drum="1" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
+                    <button class="drum-btn" data-drum="2" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-2">1</div>
-                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
+                    <button class="drum-btn" data-drum="2" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
+                    <button class="drum-btn" data-drum="3" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-3">1</div>
-                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
+                    <button class="drum-btn" data-drum="3" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
+                    <button class="drum-btn" data-drum="4" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-4">1</div>
-                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
+                    <button class="drum-btn" data-drum="4" data-dir="-1">▼</button>
                 </div>
             </div>
 
-            <button class="btn-action-submit" onclick="checkCodeSubmit()">Ввести код</button>
+            <button class="btn-action-submit" id="btnCheckCode">Ввести код</button>
         </div>
     </div>
 
-    <div id="assetsScreen" class="screen" style="background-image: url('IMG_20260719_173450.png'); background-size: cover; background-position: center;">
+    <div id="assetsScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" onclick="goToMenu()">⬅</button>
+            <button class="btn-back" id="btnBackToMenuFromAssets">⬅</button>
             <div class="screen-title">Ваши Активы</div>
         </div>
         
@@ -577,7 +579,7 @@
 
             <div style="margin-top: auto; padding: 15px; border: 2px solid #243147; background: rgba(10, 15, 26, 0.85); border-radius: 12px; text-align: center;">
                 <p style="font-size: 14px; margin-bottom: 12px; color: var(--text-main);">Приглашай друзей и получай 🪙 10 монет за каждого!</p>
-                <button onclick="shareInviteLink()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #00ffcc, #00b0ff); border: none; border-radius: 10px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer;">Пригласить друга</button>
+                <button id="btnInviteFriend" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #00ffcc, #00b0ff); border: none; border-radius: 10px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer;">Пригласить друга</button>
             </div>
         </div>
     </div>
@@ -588,12 +590,15 @@
     var userCoins = 0;
     var userStars = 0;
 
-    window.onerror = function(message, source, lineno, colno, error) {
-        alert("Ошибка в коде: " + message + " на строке " + lineno);
-        return true;
-    };
-
     var mainMenuScreen = document.getElementById('mainMenuScreen');
     var casesScreen = document.getElementById('casesScreen');
     var gamePlayScreen = document.getElementById('gamePlayScreen');
-    var assetsScr
+    var assetsScreen = document.getElementById('assetsScreen');
+    var appContainer = document.getElementById('appContainer');
+    var settingsWrapper = document.getElementById('settingsWrapper');
+
+    function showScreen(screen) {
+        mainMenuScreen.style.display = 'none';
+        casesScreen.style.display = 'none';
+        gamePlayScreen.style.display = 'none';
+        assetsS

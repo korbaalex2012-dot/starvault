@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --panel-bg: rgba(19, 26, 38, 0.9);
+            --panel-bg: rgba(19, 26, 38, 0.75);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -43,7 +43,9 @@
             width: 100%;
             max-width: 390px;
             height: 700px;
-            background-color: var(--bg-dark);
+            background-image: url('IMG_20260719_173450.png');
+            background-size: cover;
+            background-position: center;
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -71,6 +73,7 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
+            z-index: 10;
         }
 
         .btn-back {
@@ -85,16 +88,42 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px);
         }
 
         .screen-title {
             font-size: 20px;
             font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 1px;
             color: var(--accent-blue);
         }
 
         /* ГЛАВНОЕ МЕНЮ */
+        .right-sidebar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .circle-button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            color: var(--text-main);
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
         .main-action-zone {
             margin-top: 150px;
             margin-bottom: 20px;
@@ -105,25 +134,89 @@
             height: 160px;
             border: 2px solid var(--accent-blue);
             border-radius: 20px;
-            background-color: var(--panel-bg);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+            background-image: linear-gradient(rgba(10, 14, 23, 0.2), rgba(10, 14, 23, 0.6)), 
+                              url('IMG_20260719_172011_593.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .main-button .title {
             font-size: 22px;
             font-weight: 800;
+            letter-spacing: 2px;
             text-transform: uppercase;
             color: #fff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+        }
+
+        .middle-zone {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mid-button {
+            height: 100px;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-locked {
+            border-color: #1c2535;
+            color: var(--text-muted);
+            background-color: rgba(19, 26, 38, 0.4);
+        }
+
+        .btn-pvp {
+            border-color: var(--accent-gold);
+            color: #fff;
+        }
+
+        .bottom-zone {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .bottom-button {
+            height: 85px;
+            background-color: var(--panel-bg);
+            border: 2px solid #243147;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+
+        .bottom-button span:first-child {
+            font-size: 22px;
         }
 
         /* СЕТКА КЕЙСОВ */
         .cases-grid-wrapper {
             flex: 1;
             overflow-y: auto;
+            padding-right: 5px;
         }
 
         .cases-grid {
@@ -136,17 +229,21 @@
         .case-card {
             background-color: rgba(15, 22, 36, 0.85);
             border-radius: 16px;
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
         }
 
-        .case-icon-placeholder {
-            font-size: 40px;
-            margin-bottom: 10px;
+        .case-img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            margin-bottom: 6px;
         }
 
         .tier-bronze { border: 2px solid var(--bronze); }
@@ -154,10 +251,32 @@
         .tier-gold { border: 2px solid var(--accent-gold); }
 
         .case-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
+            margin-bottom: 4px;
             text-transform: uppercase;
+        }
+
+        .case-price {
+            font-size: 11px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .case-jackpot {
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: auto;
+        }
+        
+        .case-jackpot span {
+            color: var(--accent-gold);
         }
 
         /* ИГРОВОЙ ЭКРАН */
@@ -167,6 +286,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            padding-bottom: 10px;
         }
 
         .radar-panel {
@@ -176,10 +296,18 @@
             border-radius: 16px;
             padding: 15px;
             text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .radar-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
         .radar-value {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             color: var(--text-muted);
         }
@@ -202,6 +330,7 @@
             border-radius: 14px;
             padding: 8px 4px;
             flex: 1;
+            max-width: 55px;
         }
 
         .drum-btn {
@@ -214,12 +343,17 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .drum-display {
             font-size: 26px;
             font-weight: 900;
             color: #fff;
+            width: 40px;
+            text-align: center;
         }
 
         .btn-action-submit {
@@ -233,6 +367,7 @@
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
         }
     </style>
 </head>
@@ -241,9 +376,31 @@
 <div class="app-container" id="appContainer">
 
     <div id="mainMenuScreen" class="screen active">
+        <div class="right-sidebar">
+            <div class="circle-button">⚙️</div>
+            <div class="circle-button">🏆</div>
+            <div class="circle-button">🌐</div>
+        </div>
+
         <div class="main-action-zone">
             <div class="main-button" id="btnOpenSafes">
                 <span class="title">Открыть сейф</span>
+            </div>
+        </div>
+
+        <div class="middle-zone">
+            <div class="mid-button btn-locked">Скоро...</div>
+            <div class="mid-button btn-pvp">PVP Дуэли</div>
+        </div>
+
+        <div class="bottom-zone">
+            <div class="bottom-button">
+                <span>🎁</span>
+                <span>Дейли</span>
+            </div>
+            <div class="bottom-button">
+                <span>🛒</span>
+                <span>Магазин</span>
             </div>
         </div>
     </div>
@@ -257,19 +414,67 @@
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" data-name="Деревянный">
-                    <div class="case-icon-placeholder">📦</div>
+                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
+                    <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
+                    <div class="case-price">⭐ 1 звезда</div>
+                    <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Стальной">
-                    <div class="case-icon-placeholder">⚙️</div>
+                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
+                    <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Бронзовый</div>
+                    <div class="case-price">⭐ 3 звезды</div>
+                    <div class="case-jackpot">Куш: <span>420</span></div>
+                </div>
+
+                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
+                    <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Медный</div>
+                    <div class="case-price">⭐ 5 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>890</span></div>
+                </div>
+
+                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
+                    <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
+                    <div class="case-price">⭐ 10 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-gold" data-name="Золотой">
-                    <div class="case-icon-placeholder">💎</div>
+                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
+                    <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Железный</div>
+                    <div class="case-price">⭐ 25 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>3400</span></div>
+                </div>
+
+                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
+                    <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Серебряный</div>
+                    <div class="case-price">⭐ 50 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>7200</span></div>
+                </div>
+
+                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
+                    <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
+                    <div class="case-price">⭐ 100 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>15000</span></div>
+                </div>
+
+                <div class="case-card tier-gold" data-name="Платиновый" data-img="IMG_20260719_183406.png">
+                    <img src="IMG_20260719_183406.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Платиновый</div>
+                    <div class="case-price">⭐ 250 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>38000</span></div>
+                </div>
+
+                <div class="case-card tier-gold" data-name="Кибер-кейс" data-img="IMG_20260719_183425.png">
+                    <img src="IMG_20260719_183425.png" class="case-img" onerror="this.style.display='none'">
+                    <div class="case-name">Кибер-кейс</div>
+                    <div class="case-price">⭐ 500 звёзд</div>
+                    <div class="case-jackpot">Куш: <span>95000</span></div>
                 </div>
 
             </div>
@@ -284,6 +489,7 @@
 
         <div class="game-screen-content">
             <div class="radar-panel">
+                <div class="radar-title">Синхронизация с замком</div>
                 <div class="radar-value" id="radarDisplay">---</div>
             </div>
 
@@ -303,6 +509,16 @@
                     <div class="drum-display" id="drum-2">1</div>
                     <button class="drum-btn" data-drum="2" data-dir="-1">▼</button>
                 </div>
+                <div class="drum-column">
+                    <button class="drum-btn" data-drum="3" data-dir="1">▲</button>
+                    <div class="drum-display" id="drum-3">1</div>
+                    <button class="drum-btn" data-drum="3" data-dir="-1">▼</button>
+                </div>
+                <div class="drum-column">
+                    <button class="drum-btn" data-drum="4" data-dir="1">▲</button>
+                    <div class="drum-display" id="drum-4">1</div>
+                    <button class="drum-btn" data-drum="4" data-dir="-1">▼</button>
+                </div>
             </div>
 
             <button class="btn-action-submit" id="btnSubmitCode">Ввести код</button>
@@ -312,10 +528,10 @@
 </div>
 
 <script>
-    // Элементы навигации
     const mainMenuScreen = document.getElementById('mainMenuScreen');
     const casesScreen = document.getElementById('casesScreen');
     const gamePlayScreen = document.getElementById('gamePlayScreen');
+    const appContainer = document.getElementById('appContainer');
 
     function showScreen(screen) {
         mainMenuScreen.classList.remove('active');
@@ -324,28 +540,48 @@
         screen.classList.add('active');
     }
 
-    // Привязка кликов
     document.getElementById('btnOpenSafes').addEventListener('click', () => showScreen(casesScreen));
     document.getElementById('btnBackToMenu').addEventListener('click', () => showScreen(mainMenuScreen));
-    document.getElementById('btnBackToCases').addEventListener('click', () => showScreen(casesScreen));
+    document.getElementById('btnBackToCases').addEventListener('click', exitGameScreen);
 
-    let currentSecretCode = [3, 5, 7];
-    let currentDrumValues = [1, 1, 1];
+    let currentSecretCode = [];
+    let currentDrumValues = [1, 1, 1, 1, 1];
+    let currentSafeName = "";
 
     document.querySelectorAll('.case-card').forEach(card => {
         card.addEventListener('click', () => {
             const name = card.getAttribute('data-name');
-            document.getElementById('gameScreenTitle').innerText = name;
-            
-            currentDrumValues = [1, 1, 1];
-            document.getElementById('drum-0').innerText = "1";
-            document.getElementById('drum-1').innerText = "1";
-            document.getElementById('drum-2').innerText = "1";
-            document.getElementById('radarDisplay').innerText = "---";
-            
-            showScreen(gamePlayScreen);
+            const img = card.getAttribute('data-img');
+            startDecryption(name, img);
         });
     });
+
+    function startDecryption(safeName, bgImageName) {
+        currentSafeName = safeName;
+        document.getElementById('gameScreenTitle').innerText = safeName;
+        appContainer.style.backgroundImage = `linear-gradient(rgba(7, 10, 18, 0.4), rgba(7, 10, 18, 0.9)), url('${bgImageName}')`;
+        
+        currentSecretCode = [];
+        for(let i=0; i<5; i++) {
+            currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
+        }
+        
+        currentDrumValues = [1, 1, 1, 1, 1];
+        for(let i=0; i<5; i++) {
+            document.getElementById(`drum-${i}`).innerText = "1";
+        }
+
+        const radar = document.getElementById('radarDisplay');
+        radar.innerText = "---";
+        radar.style.color = "var(--text-muted)";
+
+        showScreen(gamePlayScreen);
+    }
+
+    function exitGameScreen() {
+        appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
+        showScreen(casesScreen);
+    }
 
     document.querySelectorAll('.drum-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -358,18 +594,4 @@
             
             currentDrumValues[idx] = val;
             document.getElementById(`drum-${idx}`).innerText = val;
-        });
-    });
-
-    document.getElementById('btnSubmitCode').addEventListener('click', () => {
-        let matches = 0;
-        for(let i=0; i<3; i++) {
-            if(currentDrumValues[i] === currentSecretCode[i]) matches++;
-        }
-        let percent = Math.round((matches / 3) * 100);
-        document.getElementById('radarDisplay').innerText = percent + "%";
-    });
-</script>
-
-</body>
-</html>
+        })

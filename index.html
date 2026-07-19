@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --panel-bg: rgba(19, 26, 38, 0.85);
+            --panel-bg: rgba(19, 26, 38, 0.75);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -39,11 +39,15 @@
             padding: 15px;
         }
 
+        /* Возвращаем фоновую картинку для всего приложения */
         .app-container {
             width: 100%;
             max-width: 390px;
             height: 700px;
             background-color: var(--bg-dark);
+            background-image: url('IMG_20260719_173450.png');
+            background-size: cover;
+            background-position: center;
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -71,6 +75,7 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
+            z-index: 10;
         }
 
         .btn-back {
@@ -85,12 +90,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px);
         }
 
         .screen-title {
             font-size: 20px;
             font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 1px;
             color: var(--accent-blue);
         }
 
@@ -116,6 +123,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px);
         }
 
         .main-action-zone {
@@ -123,24 +131,31 @@
             margin-bottom: 20px;
         }
 
+        /* Возвращаем картинку на главную кнопку */
         .main-button {
             width: 100%;
             height: 160px;
             border: 2px solid var(--accent-blue);
             border-radius: 20px;
-            background-color: var(--panel-bg);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+            background-color: var(--panel-bg);
+            background-image: linear-gradient(rgba(10, 14, 23, 0.2), rgba(10, 14, 23, 0.6)), 
+                              url('IMG_20260719_172011_593.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .main-button .title {
             font-size: 22px;
             font-weight: 800;
+            letter-spacing: 2px;
             text-transform: uppercase;
             color: #fff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
         }
 
         .middle-zone {
@@ -161,15 +176,18 @@
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
+            backdrop-filter: blur(8px);
         }
 
         .btn-locked {
             color: var(--text-muted);
             background-color: rgba(19, 26, 38, 0.4);
+            border-color: #1c2535;
         }
 
         .btn-pvp {
             border-color: var(--accent-gold);
+            color: #fff;
         }
 
         .bottom-zone {
@@ -191,12 +209,18 @@
             gap: 6px;
             font-size: 14px;
             font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+
+        .bottom-button span:first-child {
+            font-size: 22px;
         }
 
         /* КЕЙСЫ */
         .cases-grid-wrapper {
             flex: 1;
             overflow-y: auto;
+            padding-right: 5px;
         }
 
         .cases-grid {
@@ -215,11 +239,13 @@
             align-items: center;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
         }
 
         .case-img {
-            width: 65px;
-            height: 65px;
+            width: 75px;
+            height: 75px;
             object-fit: contain;
             margin-bottom: 6px;
         }
@@ -232,17 +258,26 @@
             font-size: 13px;
             font-weight: 700;
             margin-bottom: 4px;
+            text-transform: uppercase;
         }
 
         .case-price {
             font-size: 11px;
             color: var(--accent-blue);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600;
         }
 
         .case-jackpot {
             font-size: 12px;
             font-weight: 800;
+        }
+
+        .case-jackpot span {
+            color: var(--accent-gold);
         }
 
         /* ИГРА */
@@ -252,6 +287,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            padding-bottom: 10px;
         }
 
         .radar-panel {
@@ -261,10 +297,18 @@
             border-radius: 16px;
             padding: 15px;
             text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .radar-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
         .radar-value {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             color: var(--text-muted);
         }
@@ -272,7 +316,7 @@
         .lock-container {
             display: flex;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             margin: 25px 0;
             width: 100%;
         }
@@ -287,22 +331,29 @@
             border-radius: 14px;
             padding: 8px 4px;
             flex: 1;
+            max-width: 55px;
         }
 
         .drum-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             border: 1px solid #2d3d5a;
             background: #162032;
             color: var(--accent-blue);
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .drum-display {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
+            width: 40px;
+            text-align: center;
         }
 
         .btn-action-submit {
@@ -316,6 +367,7 @@
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
         }
     </style>
 </head>
@@ -360,49 +412,49 @@
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
-                    <div class="case-jackpot">Куш: 140</div>
+                    <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
                 <div class="case-card tier-bronze" data-name="Бронзовый">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
-                    <div class="case-jackpot">Куш: 420</div>
+                    <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
                 <div class="case-card tier-bronze" data-name="Медный">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
-                    <div class="case-jackpot">Куш: 890</div>
+                    <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
                 <div class="case-card tier-silver" data-name="Стальной">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
-                    <div class="case-jackpot">Куш: 1500</div>
+                    <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
                 <div class="case-card tier-silver" data-name="Железный">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
-                    <div class="case-jackpot">Куш: 3400</div>
+                    <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
                 <div class="case-card tier-silver" data-name="Серебряный">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
-                    <div class="case-jackpot">Куш: 7200</div>
+                    <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
                 <div class="case-card tier-gold" data-name="Золотой">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
-                    <div class="case-jackpot">Куш: 15000</div>
+                    <div class="case-jackpot">Куш: <span>15000</span></div>
                 </div>
 
             </div>
@@ -417,6 +469,7 @@
 
         <div class="game-screen-content">
             <div class="radar-panel">
+                <div class="radar-title">Синхронизация с замком</div>
                 <div class="radar-value" id="radarDisplay">---</div>
             </div>
 

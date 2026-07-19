@@ -323,7 +323,6 @@
             padding-bottom: 10px;
         }
 
-        /* Процентный радар сверху */
         .radar-panel {
             width: 100%;
             background-color: rgba(15, 22, 36, 0.9);
@@ -350,7 +349,6 @@
             transition: color 0.3s ease;
         }
 
-        /* Контейнер с барабанами */
         .lock-container {
             display: flex;
             justify-content: center;
@@ -386,6 +384,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            user-select: none;
         }
 
         .drum-btn:active {
@@ -403,7 +402,6 @@
             user-select: none;
         }
 
-        /* Кнопка Ввод / Проверить */
         .btn-action-submit {
             width: 100%;
             height: 60px;
@@ -582,7 +580,6 @@
 </div>
 
 <script>
-    // Базовый менеджер экранов
     function openScreen(screenId) {
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.remove('active');
@@ -590,11 +587,17 @@
         document.getElementById(screenId).classList.add('active');
     }
 
-    // Игровая логика
     let currentSecretCode = [];
     let currentDrumValues = [1, 1, 1, 1, 1];
     let currentSafeName = "";
 
-    // Функция генерации случайного кода из 5 цифр (от 1 до 9)
     function generateNewSecretCode() {
-        let code = 
+        let code = [];
+        for(let i=0; i<5; i++) {
+            code.push(Math.floor(Math.random() * 9) + 1);
+        }
+        return code;
+    }
+
+    function startDecryption(safeName, bgImageName) {
+        curr

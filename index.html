@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --panel-bg: rgba(19, 26, 38, 0.75);
+            --panel-bg: rgba(19, 26, 38, 0.85);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -43,9 +43,7 @@
             width: 100%;
             max-width: 390px;
             height: 700px;
-            background-image: url('IMG_20260719_173450.png');
-            background-size: cover;
-            background-position: center;
+            background-color: var(--bg-dark);
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -73,7 +71,6 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
-            z-index: 10;
         }
 
         .btn-back {
@@ -88,18 +85,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
         }
 
         .screen-title {
             font-size: 20px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
             color: var(--accent-blue);
         }
 
-        /* ГЛАВНОЕ МЕНЮ */
+        /* МЕНЮ */
         .right-sidebar {
             position: absolute;
             top: 20px;
@@ -121,7 +116,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
         }
 
         .main-action-zone {
@@ -134,24 +128,19 @@
             height: 160px;
             border: 2px solid var(--accent-blue);
             border-radius: 20px;
+            background-color: var(--panel-bg);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
-            background-image: linear-gradient(rgba(10, 14, 23, 0.2), rgba(10, 14, 23, 0.6)), 
-                              url('IMG_20260719_172011_593.jpg');
-            background-size: cover;
-            background-position: center;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
         }
 
         .main-button .title {
             font-size: 22px;
             font-weight: 800;
-            letter-spacing: 2px;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
         }
 
         .middle-zone {
@@ -172,18 +161,15 @@
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
-            backdrop-filter: blur(8px);
         }
 
         .btn-locked {
-            border-color: #1c2535;
             color: var(--text-muted);
             background-color: rgba(19, 26, 38, 0.4);
         }
 
         .btn-pvp {
             border-color: var(--accent-gold);
-            color: #fff;
         }
 
         .bottom-zone {
@@ -205,18 +191,12 @@
             gap: 6px;
             font-size: 14px;
             font-weight: 600;
-            backdrop-filter: blur(8px);
         }
 
-        .bottom-button span:first-child {
-            font-size: 22px;
-        }
-
-        /* СЕТКА КЕЙСОВ */
+        /* КЕЙСЫ */
         .cases-grid-wrapper {
             flex: 1;
             overflow-y: auto;
-            padding-right: 5px;
         }
 
         .cases-grid {
@@ -235,13 +215,11 @@
             align-items: center;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
         }
 
         .case-img {
-            width: 75px;
-            height: 75px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
             margin-bottom: 6px;
         }
@@ -253,40 +231,27 @@
         .case-name {
             font-size: 13px;
             font-weight: 700;
-            color: #fff;
             margin-bottom: 4px;
-            text-transform: uppercase;
         }
 
         .case-price {
             font-size: 11px;
             color: var(--accent-blue);
-            font-weight: 600;
-            margin-bottom: 8px;
-            background: rgba(0, 229, 255, 0.1);
-            padding: 2px 6px;
-            border-radius: 6px;
+            margin-bottom: 4px;
         }
 
         .case-jackpot {
             font-size: 12px;
             font-weight: 800;
-            color: #fff;
-            margin-top: auto;
-        }
-        
-        .case-jackpot span {
-            color: var(--accent-gold);
         }
 
-        /* ИГРОВОЙ ЭКРАН */
+        /* ИГРА */
         .game-screen-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 10px;
         }
 
         .radar-panel {
@@ -296,18 +261,10 @@
             border-radius: 16px;
             padding: 15px;
             text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .radar-title {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 5px;
         }
 
         .radar-value {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 900;
             color: var(--text-muted);
         }
@@ -315,7 +272,7 @@
         .lock-container {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             margin: 25px 0;
             width: 100%;
         }
@@ -330,30 +287,22 @@
             border-radius: 14px;
             padding: 8px 4px;
             flex: 1;
-            max-width: 55px;
         }
 
         .drum-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             border: 1px solid #2d3d5a;
             background: #162032;
             color: var(--accent-blue);
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .drum-display {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 900;
-            color: #fff;
-            width: 40px;
-            text-align: center;
         }
 
         .btn-action-submit {
@@ -367,7 +316,6 @@
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
         }
     </style>
 </head>
@@ -394,14 +342,8 @@
         </div>
 
         <div class="bottom-zone">
-            <div class="bottom-button">
-                <span>🎁</span>
-                <span>Дейли</span>
-            </div>
-            <div class="bottom-button">
-                <span>🛒</span>
-                <span>Магазин</span>
-            </div>
+            <div class="bottom-button"><span>🎁</span><span>Дейли</span></div>
+            <div class="bottom-button"><span>🛒</span><span>Магазин</span></div>
         </div>
     </div>
 
@@ -414,67 +356,53 @@
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
+                <div class="case-card tier-bronze" data-name="Деревянный">
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
-                    <div class="case-jackpot">Куш: <span>140</span></div>
+                    <div class="case-jackpot">Куш: 140</div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
+                <div class="case-card tier-bronze" data-name="Бронзовый">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
-                    <div class="case-jackpot">Куш: <span>420</span></div>
+                    <div class="case-jackpot">Куш: 420</div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
+                <div class="case-card tier-bronze" data-name="Медный">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>890</span></div>
+                    <div class="case-jackpot">Куш: 890</div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
+                <div class="case-card tier-silver" data-name="Стальной">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>1500</span></div>
+                    <div class="case-jackpot">Куш: 1500</div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
+                <div class="case-card tier-silver" data-name="Железный">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>3400</span></div>
+                    <div class="case-jackpot">Куш: 3400</div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
+                <div class="case-card tier-silver" data-name="Серебряный">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>7200</span></div>
+                    <div class="case-jackpot">Куш: 7200</div>
                 </div>
 
-                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
+                <div class="case-card tier-gold" data-name="Золотой">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>15000</span></div>
-                </div>
-
-                <div class="case-card tier-gold" data-name="Платиновый" data-img="IMG_20260719_183406.png">
-                    <img src="IMG_20260719_183406.png" class="case-img" onerror="this.style.display='none'">
-                    <div class="case-name">Платиновый</div>
-                    <div class="case-price">⭐ 250 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>38000</span></div>
-                </div>
-
-                <div class="case-card tier-gold" data-name="Кибер-кейс" data-img="IMG_20260719_183425.png">
-                    <img src="IMG_20260719_183425.png" class="case-img" onerror="this.style.display='none'">
-                    <div class="case-name">Кибер-кейс</div>
-                    <div class="case-price">⭐ 500 звёзд</div>
-                    <div class="case-jackpot">Куш: <span>95000</span></div>
+                    <div class="case-jackpot">Куш: 15000</div>
                 </div>
 
             </div>
@@ -489,7 +417,6 @@
 
         <div class="game-screen-content">
             <div class="radar-panel">
-                <div class="radar-title">Синхронизация с замком</div>
                 <div class="radar-value" id="radarDisplay">---</div>
             </div>
 
@@ -531,7 +458,6 @@
     const mainMenuScreen = document.getElementById('mainMenuScreen');
     const casesScreen = document.getElementById('casesScreen');
     const gamePlayScreen = document.getElementById('gamePlayScreen');
-    const appContainer = document.getElementById('appContainer');
 
     function showScreen(screen) {
         mainMenuScreen.classList.remove('active');
@@ -542,46 +468,31 @@
 
     document.getElementById('btnOpenSafes').addEventListener('click', () => showScreen(casesScreen));
     document.getElementById('btnBackToMenu').addEventListener('click', () => showScreen(mainMenuScreen));
-    document.getElementById('btnBackToCases').addEventListener('click', exitGameScreen);
+    document.getElementById('btnBackToCases').addEventListener('click', () => showScreen(casesScreen));
 
     let currentSecretCode = [];
     let currentDrumValues = [1, 1, 1, 1, 1];
-    let currentSafeName = "";
 
     document.querySelectorAll('.case-card').forEach(card => {
         card.addEventListener('click', () => {
             const name = card.getAttribute('data-name');
-            const img = card.getAttribute('data-img');
-            startDecryption(name, img);
+            document.getElementById('gameScreenTitle').innerText = name;
+            
+            currentSecretCode = [];
+            for(let i=0; i<5; i++) {
+                currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
+            }
+            
+            currentDrumValues = [1, 1, 1, 1, 1];
+            for(let i=0; i<5; i++) {
+                document.getElementById(`drum-${i}`).innerText = "1";
+            }
+            document.getElementById('radarDisplay').innerText = "---";
+            document.getElementById('radarDisplay').style.color = "var(--text-muted)";
+            
+            showScreen(gamePlayScreen);
         });
     });
-
-    function startDecryption(safeName, bgImageName) {
-        currentSafeName = safeName;
-        document.getElementById('gameScreenTitle').innerText = safeName;
-        appContainer.style.backgroundImage = `linear-gradient(rgba(7, 10, 18, 0.4), rgba(7, 10, 18, 0.9)), url('${bgImageName}')`;
-        
-        currentSecretCode = [];
-        for(let i=0; i<5; i++) {
-            currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
-        }
-        
-        currentDrumValues = [1, 1, 1, 1, 1];
-        for(let i=0; i<5; i++) {
-            document.getElementById(`drum-${i}`).innerText = "1";
-        }
-
-        const radar = document.getElementById('radarDisplay');
-        radar.innerText = "---";
-        radar.style.color = "var(--text-muted)";
-
-        showScreen(gamePlayScreen);
-    }
-
-    function exitGameScreen() {
-        appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
-        showScreen(casesScreen);
-    }
 
     document.querySelectorAll('.drum-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -594,4 +505,31 @@
             
             currentDrumValues[idx] = val;
             document.getElementById(`drum-${idx}`).innerText = val;
-        })
+        });
+    });
+
+    document.getElementById('btnSubmitCode').addEventListener('click', () => {
+        let matches = 0;
+        for(let i=0; i<5; i++) {
+            if(currentDrumValues[i] === currentSecretCode[i]) matches++;
+        }
+        let percent = matches * 20;
+        const radar = document.getElementById('radarDisplay');
+        radar.innerText = percent + "%";
+
+        if (percent === 100) {
+            radar.style.color = "var(--radar-green)";
+            alert("🔥 Сейф взломан!");
+            showScreen(casesScreen);
+        } else if (percent >= 60) {
+            radar.style.color = "var(--radar-green)";
+        } else if (percent >= 20) {
+            radar.style.color = "var(--radar-yellow)";
+        } else {
+            radar.style.color = "var(--radar-red)";
+        }
+    });
+</script>
+
+</body>
+</html>

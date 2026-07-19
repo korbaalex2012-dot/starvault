@@ -39,7 +39,6 @@
             padding: 15px;
         }
 
-        /* Возвращаем фоновую картинку для всего приложения */
         .app-container {
             width: 100%;
             max-width: 390px;
@@ -56,6 +55,7 @@
             position: relative;
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             overflow: hidden;
+            transition: background-image 0.3s ease;
         }
 
         .screen {
@@ -131,7 +131,6 @@
             margin-bottom: 20px;
         }
 
-        /* Возвращаем картинку на главную кнопку */
         .main-button {
             width: 100%;
             height: 160px;
@@ -408,49 +407,49 @@
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" data-name="Деревянный">
+                <div class="case-card tier-bronze" data-name="Деревянный" data-bg="IMG_20260719_180634.png">
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Бронзовый">
+                <div class="case-card tier-bronze" data-name="Бронзовый" data-bg="IMG_20260719_181100.png">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Медный">
+                <div class="case-card tier-bronze" data-name="Медный" data-bg="IMG_20260719_181706.png">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Стальной">
+                <div class="case-card tier-silver" data-name="Стальной" data-bg="IMG_20260719_183142.png">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Железный">
+                <div class="case-card tier-silver" data-name="Железный" data-bg="IMG_20260719_183244.png">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Серебряный">
+                <div class="case-card tier-silver" data-name="Серебряный" data-bg="IMG_20260719_183338.png">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold" data-name="Золотой">
+                <div class="case-card tier-gold" data-name="Золотой" data-bg="IMG_20260719_183351.png">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
@@ -511,6 +510,7 @@
     const mainMenuScreen = document.getElementById('mainMenuScreen');
     const casesScreen = document.getElementById('casesScreen');
     const gamePlayScreen = document.getElementById('gamePlayScreen');
+    const appContainer = document.getElementById('appContainer');
 
     function showScreen(screen) {
         mainMenuScreen.classList.remove('active');
@@ -521,7 +521,12 @@
 
     document.getElementById('btnOpenSafes').addEventListener('click', () => showScreen(casesScreen));
     document.getElementById('btnBackToMenu').addEventListener('click', () => showScreen(mainMenuScreen));
-    document.getElementById('btnBackToCases').addEventListener('click', () => showScreen(casesScreen));
+    
+    // При возврате назад сбрасываем фон на стандартный космический
+    document.getElementById('btnBackToCases').addEventListener('click', () => {
+        appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
+        showScreen(casesScreen);
+    });
 
     let currentSecretCode = [];
     let currentDrumValues = [1, 1, 1, 1, 1];
@@ -529,8 +534,16 @@
     document.querySelectorAll('.case-card').forEach(card => {
         card.addEventListener('click', () => {
             const name = card.getAttribute('data-name');
+            const bgImg = card.getAttribute('data-bg');
+            
             document.getElementById('gameScreenTitle').innerText = name;
             
+            // Динамически меняем задний фон приложения на картинку выбранного кейса
+            if(bgImg) {
+                appContainer.style.backgroundImage = `linear-gradient(rgba(7, 10, 18, 0.75), rgba(7, 10, 18, 0.95)), url('${bgImg}')`;
+            }
+            
+            // Генерируем новый случайный код
             currentSecretCode = [];
             for(let i=0; i<5; i++) {
                 currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
@@ -562,27 +575,23 @@
     });
 
     document.getElementById('btnSubmitCode').addEventListener('click', () => {
-        let matches = 0;
-        for(let i=0; i<5; i++) {
-            if(currentDrumValues[i] === currentSecretCode[i]) matches++;
-        }
-        let percent = matches * 20;
-        const radar = document.getElementById('radarDisplay');
-        radar.innerText = percent + "%";
+        let exactMatches = 0; // На своем месте
+        let partialMatches = 0; // Есть в коде, но на другом месте
 
-        if (percent === 100) {
-            radar.style.color = "var(--radar-green)";
-            alert("🔥 Сейф взломан!");
-            showScreen(casesScreen);
-        } else if (percent >= 60) {
-            radar.style.color = "var(--radar-green)";
-        } else if (percent >= 20) {
-            radar.style.color = "var(--radar-yellow)";
-        } else {
-            radar.style.color = "var(--radar-red)";
-        }
-    });
-</script>
+        // Копии массивов, чтобы правильно рассчитать совпадения без повторов
+        let secretCopy = [...currentSecretCode];
+        let drumCopy = [...currentDrumValues];
 
-</body>
-</html>
+        // 1. Проверяем точные совпадения (цифра на своем месте)
+        for (let i = 0; i < 5; i++) {
+            if (drumCopy[i] === secretCopy[i]) {
+                exactMatches++;
+                secretCopy[i] = null; // Помечаем как учтенное
+                drumCopy[i] = null;
+            }
+        }
+
+        // 2. Проверяем частичные совпадения (цифра есть, но не там)
+        for (let i = 0; i < 5; i++) {
+            if (drumCopy[i] !== null) {
+ 

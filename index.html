@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --panel-bg: rgba(19, 26, 38, 0.85);
+            --panel-bg: rgba(19, 26, 38, 0.95);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -26,7 +26,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2); /* Красивая фирменная обводка при тапе */
+            -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2);
         }
 
         body {
@@ -44,10 +44,7 @@
             width: 100%;
             max-width: 390px;
             height: 700px;
-            background-color: var(--bg-dark);
-            background-image: url('IMG_20260719_173450.png');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #070a12 0%, #03050a 100%);
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
@@ -170,7 +167,6 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .main-action-zone {
@@ -187,12 +183,8 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
-            background-color: var(--panel-bg);
-            background-image: linear-gradient(rgba(10, 14, 23, 0.2), rgba(10, 14, 23, 0.6)), 
-                              url('IMG_20260719_172011_593.jpg');
-            background-size: cover;
-            background-position: center;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+            background: linear-gradient(135deg, #131a26 0%, #0d131d 100%);
         }
 
         .main-button .title {
@@ -269,7 +261,7 @@
         }
 
         .case-card {
-            background-color: rgba(15, 22, 36, 0.85);
+            background-color: rgba(15, 22, 36, 0.9);
             border-radius: 16px;
             padding: 12px;
             display: flex;
@@ -279,11 +271,9 @@
             cursor: pointer;
         }
 
-        .case-img {
-            width: 75px;
-            height: 75px;
-            object-fit: contain;
-            margin-bottom: 6px;
+        .case-icon-placeholder {
+            font-size: 36px;
+            margin-bottom: 8px;
         }
 
         .tier-bronze { border: 2px solid var(--bronze); }
@@ -327,7 +317,7 @@
 
         .radar-panel {
             width: 100%;
-            background-color: rgba(15, 22, 36, 0.9);
+            background-color: rgba(15, 22, 36, 0.95);
             border: 2px solid #243147;
             border-radius: 16px;
             padding: 15px;
@@ -360,7 +350,7 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            background: rgba(10, 15, 26, 0.85);
+            background: rgba(10, 15, 26, 0.9);
             border: 2px solid #1f293d;
             border-radius: 14px;
             padding: 8px 4px;
@@ -409,7 +399,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background-color: rgba(15, 22, 36, 0.85);
+            background-color: rgba(15, 22, 36, 0.9);
             border: 2px solid #243147;
             border-radius: 16px;
             padding: 20px;
@@ -464,50 +454,50 @@
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
-                    <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-bronze" data-name="Деревянный">
+                    <div class="case-icon-placeholder">📦</div>
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
-                    <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-bronze" data-name="Бронзовый">
+                    <div class="case-icon-placeholder">🟫</div>
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
-                    <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-bronze" data-name="Медный">
+                    <div class="case-icon-placeholder">🪙</div>
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
-                    <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-silver" data-name="Стальной">
+                    <div class="case-icon-placeholder">🔗</div>
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
-                    <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-silver" data-name="Железный">
+                    <div class="case-icon-placeholder">⚙️</div>
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
-                    <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-silver" data-name="Серебряный">
+                    <div class="case-icon-placeholder">🥈</div>
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
-                    <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
+                <div class="case-card tier-gold" data-name="Золотой">
+                    <div class="case-icon-placeholder">🥇</div>
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
                     <div class="case-jackpot">Куш: <span>15000</span></div>
@@ -587,18 +577,50 @@
 </div>
 
 <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        var userCoins = 0;
-        var userStars = 0;
+    // Скрипт в самом низу страницы гарантирует, что все ID уже считаны браузером устройства
+    var userCoins = 0;
+    var userStars = 0;
 
-        var mainMenuScreen = document.getElementById('mainMenuScreen');
-        var casesScreen = document.getElementById('casesScreen');
-        var gamePlayScreen = document.getElementById('gamePlayScreen');
-        var assetsScreen = document.getElementById('assetsScreen');
-        var appContainer = document.getElementById('appContainer');
-        var settingsWrapper = document.getElementById('settingsWrapper');
+    var mainMenuScreen = document.getElementById('mainMenuScreen');
+    var casesScreen = document.getElementById('casesScreen');
+    var gamePlayScreen = document.getElementById('gamePlayScreen');
+    var assetsScreen = document.getElementById('assetsScreen');
+    var appContainer = document.getElementById('appContainer');
+    var settingsWrapper = document.getElementById('settingsWrapper');
 
-        function showScreen(screen) {
-            mainMenuScreen.style.display = 'none';
-            casesScreen.style.display = 'none';
-            gamePlayS
+    function showScreen(screen) {
+        mainMenuScreen.style.display = 'none';
+        casesScreen.style.display = 'none';
+        gamePlayScreen.style.display = 'none';
+        assetsScreen.style.display = 'none';
+        
+        if (screen === mainMenuScreen) {
+            settingsWrapper.style.display = 'flex';
+        } else {
+            settingsWrapper.style.display = 'none';
+            settingsWrapper.classList.remove('open');
+        }
+
+        screen.style.display = 'flex';
+    }
+
+    // НАСТРОЙКИ
+    document.getElementById('triggerGear').addEventListener('click', function() {
+        settingsWrapper.classList.toggle('open');
+    });
+
+    document.getElementById('triggerArrow').addEventListener('click', function() {
+        settingsWrapper.classList.toggle('open');
+    });
+
+    document.getElementById('btnCup').addEventListener('click', function() {
+        settingsWrapper.classList.remove('open');
+    });
+
+    document.getElementById('btnLang').addEventListener('click', function() {
+        settingsWrapper.classList.remove('open');
+    });
+
+    // НАВИГАЦИЯ
+    document.getElementById('btnGoToCases').addEventListener('click', function() {
+   

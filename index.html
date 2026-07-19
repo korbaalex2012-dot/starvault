@@ -27,7 +27,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2);
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -190,6 +190,7 @@
             font-weight: 800;
             text-transform: uppercase;
             color: #fff;
+            pointer-events: none;
         }
 
         .middle-zone {
@@ -236,6 +237,11 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            color: #fff;
+        }
+
+        .bottom-button span {
+            pointer-events: none;
         }
 
         /* КЕЙСЫ */
@@ -260,6 +266,11 @@
             align-items: center;
             text-align: center;
             cursor: pointer;
+            color: #fff;
+        }
+
+        .case-card * {
+            pointer-events: none;
         }
 
         .case-img {
@@ -267,7 +278,6 @@
             height: 70px;
             object-fit: contain;
             margin-bottom: 6px;
-            pointer-events: none;
         }
 
         .tier-bronze { border: 2px solid var(--bronze); }
@@ -398,29 +408,29 @@
 <div class="app-container" id="appContainer">
 
     <div class="settings-menu-wrapper" id="settingsWrapper">
-        <div class="gear-btn" id="triggerGear">⚙️</div>
-        <div class="arrow-btn" id="triggerArrow">▼</div>
+        <button class="gear-btn" id="triggerGear">⚙️</button>
+        <button class="arrow-btn" id="triggerArrow">▼</button>
         <div class="settings-dropdown">
-            <div class="sub-button" id="btnCup">🏆</div>
-            <div class="sub-button" id="btnLang">🌐</div>
+            <button class="sub-button" id="btnCup">🏆</button>
+            <button class="sub-button" id="btnLang">🌐</button>
         </div>
     </div>
 
     <div id="mainMenuScreen" class="screen" style="display: flex;">
         <div class="main-action-zone">
-            <div class="main-button" id="btnGoToCases">
+            <button class="main-button" id="btnGoToCases">
                 <span class="title">Открыть сейф</span>
-            </div>
+            </button>
         </div>
 
         <div class="middle-zone">
-            <div class="mid-button btn-assets" id="btnGoToAssets">Активы</div>
-            <div class="mid-button btn-pvp" id="btnPvpStub">PVP Дуэли</div>
+            <button class="mid-button btn-assets" id="btnGoToAssets">Активы</button>
+            <button class="mid-button btn-pvp" id="btnPvpStub">PVP Дуэли</button>
         </div>
 
         <div class="bottom-zone">
-            <div class="bottom-button" id="btnDailyStub"><span>🎁</span><span>Дейли</span></div>
-            <div class="bottom-button" id="btnShopStub"><span>🛒</span><span>Магазин</span></div>
+            <button class="bottom-button" id="btnDailyStub"><span>🎁</span><span>Дейли</span></button>
+            <button class="bottom-button" id="btnShopStub"><span>🛒</span><span>Магазин</span></button>
         </div>
     </div>
 
@@ -432,54 +442,54 @@
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
-                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
+                <button class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
                     <img src="IMG_20260719_180634.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
                     <div class="case-jackpot">Куш: <span>140</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
+                <button class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
                     <img src="IMG_20260719_181100.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
                     <div class="case-jackpot">Куш: <span>420</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
+                <button class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
                     <img src="IMG_20260719_181706.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
                     <div class="case-jackpot">Куш: <span>890</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
+                <button class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
                     <img src="IMG_20260719_183142.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
                     <div class="case-jackpot">Куш: <span>1500</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
+                <button class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
                     <img src="IMG_20260719_183244.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
                     <div class="case-jackpot">Куш: <span>3400</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
+                <button class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
                     <img src="IMG_20260719_183338.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
                     <div class="case-jackpot">Куш: <span>7200</span></div>
-                </div>
+                </button>
 
-                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
+                <button class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
                     <img src="IMG_20260719_183351.png" class="case-img" onerror="this.style.display='none'">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
                     <div class="case-jackpot">Куш: <span>15000</span></div>
-                </div>
+                </button>
             </div>
         </div>
     </div>
@@ -579,13 +589,4 @@
             settingsWrapper.style.display = 'flex';
         } else {
             settingsWrapper.style.display = 'none';
-            settingsWrapper.classList.remove('open');
-        }
-        screen.style.display = 'flex';
-    }
-
-    // Чистый метод подписки без e.preventDefault(), блокирующего Webview Telegram
-    function bindTap(elementId, callback) {
-        var el = document.getElementById(elementId);
-        if (el) {
-            el.
+            settingsWrapper.classList.remove(

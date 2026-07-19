@@ -3,161 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarVault 3D VIP</title>
+    <title>StarVault AAA</title>
     <script src="https://telegram.org"></script>
     <style>
-        body { 
-            background: #020617; 
-            color: #f8fafc; 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            text-align: center; 
-            margin: 0; 
-            padding: 0; 
-            user-select: none; 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        .game-container { 
-            width: 100vw; 
-            height: 100vh; 
-            max-width: 450px; 
-            max-height: 800px; 
-            position: relative;
-            background: url('IMG_20260719_114541_492.jpg') no-repeat center center;
-            background-size: cover;
-            overflow: hidden;
-        }
-        /* Невидимые, но кликабельные зоны поверх премиум-картинки */
-        .tabs-overlay {
-            position: absolute;
-            top: 64%;
-            left: 5%;
-            width: 90%;
-            height: 20%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 10px;
-        }
-        .hidden-tab {
-            background: rgba(255, 255, 255, 0.01);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .hidden-tab.active {
-            border-color: #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
-        }
-        .display-overlay {
-            position: absolute;
-            top: 37.5%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            gap: 18px;
-        }
-        .digit-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .arrow-up, .arrow-down {
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: #fbbf24;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 2px 10px;
-            font-weight: 900;
-            text-shadow: 0 0 8px #fbbf24;
-        }
-        .arrow-up:active, .arrow-down:active {
-            transform: scale(1.3);
-        }
-        .digital-num {
-            font-size: 52px;
-            font-weight: 900;
-            font-family: monospace;
-            color: #fbbf24;
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.9);
-            margin: 5px 0;
-            user-select: none;
-        }
-        .info-panel {
-            position: absolute;
-            bottom: 4%;
-            left: 5%;
-            width: 90%;
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px;
-            border-radius: 14px;
-            font-size: 13px;
-            color: #94a3b8;
-            backdrop-filter: blur(10px);
-        }
+        body { background: #020617; color: #f8fafc; font-family: 'Segoe UI', Roboto, sans-serif; text-align: center; margin: 0; padding: 0; user-select: none; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        /* ОБЩАЯ НАСТРОЙКА ЭКРАНОВ */
+        .window { width: 100vw; height: 100vh; max-width: 450px; max-height: 800px; position: relative; overflow: hidden; display: none; }
+        .window.active { display: block; }
+
+        /* ЭКРАН 1: ГЛАВНОЕ МЕНЮ */
+        #menu-screen { background: url('IMG_20260719_114541_492.jpg') no-repeat center center; background-size: cover; }
+        
+        /* Невидимые сенсорные зоны поверх картиночных кнопок */
+        .menu-btn-zone { position: absolute; width: 42%; height: 10%; background: rgba(255, 255, 255, 0.01); cursor: pointer; border-radius: 12px; }
+        .menu-btn-zone:active { background: rgba(255, 255, 255, 0.08); }
+        
+        #btn-zone-bronze { top: 67%; left: 7%; }
+        #btn-zone-friend { top: 67%; right: 7%; }
+        #btn-zone-gift { top: 79%; left: 7%; }
+        #btn-zone-settings { top: 79%; right: 7%; }
+
+        /* ЭКРАН 2: САМА ИГРА (ВЗЛОМ) */
+        #game-screen { background: radial-gradient(circle at center, #1e293b, #020617); padding: 20px 15px; box-sizing: border-box; }
+        .back-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 8px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 12px; }
+        .back-btn:active { transform: scale(0.95); }
+        
+        .game-title { margin-top: 50px; font-size: 12px; color: #fbbf24; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+        .game-jackpot { font-size: 34px; font-weight: 900; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); margin: 5px 0 25px 0; font-family: 'Impact', sans-serif; }
+        
+        .3d-vault-disc { background: radial-gradient(circle at center, #475569, #0f172a); border: 6px solid #1e293b; box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 4px 10px rgba(255,255,255,0.2); border-radius: 50%; width: 230px; height: 230px; margin: 0 auto 30px auto; display: flex; flex-direction: column; justify-content: center; align-items: center; border-style: double; }
+        .gold-scoreboard { background: #020617; border: 3px solid #fbbf24; box-shadow: 0 0 15px rgba(251, 191, 36, 0.2), inset 0 2px 8px rgba(0,0,0,0.8); border-radius: 14px; padding: 10px 6px; display: flex; gap: 8px; }
+        
+        .digit-slot { display: flex; flex-direction: column; align-items: center; }
+        .arrow { background: none; border: none; color: #fbbf24; font-size: 16px; cursor: pointer; padding: 2px 10px; font-weight: 900; text-shadow: 0 0 5px #fbbf24; }
+        .arrow:active { transform: scale(1.3); }
+        .num-slot { font-size: 34px; font-weight: 900; font-family: monospace; color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.7); width: 32px; height: 42px; display: flex; align-items: center; justify-content: center; }
+        
+        .action-submit { background: linear-gradient(135deg, #10b981, #047857); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 16px; font-size: 14px; font-weight: 800; border-radius: 14px; cursor: pointer; width: 90%; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
+        .action-submit:active { transform: scale(0.98); }
+        
+        .status-msg { color: #94a3b8; font-size: 12px; margin-top: 20px; min-height: 40px; padding: 10px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; width: 85%; margin-left: auto; margin-right: auto; }
+        .coins-panel { color: #38bdf8; font-size: 14px; font-weight: 700; margin-bottom: 10px; text-shadow: 0 0 8px rgba(56,189,248,0.3); }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Цифры кода накладываются ровно на табло сейфа из картинки -->
-        <div class="display-overlay">
-            <div class="digit-container"><button class="arrow-up" onclick="move(0,1)">▲</button><span class="digital-num" id="d0">0</span><button class="arrow-down" onclick="move(0,-1)">▼</button></div>
-            <div class="digit-container"><button class="arrow-up" onclick="move(1,1)">▲</button><span class="digital-num" id="d1">0</span><button class="arrow-down" onclick="move(1,-1)">▼</button></div>
-            <div class="digit-container"><button class="arrow-up" onclick="move(2,1)">▲</button><span class="digital-num" id="d2">0</span><button class="arrow-down" onclick="move(2,-1)">▼</button></div>
-            <div class="digit-container"><button class="arrow-up" onclick="move(3,1)">▲</button><span class="digital-num" id="d3">0</span><button class="arrow-down" onclick="move(3,-1)">▼</button></div>
+
+    <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ С ТВОЕЙ КАРТИНКОЙ -->
+    <div id="menu-screen" class="window active">
+        <div class="menu-btn-zone" id="btn-zone-bronze" onclick="openGame('bronze', 5)"></div>
+        <div class="menu-btn-zone" id="btn-zone-friend" onclick="openGame('friend', 0)"></div>
+        <div class="menu-btn-zone" id="btn-zone-gift" onclick="alert('🎁 Реферальная система: Пригласи 3 друзей и получи 5 бесплатных попыток!')"></div>
+        <div class="menu-btn-zone" id="btn-zone-settings" onclick="alert('⚙️ Язык приложения установлен на: RU (Русский)')"></div>
+    </div>
+
+    <!-- ЭКРАН 2: САМА ИГРА, КОТОРАЯ ОТКРЫВАЕТСЯ ПОСЛЕ ТАПА -->
+    <div id="game-screen" class="window">
+        <button class="back-btn" onclick="openMenu()">◀ Меню</button>
+        
+        <div class="game-title" id="vault-title-text">👑 БРОНЗОВЫЙ СЕЙФ 👑</div>
+        <div class="game-jackpot" id="vault-jackpot-text">4 250 ★</div>
+        
+        <div class="coins-panel" id="coins-text" style="display: none;">🪙 МОНЕТЫ: <span id="user-coins">100</span></div>
+
+        <div class="3d-vault-disc">
+            <div style="font-size:9px; font-weight:800; color:#94a3b8; letter-spacing:1px; margin-bottom:8px;">ПОДБОР ШИФРА</div>
+            <div class="gold-scoreboard">
+                <div class="digit-slot"><button class="arrow" onclick="move(0,1)">▲</button><span class="num-slot" id="d0">0</span><button class="arrow" onclick="move(0,-1)">▼</button></div>
+                <div class="digit-slot"><button class="arrow" onclick="move(1,1)">▲</button><span class="num-slot" id="d1">0</span><button class="arrow" onclick="move(1,-1)">▼</button></div>
+                <div class="digit-slot"><button class="arrow" onclick="move(2,1)">▲</button><span class="num-slot" id="d2">0</span><button class="arrow" onclick="move(2,-1)">▼</button></div>
+                <div class="digit-slot"><button class="arrow" onclick="move(3,1)">▲</button><span class="num-slot" id="d3">0</span><button class="arrow" onclick="move(3,-1)">▼</button></div>
+            </div>
         </div>
 
-        <!-- Кликабельные зоны ложатся прямо на 4 неоновые кнопки из картинки -->
-        <div class="tabs-overlay">
-            <div class="hidden-tab active" onclick="changeSafe('bronze', 5)"></div>
-            <div class="hidden-tab" onclick="changeSafe('friend', 0)"></div>
-            <div class="hidden-tab" onclick="changeSafe('silver', 50)"></div>
-            <div class="hidden-tab" onclick="changeSafe('gold', 500)"></div>
-        </div>
-
-        <div class="info-panel" id="hint">
-            Сейф заперт. Крути золотые стрелочки прямо на табло, чтобы взломать шифр и забрать джекпот!
-        </div>
+        <button class="action-submit" id="submit-btn" onclick="checkCode()">ВЗЛОМАТЬ ЗА 5 ★</button>
+        <div class="status-msg" id="hint">Крути стрелочки и подбирай код логикой. Каждая попытка дает точный анализ совпадений!</div>
     </div>
 
     <script>
         let vaultCodes = {
             "bronze": [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)],
-            "silver": [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)],
-            "gold": [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)],
             "friend": [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)]
         };
         
         let currentCode =;
         let currentMode = 'bronze';
+        let coins = 100;
 
         function move(idx, dir) {
             currentCode[idx] = (currentCode[idx] + dir + 10) % 10;
             document.getElementById('d' + idx).innerText = currentCode[idx];
-            
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
             }
         }
 
-        function changeSafe(type, cost) {
-            currentMode = type;
-            document.querySelectorAll('.hidden-tab').forEach(t => t.classList.remove('active'));
-            if(event && event.currentTarget) event.currentTarget.classList.add('active');
+        function openGame(mode, cost) {
+            currentMode = mode;
+            currentCode =;
+            for(let i=0; i<4; i++) document.getElementById('d' + i).innerText = 0;
+
+            document.getElementById('menu-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
             
-            let hint = document.getElementById('hint');
-            if(type === 'friend') {
-                hint.innerHTML = "🎯 <b>Режим «С другом» активен!</b><br>Крути диски, попытка стоит 10 монет.";
+            let title = document.getElementById('vault-title-text');
+            let jackpot = document.getElementById('vault-jackpot-text');
+            let btn = document.getElementById('submit-btn');
+            let coinsDisplay = document.getElementById('coins-text');
+            
+            if(mode === 'friend') {
+                title.innerText = "👥 РЕЖИМ С ДРУГОМ 👥";
+                jackpot.innerText = "ИГРА НА МОНЕТЫ";
+                btn.innerText = "ПОПЫТКА (10 🪙)";
+                btn.style.background = 'linear-gradient(135deg, #0ea5e9, #0369a1)';
+                coinsDisplay.style.display = 'block';
             } else {
-                hint.innerHTML = `💰 <b>Сейф обновлен! Ставка: ${cost} ★</b><br>Каждая попытка увеличивает главный джекпот!`;
+                title.innerText = "👑 БРОНЗОВЫЙ СЕЙФ 👑";
+                jackpot.innerText = "4 250 ★";
+                btn.innerText = `ВЗЛОМАТЬ ЗА ${cost} ★`;
+                btn.style.background = 'linear-gradient(135deg, #10b981, #047857)';
+                coinsDisplay.style.display = 'none';
             }
         }
-    </script>
-</body>
-</html>
+
+        function openMenu() {
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('menu-screen').classList.add('active');
+        }
+
+        function checkCode() {
+            let targetCode = vaultCodes[currentMode];
+            
+            if(currentMode === 'friend') {
+                if(coins < 10) {
+                    document.getElementById('hint').innerText = "❌ Не хватает монет для игры с другом!";
+                    return;
+                }
+                coins -= 10;
+                document.getElementById('user-coins').innerText = coins;
+            }
+
+            let correctDigits = 0;
+            let correctPositions = 0;
+            
+            for(let i=0; i<4; i++) {
+                if(currentCode[i] === targetCode[i]) correctPositions++;
+                if(targetCode.includes(currentCode[i])) correctDigits++;
+            }
+
+            let hintElement = document.getElementById('hint');
+            if(correctPositions === 4) {
+                if(currentMode === 'friend') {
+                    coins += 100;
+                    document.getElementById('user-coins').innerText = coins;
+                    hintElement.innerHTML = "<span style='color:#0ea5e9; font-weight:bold;'>💥 ВЗЛОМАНО! +100 монет!</span>";
+                    } else {hintElement.innerHTML = "💥 СЕЙФ ВЗОРВАН! ДЖЕКПОТ ТВОЙ!";alert("БАНК ВЗЛОМАН! Джекпот!");}vaultCodes[currentMode] = [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)];} else {hintElement.innerHTML = ⚙️ <b>Анализ:</b> угадано цифр: <span style='color:#fff'>${correctDigits}</span> | на своих местах: <span style='color:#fbbf24'>${correctPositions}</span>;}}

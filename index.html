@@ -6,8 +6,8 @@
     <title>Главное Меню</title>
     <style>
         :root {
-            --bg-dark: #0a0e17;
-            --panel-bg: rgba(19, 26, 38, 0.6);
+            --bg-dark: #070a12;
+            --panel-bg: rgba(19, 26, 38, 0.75);
             --accent-blue: #00e5ff;
             --accent-gold: #ffc107;
             --text-main: #ffffff;
@@ -22,7 +22,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-dark);
+            background-color: #020408;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -36,14 +36,33 @@
             width: 100%;
             max-width: 390px;
             height: 700px;
-            background: linear-gradient(180deg, #101622 0%, #0a0e17 100%);
+            background: radial-gradient(circle at 50% 30%, #141f36 0%, #070a12 100%);
             border: 2px solid #1f293d;
             border-radius: 28px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 225, 255, 0.05);
+            overflow: hidden;
+        }
+
+        /* Кибер-сетка для красивого заднего фона */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: center;
+            mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 90%);
+            -webkit-mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 90%);
+            pointer-events: none;
+            z-index: 1;
         }
 
         /* Верхний блок с круглыми кнопками справа */
@@ -61,7 +80,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background-color: #131a26;
+            background-color: var(--panel-bg);
             border: 2px solid #243147;
             color: var(--text-main);
             font-size: 20px;
@@ -69,12 +88,15 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         /* Центральная большая плита (Главная кнопка с СЕЙФОМ) */
         .main-action-zone {
             margin-top: 150px;
             margin-bottom: 20px;
+            z-index: 5;
         }
 
         .main-button {
@@ -87,10 +109,10 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.25);
             
-            /* Подключаем твое фото из репозитория Гитхаба */
-            background-image: linear-gradient(rgba(10, 14, 23, 0.4), rgba(10, 14, 23, 0.7)), 
+            /* Твой сейф */
+            background-image: linear-gradient(rgba(10, 14, 23, 0.3), rgba(10, 14, 23, 0.65)), 
                               url('IMG_20260719_172011_593.jpg');
             background-size: cover;
             background-position: center;
@@ -114,11 +136,12 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
+            z-index: 5;
         }
 
         .mid-button {
             height: 100px;
-            background-color: #131a26;
+            background-color: var(--panel-bg);
             border: 2px solid #243147;
             border-radius: 16px;
             display: flex;
@@ -128,8 +151,8 @@
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            text-align: center;
-            padding: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .btn-locked {
@@ -142,7 +165,7 @@
         .btn-pvp {
             border-color: var(--accent-gold);
             color: #fff;
-            box-shadow: 0 0 10px rgba(255, 193, 7, 0.1);
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.15);
         }
 
         /* Нижний блок (Дейлик и Магазин) */
@@ -151,11 +174,12 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-top: auto;
+            z-index: 5;
         }
 
         .bottom-button {
             height: 85px;
-            background-color: #131a26;
+            background-color: var(--panel-bg);
             border: 2px solid #243147;
             border-radius: 16px;
             display: flex;
@@ -166,6 +190,8 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .bottom-button span:first-child {
@@ -176,6 +202,7 @@
 <body>
 
 <div class="app-container">
+    <div class="bg-grid"></div>
 
     <div class="right-sidebar">
         <div class="circle-button">⚙️</div>

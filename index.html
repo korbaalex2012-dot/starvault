@@ -351,7 +351,7 @@
 
 <div class="app-container" id="appContainer">
 
-    <div id="mainMenuScreen" class="screen" style="display: flex;">
+    <div id="mainMenuScreen" class="screen" style="display: flex; position: relative; z-index: 999;">
         <div class="right-sidebar">
             <div class="circle-button">⚙️</div>
             <div class="circle-button">🏆</div>
@@ -484,7 +484,6 @@
 </div>
 
 <script>
-    // Отлавливаем любые скрытые ошибки скрипта на телефонах
     window.onerror = function(message, source, lineno, colno, error) {
         alert("Ошибка в коде: " + message + " на строке " + lineno);
         return true;
@@ -517,12 +516,11 @@
 
     var currentSecretCode = [1, 2, 3, 4, 5];
     var currentDrumValues = [1, 1, 1, 1, 1];
-    var gameDifficulty = "hard"; // Глобальная переменная для хранения режима сложности
+    var gameDifficulty = "hard";
 
     function selectCase(name, bgImg) {
         document.getElementById('gameScreenTitle').innerText = name;
         
-        // Устанавливаем сложность в зависимости от имени выбранного кейса
         if (name === "Деревянный" || name === "Бронзовый" || name === "Медный") {
             gameDifficulty = "easy";
         } else {
@@ -566,7 +564,6 @@
         var sCopy = [currentSecretCode[0], currentSecretCode[1], currentSecretCode[2], currentSecretCode[3], currentSecretCode[4]];
         var dCopy = [currentDrumValues[0], currentDrumValues[1], currentDrumValues[2], currentDrumValues[3], currentDrumValues[4]];
 
-        // 1. Ищем идеальные совпадения
         for (var i = 0; i < 5; i++) {
             if (dCopy[i] === sCopy[i]) {
                 exactMatches++;
@@ -575,7 +572,6 @@
             }
         }
 
-        // 2. Ищем частичные совпадения без indexOf
         for (var i = 0; i < 5; i++) {
             if (dCopy[i] !== -1) {
                 for (var j = 0; j < 5; j++) {
@@ -588,12 +584,11 @@
             }
         }
 
-        // Расчет очков в зависимости от текущей сложности
         var totalScore = 0;
         if (gameDifficulty === "easy") {
-            totalScore = exactMatches * 20; // В легком режиме частичные совпадения игнорируются
+            totalScore = exactMatches * 20;
         } else {
-            totalScore = (exactMatches * 20) + (partialMatches * 8); // В сложном режиме учитывается всё
+            totalScore = (exactMatches * 20) + (partialMatches * 8);
         }
 
         if (totalScore > 100) totalScore = 100;
@@ -607,3 +602,18 @@
             appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
             showScreen(casesScreen);
         } else {
+            radar.innerText = "СИГНАЛ: " + totalScore + "%";
+            
+            if (totalScore >= 60) {
+                radar.style.color = "var(--radar-green)";
+            } else if (totalScore >= 30) {
+                radar.style.color = "var(--radar-yellow)";
+            } else {
+                radar.style.color = "var(--radar-red)";
+            }
+        }
+    }
+</script>
+
+</body>
+    

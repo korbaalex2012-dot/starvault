@@ -13,12 +13,10 @@
             --text-main: #ffffff;
             --text-muted: #707e94;
             
-            /* Цвета для тиров */
             --bronze: #cd7f32;
             --silver: #c0c0c0;
             --gold: #ffd700;
 
-            /* Цвета радара */
             --radar-red: #ff3d71;
             --radar-yellow: #ffaa00;
             --radar-green: #00e676;
@@ -70,7 +68,6 @@
             display: flex;
         }
 
-        /* Общий заголовок для внутренних экранов */
         .screen-header {
             display: flex;
             align-items: center;
@@ -102,7 +99,7 @@
             color: var(--accent-blue);
         }
 
-        /* ================= ЭКРАН 1: ГЛАВНОЕ МЕНЮ ================= */
+        /* МЕНЮ */
         .right-sidebar {
             position: absolute;
             top: 20px;
@@ -124,9 +121,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
             backdrop-filter: blur(8px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
         .main-action-zone {
@@ -151,11 +146,6 @@
             background-position: center;
             position: relative;
             overflow: hidden;
-            transition: transform 0.1s ease;
-        }
-
-        .main-button:active {
-            transform: scale(0.98);
         }
 
         .main-button .title {
@@ -186,22 +176,18 @@
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
-            cursor: pointer;
             backdrop-filter: blur(8px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .btn-locked {
             border-color: #1c2535;
             color: var(--text-muted);
-            cursor: not-allowed;
             background-color: rgba(19, 26, 38, 0.4);
         }
 
         .btn-pvp {
             border-color: var(--accent-gold);
             color: #fff;
-            box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
         }
 
         .bottom-zone {
@@ -223,28 +209,18 @@
             gap: 6px;
             font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
             backdrop-filter: blur(8px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .bottom-button span:first-child {
             font-size: 22px;
         }
 
-        /* ================= ЭКРАН 2: ВЫБОР КЕЙСОВ ================= */
+        /* СЕТКА КЕЙСОВ */
         .cases-grid-wrapper {
             flex: 1;
             overflow-y: auto;
             padding-right: 5px;
-        }
-
-        .cases-grid-wrapper::-webkit-scrollbar {
-            width: 4px;
-        }
-        .cases-grid-wrapper::-webkit-scrollbar-thumb {
-            background: #1f293d;
-            border-radius: 10px;
         }
 
         .cases-grid {
@@ -264,13 +240,7 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            transition: transform 0.1s ease;
-            position: relative;
             backdrop-filter: blur(4px);
-        }
-
-        .case-card:active {
-            transform: scale(0.96);
         }
 
         .case-img {
@@ -280,9 +250,9 @@
             margin-bottom: 6px;
         }
 
-        .tier-bronze { border: 2px solid var(--bronze); box-shadow: inset 0 0 10px rgba(205,127,50,0.15); }
-        .tier-silver { border: 2px solid var(--silver); box-shadow: inset 0 0 10px rgba(192,192,192,0.15); }
-        .tier-gold { border: 2px solid var(--accent-gold); box-shadow: inset 0 0 10px rgba(255,193,7,0.15); }
+        .tier-bronze { border: 2px solid var(--bronze); }
+        .tier-silver { border: 2px solid var(--silver); }
+        .tier-gold { border: 2px solid var(--accent-gold); }
 
         .case-name {
             font-size: 13px;
@@ -313,7 +283,7 @@
             color: var(--accent-gold);
         }
 
-        /* ================= ЭКРАН 3: ЭКРАН ПОДБОРА КОДА ================= */
+        /* ИГРОВОЙ ЭКРАН */
         .game-screen-content {
             flex: 1;
             display: flex;
@@ -331,14 +301,12 @@
             padding: 15px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .radar-title {
             font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 5px;
         }
 
@@ -346,7 +314,6 @@
             font-size: 26px;
             font-weight: 900;
             color: var(--text-muted);
-            transition: color 0.3s ease;
         }
 
         .lock-container {
@@ -368,7 +335,6 @@
             padding: 8px 4px;
             flex: 1;
             max-width: 55px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
         .drum-btn {
@@ -384,22 +350,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            user-select: none;
-        }
-
-        .drum-btn:active {
-            background: var(--accent-blue);
-            color: #000;
         }
 
         .drum-display {
             font-size: 26px;
             font-weight: 900;
             color: #fff;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
             width: 40px;
             text-align: center;
-            user-select: none;
         }
 
         .btn-action-submit {
@@ -412,14 +370,8 @@
             font-size: 18px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
-            transition: transform 0.1s ease;
-        }
-
-        .btn-action-submit:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
@@ -435,7 +387,7 @@
         </div>
 
         <div class="main-action-zone">
-            <div class="main-button" onclick="openScreen('casesScreen')">
+            <div class="main-button" id="btnOpenSafes">
                 <span class="title">Открыть сейф</span>
             </div>
         </div>
@@ -459,74 +411,74 @@
 
     <div id="casesScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" onclick="openScreen('mainMenuScreen')">⬅</button>
+            <button class="btn-back" id="btnBackToMenu">⬅</button>
             <div class="screen-title">Выбор хранилища</div>
         </div>
 
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
                 
-                <div class="case-card tier-bronze" onclick="startDecryption('Деревянный', 'IMG_20260719_180634.png')">
-                    <img src="IMG_20260719_180634.png" alt="Деревянный кейс" class="case-img">
+                <div class="case-card tier-bronze" data-name="Деревянный" data-img="IMG_20260719_180634.png">
+                    <img src="IMG_20260719_180634.png" class="case-img">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">⭐ 1 звезда</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-1">140</span></div>
+                    <div class="case-jackpot">Куш: <span>140</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" onclick="startDecryption('Бронзовый', 'IMG_20260719_181100.png')">
-                    <img src="IMG_20260719_181100.png" alt="Бронзовый кейс" class="case-img">
+                <div class="case-card tier-bronze" data-name="Бронзовый" data-img="IMG_20260719_181100.png">
+                    <img src="IMG_20260719_181100.png" class="case-img">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">⭐ 3 звезды</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-2">420</span></div>
+                    <div class="case-jackpot">Куш: <span>420</span></div>
                 </div>
 
-                <div class="case-card tier-bronze" onclick="startDecryption('Медный', 'IMG_20260719_181706.png')">
-                    <img src="IMG_20260719_181706.png" alt="Медный кейс" class="case-img">
+                <div class="case-card tier-bronze" data-name="Медный" data-img="IMG_20260719_181706.png">
+                    <img src="IMG_20260719_181706.png" class="case-img">
                     <div class="case-name">Медный</div>
                     <div class="case-price">⭐ 5 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-3">890</span></div>
+                    <div class="case-jackpot">Куш: <span>890</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="startDecryption('Стальной', 'IMG_20260719_183142.png')">
-                    <img src="IMG_20260719_183142.png" alt="Стальной кейс" class="case-img">
+                <div class="case-card tier-silver" data-name="Стальной" data-img="IMG_20260719_183142.png">
+                    <img src="IMG_20260719_183142.png" class="case-img">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">⭐ 10 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-4">1500</span></div>
+                    <div class="case-jackpot">Куш: <span>1500</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="startDecryption('Железный', 'IMG_20260719_183244.png')">
-                    <img src="IMG_20260719_183244.png" alt="Железный кейс" class="case-img">
+                <div class="case-card tier-silver" data-name="Железный" data-img="IMG_20260719_183244.png">
+                    <img src="IMG_20260719_183244.png" class="case-img">
                     <div class="case-name">Железный</div>
                     <div class="case-price">⭐ 25 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-5">3400</span></div>
+                    <div class="case-jackpot">Куш: <span>3400</span></div>
                 </div>
 
-                <div class="case-card tier-silver" onclick="startDecryption('Серебряный', 'IMG_20260719_183338.png')">
-                    <img src="IMG_20260719_183338.png" alt="Серебряный кейс" class="case-img">
+                <div class="case-card tier-silver" data-name="Серебряный" data-img="IMG_20260719_183338.png">
+                    <img src="IMG_20260719_183338.png" class="case-img">
                     <div class="case-name">Серебряный</div>
                     <div class="case-price">⭐ 50 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-6">7200</span></div>
+                    <div class="case-jackpot">Куш: <span>7200</span></div>
                 </div>
 
-                <div class="case-card tier-gold" onclick="startDecryption('Золотой', 'IMG_20260719_183351.png')">
-                    <img src="IMG_20260719_183351.png" alt="Золотой кейс" class="case-img">
+                <div class="case-card tier-gold" data-name="Золотой" data-img="IMG_20260719_183351.png">
+                    <img src="IMG_20260719_183351.png" class="case-img">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">⭐ 100 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-7">15000</span></div>
+                    <div class="case-jackpot">Куш: <span>15000</span></div>
                 </div>
 
-                <div class="case-card tier-gold" onclick="startDecryption('Платиновый', 'IMG_20260719_183406.png')">
-                    <img src="IMG_20260719_183406.png" alt="Платиновый кейс" class="case-img">
+                <div class="case-card tier-gold" data-name="Платиновый" data-img="IMG_20260719_183406.png">
+                    <img src="IMG_20260719_183406.png" class="case-img">
                     <div class="case-name">Платиновый</div>
                     <div class="case-price">⭐ 250 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-8">38000</span></div>
+                    <div class="case-jackpot">Куш: <span>38000</span></div>
                 </div>
 
-                <div class="case-card tier-gold" onclick="startDecryption('Кибер-кейс', 'IMG_20260719_183425.png')">
-                    <img src="IMG_20260719_183425.png" alt="Кибер-кейс" class="case-img">
+                <div class="case-card tier-gold" data-name="Кибер-кейс" data-img="IMG_20260719_183425.png">
+                    <img src="IMG_20260719_183425.png" class="case-img">
                     <div class="case-name">Кибер-кейс</div>
                     <div class="case-price">⭐ 500 звёзд</div>
-                    <div class="case-jackpot">Куш: <span id="jackpot-9">95000</span></div>
+                    <div class="case-jackpot">Куш: <span>95000</span></div>
                 </div>
 
             </div>
@@ -535,7 +487,7 @@
 
     <div id="gamePlayScreen" class="screen">
         <div class="screen-header">
-            <button class="btn-back" onclick="exitGameScreen()">⬅</button>
+            <button class="btn-back" id="btnBackToCases">⬅</button>
             <div class="screen-title" id="gameScreenTitle">Подбор кода</div>
         </div>
 
@@ -547,57 +499,112 @@
 
             <div class="lock-container">
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
+                    <button class="drum-btn" data-drum="0" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-0">1</div>
-                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
+                    <button class="drum-btn" data-drum="0" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
+                    <button class="drum-btn" data-drum="1" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-1">1</div>
-                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
+                    <button class="drum-btn" data-drum="1" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
+                    <button class="drum-btn" data-drum="2" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-2">1</div>
-                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
+                    <button class="drum-btn" data-drum="2" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
+                    <button class="drum-btn" data-drum="3" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-3">1</div>
-                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
+                    <button class="drum-btn" data-drum="3" data-dir="-1">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
+                    <button class="drum-btn" data-drum="4" data-dir="1">▲</button>
                     <div class="drum-display" id="drum-4">1</div>
-                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
+                    <button class="drum-btn" data-drum="4" data-dir="-1">▼</button>
                 </div>
             </div>
 
-            <button class="btn-action-submit" onclick="checkCombination()">Ввести код</button>
+            <button class="btn-action-submit" id="btnSubmitCode">Ввести код</button>
         </div>
     </div>
 
 </div>
 
 <script>
-    function openScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
-        document.getElementById(screenId).classList.add('active');
+    // Навигация
+    const mainMenuScreen = document.getElementById('mainMenuScreen');
+    const casesScreen = document.getElementById('casesScreen');
+    const gamePlayScreen = document.getElementById('gamePlayScreen');
+    const appContainer = document.getElementById('appContainer');
+
+    function showScreen(screen) {
+        mainMenuScreen.classList.remove('active');
+        casesScreen.classList.remove('active');
+        gamePlayScreen.classList.remove('active');
+        screen.classList.add('active');
     }
 
+    document.getElementById('btnOpenSafes').addEventListener('click', () => showScreen(casesScreen));
+    document.getElementById('btnBackToMenu').addEventListener('click', () => showScreen(mainMenuScreen));
+    document.getElementById('btnBackToCases').addEventListener('click', exitGameScreen);
+
+    // Логика
     let currentSecretCode = [];
     let currentDrumValues = [1, 1, 1, 1, 1];
     let currentSafeName = "";
 
-    function generateNewSecretCode() {
-        let code = [];
-        for(let i=0; i<5; i++) {
-            code.push(Math.floor(Math.random() * 9) + 1);
-        }
-        return code;
-    }
+    document.querySelectorAll('.case-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const name = card.getAttribute('data-name');
+            const img = card.getAttribute('data-img');
+            startDecryption(name, img);
+        });
+    });
 
     function startDecryption(safeName, bgImageName) {
-        curr
+        currentSafeName = safeName;
+        document.getElementById('gameScreenTitle').innerText = safeName;
+        appContainer.style.backgroundImage = `linear-gradient(rgba(7, 10, 18, 0.4), rgba(7, 10, 18, 0.9)), url('${bgImageName}')`;
+        
+        // Новый код
+        currentSecretCode = [];
+        for(let i=0; i<5; i++) {
+            currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
+        }
+        
+        currentDrumValues = [1, 1, 1, 1, 1];
+        for(let i=0; i<5; i++) {
+            document.getElementById(`drum-${i}`).innerText = "1";
+        }
+
+        const radar = document.getElementById('radarDisplay');
+        radar.innerText = "---";
+        radar.style.color = "var(--text-muted)";
+
+        showScreen(gamePlayScreen);
+    }
+
+    function exitGameScreen() {
+        appContainer.style.backgroundImage = "url('IMG_20260719_173450.png')";
+        showScreen(casesScreen);
+    }
+
+    document.querySelectorAll('.drum-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-drum'));
+            const dir = parseInt(btn.getAttribute('data-dir'));
+            
+            let val = currentDrumValues[idx] + dir;
+            if (val > 9) val = 1;
+            if (val < 1) val = 9;
+            
+            currentDrumValues[idx] = val;
+            document.getElementById(`drum-${idx}`).innerText = val;
+        });
+    });
+
+    document.getElementById('btnSubmitCode').addEventListener('click', () => {
+        let matches = 0;
+        for(let i=0; i<5; i++) {
+          

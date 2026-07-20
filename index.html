@@ -45,7 +45,9 @@
       display: flex; justify-content: space-between; align-items: center;
     }
 
-    .user-badge { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .user-badge { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px; border-radius: 8px; }
+    .user-badge:active { background: rgba(255,255,255,0.05); }
+    
     .avatar {
       width: 42px; height: 42px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
@@ -81,7 +83,7 @@
     .section-title { font-size: 18px; font-weight: 900; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
 
     .safes-grid, .items-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .items-grid { grid-template-columns: repeat(3, 1fr); }
+    .items-grid { grid-template-columns: repeat(2, 1fr); }
 
     .safe-card, .item-card, .pvp-card, .setting-row, .daily-card {
       background: var(--card-bg); border: 1px solid var(--glass-border);
@@ -91,8 +93,8 @@
 
     .setting-row { flex-direction: row; justify-content: space-between; align-items: center; padding: 16px; margin-bottom: 10px; text-align: left; }
 
-    .safe-img, .item-img { width: 70px; height: 70px; object-fit: contain; margin: 8px 0; }
-    .item-img { width: 50px; height: 50px; }
+    .safe-img, .item-img { width: 75px; height: 75px; object-fit: contain; margin: 8px 0; }
+    .item-img { width: 55px; height: 55px; }
 
     .btn-hack {
       width: 100%; padding: 8px 0; border: none; border-radius: 10px;
@@ -154,7 +156,7 @@
   <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
-    <div class="user-badge" id="userBadgeBtn" onclick="openProfileModal()">
+    <div class="user-badge" id="userBadgeBtn">
       <div class="avatar" id="uAvatar">U</div>
       <div>
         <div style="font-weight:700; font-size:14px" id="uName">Игрок</div>
@@ -266,7 +268,7 @@
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
     <script>
-    // 1. БАЗА ДАННЫХ И КОНСТАНТЫ
+    // 1. БАЗА ДАННЫХ: ВСЕ 9 СЕЙФОВ С ТВОИМИ КАРТИНКАМИ
     const ALL_TITLES = [
       { id: "newbie", name: "🟢 Новичок", desc: "Выдается при старте" },
       { id: "hacker", name: "💻 Взломщик", desc: "Успешно взломать 5 сейфов" },
@@ -276,10 +278,15 @@
     ];
 
     const VAULTS = [
-      { id: 1, name: "📦 Деревянный Сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.4, img: "https://upload.wikimedia.org/wikipedia/commons/2/22/3D_Wooden_Box.png" },
-      { id: 2, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 150, reward: 450, dropId: 102, dropRate: 0.35, img: "https://upload.wikimedia.org/wikipedia/commons/4/41/Icon_Safe.png" },
-      { id: 3, name: "🔐 Электронный Сейф", len: 4, mode: "logic", attempts: 6, cost: 300, reward: 900, dropId: 103, dropRate: 0.3, img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Padlock-icon.png" },
-      { id: 4, name: "💎 Бриллиантовый Сейф", len: 5, mode: "time", time: 20, cost: 800, reward: 2500, dropId: 104, dropRate: 0.25, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Diamond_flat_icon.png" }
+      { id: 1, name: "📦 Деревянный Сундук", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.5, img: "IMG_20260719_180634.png" },
+      { id: 2, name: "🗝️ Ржавый Сейф", len: 3, mode: "time", time: 35, cost: 100, reward: 300, dropId: 101, dropRate: 0.45, img: "IMG_20260719_181100.png" },
+      { id: 3, name: "🥉 Медный Сейф", len: 4, mode: "logic", attempts: 8, cost: 200, reward: 600, dropId: 102, dropRate: 0.4, img: "IMG_20260719_181706.png" },
+      { id: 4, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 350, reward: 1000, dropId: 102, dropRate: 0.35, img: "IMG_20260719_183142.png" },
+      { id: 5, name: "📜 Винтажный Сейф", len: 4, mode: "logic", attempts: 7, cost: 500, reward: 1500, dropId: 103, dropRate: 0.3, img: "IMG_20260719_183244.png" },
+      { id: 6, name: "🔐 Электронный Сейф", len: 4, mode: "time", time: 25, cost: 800, reward: 2400, dropId: 103, dropRate: 0.25, img: "IMG_20260719_183338.png" },
+      { id: 7, name: "👑 Золотой VIP", len: 5, mode: "logic", attempts: 6, cost: 1200, reward: 4000, dropId: 104, dropRate: 0.2, img: "IMG_20260719_183351.png" },
+      { id: 8, name: "🖐️ Биометрический", len: 5, mode: "time", time: 20, cost: 2000, reward: 7000, dropId: 104, dropRate: 0.15, img: "IMG_20260719_183406.png" },
+      { id: 9, name: "🌌 Кибер-Квазар", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 104, dropRate: 0.1, img: "IMG_20260719_183425.png" }
     ];
 
     const ITEMS = [
@@ -289,7 +296,7 @@
       { id: 104, name: "👑 Золотая Корона", income: 200, img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Crown_flat_icon.png" }
     ];
 
-    // 2. ИНИЦИАЛИЗАЦИЯ И СОХРАНЕНИЕ
+    // 2. СОХРАНЕНИЯ И ИНИЦИАЛИЗАЦИЯ
     let tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
 
@@ -328,13 +335,11 @@
       document.getElementById('settingsPlaytime').innerText = `Зафиксировано: ${mins} мин`;
     }
 
-    // ТАЙМЕР ИГРОВОГО ВРЕМЕНИ
     setInterval(() => {
       state.playTimeSeconds += 1;
       if (state.playTimeSeconds % 10 === 0) saveState();
     }, 1000);
 
-    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     function switchTab(tabId, el) {
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -349,32 +354,18 @@
       if (tabId === 'market') renderMarket();
     }
 
-    // МУЗЫКА
     function toggleMusic(enabled) {
       const audio = document.getElementById('bgMusic');
-      if (enabled) {
-        audio.play().catch(() => {});
-      } else {
-        audio.pause();
-      }
+      if (enabled) { audio.play().catch(() => {}); } else { audio.pause(); }
     }
 
-    // ПРОВЕРКА ТИТУЛОВ И ОТКРЫТИЕ МОДАЛКИ
+    // 3. ОТКРЫТИЕ И ВЫБОР ТИТУЛОВ
     function checkTitleAchievements() {
       const totalWins = state.logicWins + state.timeWins;
-      
-      if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) {
-        state.unlockedTitles.push("hacker");
-      }
-      if (state.inventory.length >= 3 && !state.unlockedTitles.includes("collector")) {
-        state.unlockedTitles.push("collector");
-      }
-      if (state.pvpWins >= 3 && !state.unlockedTitles.includes("pvp_master")) {
-        state.unlockedTitles.push("pvp_master");
-      }
-      if (state.coins >= 10000 && !state.unlockedTitles.includes("rich")) {
-        state.unlockedTitles.push("rich");
-      }
+      if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) state.unlockedTitles.push("hacker");
+      if (state.inventory.length >= 3 && !state.unlockedTitles.includes("collector")) state.unlockedTitles.push("collector");
+      if (state.pvpWins >= 3 && !state.unlockedTitles.includes("pvp_master")) state.unlockedTitles.push("pvp_master");
+      if (state.coins >= 10000 && !state.unlockedTitles.includes("rich")) state.unlockedTitles.push("rich");
       saveState();
     }
 
@@ -413,7 +404,15 @@
       saveState();
       openProfileModal();
     }
-          // 3. ИГРОВОЙ ДВИЖОК СЕЙФОВ
+
+    // Принудительное подключение нажатия на шапку профиля
+    document.addEventListener('DOMContentLoaded', () => {
+      const userBadge = document.getElementById('userBadgeBtn');
+      if (userBadge) {
+        userBadge.addEventListener('click', openProfileModal);
+      }
+    });
+         // 4. ИГРОВОЙ ДВИЖОК СЕЙФОВ
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
@@ -569,7 +568,7 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // 4. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ (30/31 ДЕНЬ)
+    // 5. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
     function renderBonusTab() {
       const now = new Date();
       const currentDay = now.getDate();
@@ -646,7 +645,7 @@
       alert(`🎉 Награда за ${currentDay}-й день получена: +${rewardCoins} 🪙!`);
     }
 
-    // 5. ИНВЕНТАРЬ
+    // 6. ИНВЕНТАРЬ
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
       if (!grid) return;
@@ -696,7 +695,7 @@
       }
     }
 
-    // 6. P2P МАРКЕТ
+    // 7. P2P МАРКЕТ
     function tradeItem(itemId) {
       const item = ITEMS.find(i => i.id === itemId);
       const invIndex = state.inventory.findIndex(i => i.id === itemId);
@@ -795,7 +794,7 @@
       alert("🎉 Покупка совершена!");
     }
 
-    // 7. PVP ДУЭЛИ
+    // 8. PVP ДУЭЛИ
     function createPvpMatch() {
       const code = prompt("Придумайте код (3-5 цифр):", "1234");
       if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
@@ -922,9 +921,10 @@
       updateDigitsDisplay();
     }
 
-    // ИНИЦИАЛИЗАЦИЯ
+    // СТАРТ РЕНДЕРА
     saveState();
     renderSafes();
   </script>
 </body>
 </html>
+

@@ -293,14 +293,24 @@
   </nav>
     <script>
     // ==========================================
-    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ (Админ-Панель в коде)
-    // Легко добавляй новые промокоды здесь!
+    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ (Админ-Панель)
     // ==========================================
     const PROMO_CODES = {
       "STAR2026": { reward: 150, maxUses: 100 },
       "CYBERBERRY": { reward: 300, maxUses: 50 },
       "VAULT50": { reward: 50, maxUses: 999 }
     };
+
+    // ==========================================
+    // 🏷️ ВСЕ ТИТУЛЫ В ИГРЕ
+    // ==========================================
+    const ALL_TITLES = [
+      { id: "novice", name: "🟢 Новичок", req: 0 },
+      { id: "hacker", name: "⚡ Взломщик", req: 1000 },
+      { id: "master", name: "🔥 Мастер Сейфов", req: 5000 },
+      { id: "legend", name: "👑 Легенда Vault", req: 25000 },
+      { id: "dev", name: "👨‍💻 Разработчик", isDevOnly: true }
+    ];
 
     // 1. ИНИЦИАЛИЗАЦИЯ И СОСТОЯНИЕ
     let tg = window.Telegram ? window.Telegram.WebApp : null;
@@ -319,7 +329,7 @@
     let refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
     let usedPromos = JSON.parse(localStorage.getItem('sv_used_promos')) || [];
 
-    // 2. РЕДКИЕ ШАНСЫ И ПРЕДМЕТЫ
+    // 2. СЕЙФЫ И ПРЕДМЕТЫ
     const VAULTS = [
       { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.30, img: "IMG_20260719_180634.png" },
       { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 8, cost: 100, reward: 300, dropId: 102, dropRate: 0.22, img: "IMG_20260719_181100.png" },
@@ -353,7 +363,7 @@
 
     // 3. РЕФЕРАЛЫ И ПРОМОКОДЫ
     function shareRefLink() {
-      const botUsername = "StarVaultBot"; // Укажи здесь юзернейм своего бота
+      const botUsername = "StarVaultBot";
       const refLink = `https://t.me/${botUsername}?start=ref_${Date.now()}`;
       const text = `🔒 Взламывай сейфы вместе со мной в StarVault!\nПереходи по ссылке и получи +100 🪙 стартового бонуса!`;
       
@@ -710,7 +720,61 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // 7. СОХРАНЕНИЕ И ОБНОВЛЕНИЕ UI
+    // 7. МОДАЛЬНОЕ ОКНО ПРОФИЛЯ И ТИТУЛЫ
+    function openProfileModal() {
+      const container = document.getElementById('unlockedTitlesList');
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      // Получаем Telegram юзернейм
+      const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.username : "";
+
+      ALL_TITLES.forEach(t => {
+        // Проверка титула Разработчика для vqc_2
+        if (t.isDevOnly) {
+          if (tgUser && tgUser.toLowerCase() === "vqc_2") {
+            container.innerHTML += createTitleCard(t);
+          }
+          return;
+        }
+
+        // Обычные титулы
+        if (userBalance >= t.req || t.id === "novice") {
+          container.innerHTML += createTitleCard(t);
+        }
+      });
+
+      document.getElementById('profileModal').classList.add('active');
+    }
+
+    function createTitleCard(t) {
+      const isSelected = currentTitle === t.name;
+      return `
+        <div class="setting-row" style="margin-bottom:8px; padding:10px; background:${isSelected ? 'rgba(0,240,255,0.15)' : 'rgba(255,255,255,0.03)'}">
+          <div>
+            <div style="font-weight:800; font-size:13px;">${t.name}</div>
+            <div style="font-size:10px; color:var(--text-sub);">${t.isDevOnly ? '🔒 Эксклюзивно для разработчика' : 'Доступен'}</div>
+          </div>
+          <button class="btn-hack" style="width:auto; padding:4px 10px; font-size:10px;" onclick="selectTitle('${t.name}')">
+            ${isSelected ? '✓ Выбран' : 'Выбрать'}
+          </button>
+        </div>
+      `;
+    }
+
+    function selectTitle(titleName) {
+      currentTitle = titleName;
+      saveData();
+      updateUI();
+      openProfileModal();
+    }
+
+    function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
+    function openShopModal() { document.getElementById('shopModal').classList.add('active'); }
+    function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
+
+    // 8. СОХРАНЕНИЕ И ОБНОВЛЕНИЕ UI
     function saveData() {
       localStorage.setItem('sv_balance', userBalance);
       localStorage.setItem('sv_title', currentTitle);
@@ -727,11 +791,6 @@
       document.getElementById('uTitle').innerText = currentTitle;
     }
 
-    function openShopModal() { document.getElementById('shopModal').classList.add('active'); }
-    function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
-    function openProfileModal() { document.getElementById('profileModal').classList.add('active'); }
-    function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
-
     function toggleMusic(play) {
       const audio = document.getElementById('bgMusic');
       if (audio) { play ? audio.play() : audio.pause(); }
@@ -743,4 +802,3 @@
   </script>
 </body>
 </html>
-

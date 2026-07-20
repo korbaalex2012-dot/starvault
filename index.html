@@ -18,43 +18,73 @@
             --radar-green: #00E676;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .app-container { width: 100%; max-width: 420px; height: 100vh; max-height: 880px; background: radial-gradient(circle at top, #162238 0%, #0B0F19 100%); display: flex; flex-direction: column; position: relative; overflow: hidden; }
         
-        .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        /* ОБЩИЙ ФОН ПРИЛОЖЕНИЯ */
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
+        }
+        .app-container { 
+            width: 100%; 
+            max-width: 420px; 
+            height: 100vh; 
+            max-height: 880px; 
+            background: url('IMG_20260719_173450.png') center/cover no-repeat; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* МОДАЛЬНЫЕ ОКНА И НАСТРОЙКИ */
+        .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .toast-card { background: #141d2f; border: 1px solid var(--accent-gold); border-radius: 16px; padding: 20px; width: 85%; max-width: 320px; text-align: center; }
         .toast-title { font-weight: 800; font-size: 16px; color: var(--accent-gold); margin-bottom: 8px; }
         .toast-msg { font-size: 13px; color: var(--text-main); margin-bottom: 14px; }
         .toast-input { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #FFF; font-size: 14px; text-align: center; margin-bottom: 12px; outline: none; text-transform: uppercase; }
         .toast-btn { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 10px 18px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
 
-        .settings-menu-wrapper { position: absolute; top: 15px; left: 15px; z-index: 100; }
-        .gear-btn { font-size: 18px; cursor: pointer; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); }
-        .settings-dropdown { display: none; position: absolute; top: 45px; left: 0; flex-direction: column; gap: 8px; }
-        .settings-menu-wrapper.open .settings-dropdown { display: flex; }
-        .sub-button { background: rgba(20,29,47,0.95); border: 1px solid rgba(255,255,255,0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+        /* ВЕРХНИЕ КНОПКИ (ШЕСТЕРЕНКА И КУБОК) */
+        .top-left-controls { position: absolute; top: 15px; left: 15px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
+        .control-icon-btn { font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); }
 
         .top-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px; gap: 10px; z-index: 10; }
-        .coin-counter { background: rgba(255,215,0,0.1); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: var(--accent-gold); display: flex; align-items: center; gap: 6px; }
+        .coin-counter { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: var(--accent-gold); display: flex; align-items: center; gap: 6px; }
         .screen { display: none; flex-direction: column; flex: 1; padding: 15px; overflow-y: auto; position: relative; }
 
-        /* ПРЯМОУГОЛЬНАЯ ГЛАВНАЯ КНОПКА C КРАСИВЫМ ФОНОМ */
+        /* ГЛАВНАЯ КНОПКА С ТВОЕЙ КАРТИНКОЙ */
         .main-action-zone { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px 0; }
-        .main-button { width: 100%; height: 140px; border-radius: 20px; background: linear-gradient(135deg, #1e2d4a 0%, #111a2e 100%); border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15); position: relative; overflow: hidden; }
-        .main-button::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%); pointer-events: none; }
-        .main-button .icon { font-size: 38px; }
-        .main-button .title { color: var(--accent-gold); font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .main-button .subtitle { color: var(--text-muted); font-size: 12px; font-weight: 600; }
+        .main-button { 
+            width: 100%; 
+            height: 150px; 
+            border-radius: 20px; 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('IMG_20260719_172011_593.jpg') center/cover no-repeat; 
+            border: 2px solid var(--accent-gold); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px; 
+            cursor: pointer; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); 
+        }
+        .main-button .title { color: var(--accent-gold); font-weight: 900; font-size: 22px; text-transform: uppercase; text-shadow: 0 2px 4px #000; }
+        .main-button .subtitle { color: #FFF; font-size: 12px; font-weight: 700; text-shadow: 0 1px 3px #000; }
 
         .middle-zone { display: flex; gap: 10px; margin-bottom: 12px; }
         .mid-button { flex: 1; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 13px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-assets { background: linear-gradient(135deg, #2b3a55, #162238); }
-        .btn-pvp { background: linear-gradient(135deg, #d32f2f, #880e4f); }
+        .btn-assets { background: rgba(20, 29, 47, 0.85); }
+        .btn-pvp { background: rgba(136, 14, 79, 0.85); }
         .bottom-zone { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .bottom-button { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
+        .bottom-button { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
 
         .screen-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .btn-back { background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
+        .btn-back { background: rgba(0,0,0,0.5); border: none; color: #FFF; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
         .screen-title { font-size: 18px; font-weight: 800; }
 
         .cases-grid-wrapper { flex: 1; overflow-y: auto; }
@@ -68,7 +98,7 @@
         .unlock-btn { margin-top: 8px; width: 100%; background: var(--accent-gold); color: #000; border: none; padding: 6px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
 
         .game-screen-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; }
-        .radar-panel { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 15px; border-radius: 16px; text-align: center; }
+        .radar-panel { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 15px; border-radius: 16px; text-align: center; }
         .radar-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
         .radar-value { font-size: 20px; font-weight: 900; color: var(--radar-yellow); }
         .attempts-bar { margin-top: 6px; font-size: 12px; color: var(--accent-gold); font-weight: 700; }
@@ -94,7 +124,7 @@
         .day-card.claimed { opacity: 0.4; border-color: transparent; }
         .day-card.today { border-color: var(--accent-gold); background: rgba(255,215,0,0.15); }
 
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 2px; margin-bottom: 12px; }
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 2px; margin-bottom: 12px; }
         .tab-btn { flex: 1; text-align: center; padding: 8px; font-size: 11px; font-weight: 800; border-radius: 8px; cursor: pointer; color: var(--text-muted); }
         .tab-btn.active { background: var(--accent-blue); color: #000; }
         .pedestal-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 120px; margin-bottom: 15px; }
@@ -107,14 +137,14 @@
         .p-2 { height: 45px; background: #C0C0C0; }
         .p-3 { height: 30px; background: #CD7F32; }
         .leader-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
-        .leader-item { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .leader-item { background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
         .leader-rank { font-weight: 900; width: 30px; font-size: 12px; color: var(--accent-blue); }
         .leader-info { flex: 1; }
         .leader-score { font-weight: 800; font-size: 12px; color: var(--accent-gold); }
-        .my-rank-card { background: rgba(0, 191, 255, 0.15); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .my-rank-card { background: rgba(0, 191, 255, 0.2); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
-  <body>
+<body>
 
 <div class="app-container">
 
@@ -127,12 +157,32 @@
         </div>
     </div>
 
-    <div class="settings-menu-wrapper" id="settingsWrapper">
-        <div class="gear-btn" id="triggerGear">⚙️</div>
-        <div class="settings-dropdown">
-            <div class="sub-button" id="btnCup" title="Лидерборд">🏆</div>
-            <div class="sub-button" id="btnLang" title="Язык">🌐</div>
+    <div class="toast-modal" id="settingsModal">
+        <div class="toast-card" style="text-align: left;">
+            <div class="toast-title" style="text-align: center; margin-bottom: 15px;">⚙️ Настройки</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: 13px; font-weight: 700;">🔊 Звук / Музыка</span>
+                <input type="checkbox" id="toggleSound" checked style="width: 18px; height: 18px; cursor: pointer;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: 13px; font-weight: 700;">📳 Виброотклик</span>
+                <input type="checkbox" id="toggleHaptic" checked style="width: 18px; height: 18px; cursor: pointer;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <span style="font-size: 13px; font-weight: 700;">🌐 Язык</span>
+                <span style="font-size: 12px; color: var(--accent-gold); font-weight: 800;">Русский</span>
+            </div>
+
+            <button class="toast-btn" id="btnCloseSettings">Сохранить</button>
         </div>
+    </div>
+
+    <div class="top-left-controls">
+        <div class="control-icon-btn" id="btnOpenSettings" title="Настройки">⚙️</div>
+        <div class="control-icon-btn" id="btnCup" title="Лидерборд">🏆</div>
     </div>
 
     <div class="top-bar">
@@ -143,7 +193,6 @@
     <div id="mainMenuScreen" class="screen" style="display: flex;">
         <div class="main-action-zone">
             <div class="main-button" id="btnGoToCases">
-                <div class="icon">🔓</div>
                 <div class="title">Открыть сейф</div>
                 <div class="subtitle">Взламывай замки и забирай куш</div>
             </div>
@@ -420,472 +469,503 @@
     </div>
 
 </div>
-  <div class="toast-modal" id="settingsModal">
-    <div class="toast-card" style="text-align: left;">
-        <div class="toast-title" style="text-align: center; margin-bottom: 15px;">⚙️ Настройки</div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 13px; font-weight: 700;">🔊 Звук</span>
-            <input type="checkbox" id="toggleSound" checked style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 13px; font-weight: 700;">📳 Виброотклик</span>
-            <input type="checkbox" id="toggleHaptic" checked style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-            <span style="font-size: 13px; font-weight: 700;">🌐 Язык</span>
-            <span style="font-size: 12px; color: var(--accent-gold); font-weight: 800;">Русский</span>
-        </div>
-
-        <button class="toast-btn" id="btnCloseSettings">Сохранить</button>
-    </div>
-</div>
-
 <script>
-// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
-var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
-var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
-var userTimeInGame = parseInt(localStorage.getItem('sv_time_in_game')) || 0;
-var usedPromos = JSON.parse(localStorage.getItem('sv_used_promos')) || [];
+    // -------------------------------------------------------------
+    // СОСТОЯНИЕ И НАСТРОЙКИ
+    // -------------------------------------------------------------
+    var tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg) tg.expand();
 
-var soundEnabled = localStorage.getItem('sv_sound') !== 'false';
-var hapticEnabled = localStorage.getItem('sv_haptic') !== 'false';
+    var userCoins = 100;
+    var currentCase = null;
+    var secretCode = [];
+    var currentDrums = [1, 1, 1, 1, 1];
+    var attemptsLeft = 5;
+    var maxAttempts = 5;
 
-var unlockedCases = JSON.parse(localStorage.getItem('sv_unlocked_cases')) || ['wood'];
-var userMiners = JSON.parse(localStorage.getItem('sv_miners')) || [];
-var refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
-var refEarned = parseInt(localStorage.getItem('sv_ref_earned')) || 0;
+    var unlockedCases = ['wood'];
+    var soundEnabled = true;
+    var hapticEnabled = true;
 
-var currentLeaderTab = 'coins';
+    var streakDays = 1;
+    var lastDailyClaim = 0;
 
-// ИГРОВЫЕ ПЕРЕМЕННЫЕ
-var maxAttempts = 5;
-var remainingAttempts = 5;
-var currentSecretCode = [];
-var currentDrumValues = [1, 1, 1, 1, 1];
-var currentJackpot = 0;
+    var miners = { m1: 0, m2: 0 };
+    var friendsCount = 0;
+    var refIncome = 0;
 
-function saveProgress() {
-    localStorage.setItem('sv_coins', userCoins);
-    localStorage.setItem('sv_streak', userStreak);
-    localStorage.setItem('sv_last_claimed', lastClaimedDay);
-    localStorage.setItem('sv_unlocked_cases', JSON.stringify(unlockedCases));
-    localStorage.setItem('sv_miners', JSON.stringify(userMiners));
-    localStorage.setItem('sv_ref_count', refCount);
-    localStorage.setItem('sv_ref_earned', refEarned);
-    localStorage.setItem('sv_time_in_game', userTimeInGame);
-    localStorage.setItem('sv_used_promos', JSON.stringify(usedPromos));
-    localStorage.setItem('sv_sound', soundEnabled);
-    localStorage.setItem('sv_haptic', hapticEnabled);
-    updateUI();
-}
+    // -------------------------------------------------------------
+    // МУЗЫКА И ВИБРАЦИЯ (ИСПРАВЛЕНО!)
+    // -------------------------------------------------------------
+    var bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.3;
 
-function updateUI() {
-    var coinsEl = document.getElementById('globalCoins');
-    if (coinsEl) coinsEl.innerText = userCoins;
-
-    var streakEl = document.getElementById('streakDisplay');
-    if (streakEl) streakEl.innerText = userStreak + " ДЕНЬ";
-
-    if (document.getElementById('refCount')) document.getElementById('refCount').innerText = refCount;
-    if (document.getElementById('refEarned')) document.getElementById('refEarned').innerText = refEarned;
-
-    ['bronze', 'silver', 'gold'].forEach(function(caseId) {
-        var el = document.getElementById('case-' + caseId);
-        if (el) {
-            if (unlockedCases.indexOf(caseId) !== -1) {
-                el.classList.remove('locked');
-            } else {
-                el.classList.add('locked');
-            }
+    function toggleMusic(enable) {
+        if (enable) {
+            bgMusic.play().catch(function(e) { console.log("Музыка заблокирована браузером до клика"); });
+        } else {
+            bgMusic.pause();
         }
-    });
-
-    if (userMiners.indexOf(1) !== -1) {
-        var b1 = document.getElementById('btnBuyMiner1');
-        if (b1) { b1.innerText = "Куплено ✅"; b1.disabled = true; b1.style.opacity = "0.5"; }
-    }
-    if (userMiners.indexOf(2) !== -1) {
-        var b2 = document.getElementById('btnBuyMiner2');
-        if (b2) { b2.innerText = "Куплено ✅"; b2.disabled = true; b2.style.opacity = "0.5"; }
-    }
-}
-
-function triggerHaptic(type) {
-    if (!hapticEnabled) return;
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-        if (type === 'impact') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-        if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-        if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-    }
-}
-
-function showToast(title, msg) {
-    document.getElementById('toastInput').style.display = 'none';
-    document.getElementById('toastTitle').innerText = title;
-    document.getElementById('toastMsg').innerText = msg;
-    document.getElementById('toastModal').style.display = 'flex';
-}
-
-function showPromoModal() {
-    document.getElementById('toastTitle').innerText = "Ключ-код";
-    document.getElementById('toastMsg').innerText = "Введите секретный промокод:";
-    var input = document.getElementById('toastInput');
-    input.value = "";
-    input.style.display = 'block';
-    document.getElementById('toastModal').style.display = 'flex';
-}
-
-function showScreen(screenId) {
-    var screens = document.querySelectorAll('.screen');
-    screens.forEach(function(s) { s.style.display = 'none'; });
-
-    var target = document.getElementById(screenId);
-    if (target) target.style.display = 'flex';
-
-    var settingsWrapper = document.getElementById('settingsWrapper');
-    if (settingsWrapper) settingsWrapper.classList.remove('open');
-}
-
-function buyStarsPack(coinsAmount, starsCost) {
-    triggerHaptic('success');
-    userCoins += coinsAmount;
-    saveProgress();
-    showToast("Покупка 🌟 Stars", "Успешно получено +" + coinsAmount + " 🪙!");
-}
-
-function buyExtraAttempts() {
-    if (userCoins < 30) {
-        triggerHaptic('error');
-        showToast("Ошибка", "Недостаточно монет!");
-        return;
-    }
-    userCoins -= 30;
-    remainingAttempts += 3;
-    saveProgress();
-    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
-    triggerHaptic('success');
-    showToast("Попытки куплены", "+3 доп. попытки добавлено!");
-}
-
-function unlockCase(caseId, cost, event) {
-    if (event) event.stopPropagation();
-
-    if (userCoins < cost) {
-        triggerHaptic('error');
-        showToast("Ошибка", "Недостаточно монет! Требуется: " + cost + " 🪙");
-        return;
     }
 
-    userCoins -= cost;
-    unlockedCases.push(caseId);
-    triggerHaptic('success');
-    saveProgress();
-    showToast("Сейф разблокирован", "Теперь вы можете взламывать этот сейф!");
-}
+    function triggerHaptic(type) {
+        if (!hapticEnabled) return;
 
-window.buyMiner = function(minerId, cost) {
-    if (userMiners.indexOf(minerId) !== -1) return;
-
-    if (userCoins < cost) {
-        triggerHaptic('error');
-        showToast("Ошибка", "Недостаточно монет! Требуется: " + cost + " 🪙");
-        return;
+        // 1. Telegram Haptic (внутри Telegram)
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+            if (type === 'impact') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+        } 
+        // 2. Запасной вариант для браузеров (Android / PC)
+        else if (navigator.vibrate) {
+            if (type === 'impact') navigator.vibrate(40);
+            if (type === 'success') navigator.vibrate([40, 60, 100]);
+            if (type === 'error') navigator.vibrate([100, 50, 100]);
+        }
     }
 
-    userCoins -= cost;
-    userMiners.push(minerId);
-    triggerHaptic('success');
-    saveProgress();
-    showToast("Майнер куплен", "🎉 Майнер успешно активирован!");
-};
+    // -------------------------------------------------------------
+    // ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ
+    // -------------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", function() {
+        loadProgress();
+        updateUI();
 
-function startVaultGame(caseId, jackpot) {
-    currentJackpot = jackpot;
-    remainingAttempts = maxAttempts;
-    currentSecretCode = [];
-    
-    for (var i = 0; i < 5; i++) {
-        currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
-        currentDrumValues[i] = 1;
-        document.getElementById('drum-' + i).innerText = "1";
-    }
+        // Старт музыки при первом клике
+        document.body.addEventListener('click', function initAudio() {
+            if (soundEnabled && bgMusic.paused) {
+                toggleMusic(true);
+            }
+            document.body.removeEventListener('click', initAudio);
+        }, { once: true });
 
-    document.getElementById('gameScreenTitle').innerText = "Взлом сейфа";
-    document.getElementById('radarDisplay').innerText = "---";
-    document.getElementById('radarDisplay').style.color = "var(--text-muted)";
-    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+        // Окно настроек
+        document.getElementById('btnOpenSettings').onclick = function() {
+            document.getElementById('settingsModal').style.display = 'flex';
+            triggerHaptic('impact');
+        };
 
-    triggerHaptic('impact');
-    showScreen('gamePlayScreen');
-}
+        document.getElementById('btnCloseSettings').onclick = function() {
+            soundEnabled = document.getElementById('toggleSound').checked;
+            hapticEnabled = document.getElementById('toggleHaptic').checked;
+            
+            toggleMusic(soundEnabled);
+            saveProgress();
+            document.getElementById('settingsModal').style.display = 'none';
+            triggerHaptic('success');
+        };
 
-function renderDailyGrid() {
-    var grid = document.getElementById('dailyGrid');
-    if (!grid) return;
-    grid.innerHTML = "";
+        // Навигация
+        document.getElementById('btnGoToCases').onclick = function() { showScreen('casesScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnGoToShop').onclick = function() { showScreen('shopScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnGoToDaily').onclick = function() { renderDailyCalendar(); showScreen('dailyScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnGoToPvp').onclick = function() { showScreen('pvpScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnGoToAssets').onclick = function() { showScreen('assetsScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnCup').onclick = function() { renderLeaderboard(); showScreen('leaderboardScreen'); triggerHaptic('impact'); };
 
-    for (var d = 1; d <= 10; d++) {
-        var card = document.createElement('div');
-        card.className = 'day-card';
-        if (d < userStreak) card.classList.add('claimed');
-        if (d === userStreak) card.classList.add('today');
+        // Кнопки "Назад"
+        document.getElementById('btnBackToMenuFromCases').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToCases').onclick = function() { showScreen('casesScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToMenuFromShop').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToMenuFromDaily').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToMenuFromPvp').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToMenuFromAssets').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
+        document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
 
-        card.innerHTML = '<div style="font-size:9px; color:var(--text-muted);">ДЕНЬ ' + d + '</div>' +
-                         '<div style="font-weight:800; color:var(--accent-gold);">' + (d * 10) + ' 🪙</div>';
-
-        if (d === userStreak) {
-            card.onclick = function() {
-                var nowDay = Math.floor(Date.now() / 86400000);
-                if (nowDay > lastClaimedDay) {
-                    var reward = userStreak * 10;
-                    userCoins += reward;
-                    lastClaimedDay = nowDay;
-                    userStreak++;
+        // Промокод
+        document.getElementById('btnPromoCode').onclick = function() {
+            showToast("Промокод", "Введите секретный код для получения монет:", true, function(code) {
+                if (code && code.trim().toUpperCase() === "STAR2026") {
+                    userCoins += 500;
                     saveProgress();
                     triggerHaptic('success');
-                    showToast('Награда', 'Забрано +' + reward + ' 🪙!');
-                    renderDailyGrid();
+                    showToast("Успех!", "Вам зачислено +500 🪙!");
                 } else {
-                    showToast('Завтра', 'Вы уже забирали бонус сегодня!');
+                    triggerHaptic('error');
+                    showToast("Ошибка", "Неверный промокод!");
                 }
+            });
+        };
+
+        // Клик по кейсам
+        document.querySelectorAll('.case-card').forEach(function(card) {
+            card.onclick = function(e) {
+                if (e.target.classList.contains('unlock-btn')) return;
+                var id = card.getAttribute('data-id');
+                if (unlockedCases.indexOf(id) === -1) {
+                    showToast("Заблокировано", "Сначала разблокируйте этот сейф!");
+                    triggerHaptic('error');
+                    return;
+                }
+                startVaultGame(id);
             };
-        }
-        grid.appendChild(card);
-    }
-}
+        });
 
-function renderLeaderboard() {
-    var isCoins = (currentLeaderTab === 'coins');
-    var userName = document.getElementById('userTag').innerText || "Игрок";
+        // Барабаны
+        document.querySelectorAll('.drum-btn').forEach(function(btn) {
+            btn.onclick = function() {
+                var index = parseInt(btn.getAttribute('data-drum'));
+                var dir = parseInt(btn.getAttribute('data-dir'));
+                currentDrums[index] += dir;
+                if (currentDrums[index] > 9) currentDrums[index] = 1;
+                if (currentDrums[index] < 1) currentDrums[index] = 9;
+                document.getElementById('drum-' + index).innerText = currentDrums[index];
+                triggerHaptic('impact');
+            };
+        });
 
-    var mockData = [
-        { name: "CyberGhost", val: isCoins ? 9500 : 180 },
-        { name: "Satoshi_N", val: isCoins ? 8200 : 155 },
-        { name: "VaultMaster", val: isCoins ? 6400 : 120 },
-        { name: "Hacker777", val: isCoins ? 4300 : 80 }
-    ];
+        document.getElementById('btnCheckCode').onclick = checkCodeAttempt;
+        document.getElementById('btnInviteFriend').onclick = inviteFriend;
 
-    var myVal = isCoins ? userCoins : Math.floor(userTimeInGame / 60);
-    mockData.push({ name: userName + " (Ты)", val: myVal, isMe: true });
+        // Пассивный доход раз в 5 минут
+        setInterval(processMiners, 300000);
+    });
 
-    mockData.sort(function(a, b) { return b.val - a.val; });
-
-    document.getElementById('p1-name').innerText = mockData[0] ? mockData[0].name : "---";
-    document.getElementById('p1-val').innerText = mockData[0] ? (mockData[0].val + (isCoins ? " 🪙" : " ч.")) : "0";
-    document.getElementById('p2-name').innerText = mockData[1] ? mockData[1].name : "---";
-    document.getElementById('p2-val').innerText = mockData[1] ? (mockData[1].val + (isCoins ? " 🪙" : " ч.")) : "0";
-    document.getElementById('p3-name').innerText = mockData[2] ? mockData[2].name : "---";
-    document.getElementById('p3-val').innerText = mockData[2] ? (mockData[2].val + (isCoins ? " 🪙" : " ч.")) : "0";
-
-    var listEl = document.getElementById('leaderList');
-    if (!listEl) return;
-    listEl.innerHTML = "";
-
-    var myPos = 1;
-    for (var i = 0; i < mockData.length; i++) {
-        if (mockData[i].isMe) myPos = i + 1;
-        if (i >= 3) {
-            var item = document.createElement('div');
-            item.className = 'leader-item';
-            if (mockData[i].isMe) item.style.border = "1px solid var(--accent-blue)";
-            item.innerHTML = 
-                '<div class="leader-rank">#' + (i + 1) + '</div>' +
-                '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
-                '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
-            listEl.appendChild(item);
-        }
+    // -------------------------------------------------------------
+    // ЭКРАНЫ И УВЕДОМЛЕНИЯ
+    // -------------------------------------------------------------
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
+        document.getElementById(screenId).style.display = 'flex';
+        updateUI();
     }
 
-    document.getElementById('myRankPos').innerText = "#" + myPos;
-    document.getElementById('myRankName').innerText = userName + " (Ты)";
-    document.getElementById('myRankVal').innerText = isCoins ? (userCoins + " 🪙") : (Math.floor(userTimeInGame / 60) + " ч.");
-}
-
-function switchLeaderTab(tab) {
-    currentLeaderTab = tab;
-    document.getElementById('tabCoins').classList.toggle('active', tab === 'coins');
-    document.getElementById('tabTime').classList.toggle('active', tab === 'time');
-    triggerHaptic('impact');
-    renderLeaderboard();
-}
-
-/* ЗАПУСК И ОБРАБОТЧИКИ */
-document.addEventListener("DOMContentLoaded", function() {
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        if (window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-            document.getElementById('userTag').innerText = window.Telegram.WebApp.initDataUnsafe.user.first_name;
-        }
-    }
-
-    document.getElementById('toggleSound').checked = soundEnabled;
-    document.getElementById('toggleHaptic').checked = hapticEnabled;
-
-    updateUI();
-
-    // ШЕСТЕРЕНКА И КУБОК ПОД НЕЙ
-    document.getElementById('triggerGear').onclick = function() {
-        triggerHaptic('impact');
-        document.getElementById('settingsModal').style.display = 'flex';
-    };
-
-    document.getElementById('btnCloseSettings').onclick = function() {
-        soundEnabled = document.getElementById('toggleSound').checked;
-        hapticEnabled = document.getElementById('toggleHaptic').checked;
-        saveProgress();
-        document.getElementById('settingsModal').style.display = 'none';
-        triggerHaptic('success');
-    };
-
-    document.getElementById('btnCup').onclick = function() {
-        triggerHaptic('impact');
-        showScreen('leaderboardScreen');
-        renderLeaderboard();
-    };
-
-    // ОБРАБОТКА ВВОДА ПРОМОКОДА
-    document.getElementById('btnPromoCode').onclick = function() {
-        triggerHaptic('impact');
-        showPromoModal();
-    };
-
-    document.getElementById('btnToastOk').onclick = function() {
+    function showToast(title, msg, hasInput, callback) {
+        document.getElementById('toastTitle').innerText = title;
+        document.getElementById('toastMsg').innerText = msg;
         var input = document.getElementById('toastInput');
-        if (input.style.display !== 'none') {
-            var code = input.value.trim().toUpperCase();
-            if (code === "") {
-                document.getElementById('toastModal').style.display = 'none';
-                return;
-            }
-
-            if (usedPromos.indexOf(code) !== -1) {
-                triggerHaptic('error');
-                showToast("Ошибка", "Вы уже активировали этот промокод!");
-                return;
-            }
-
-            if (code === "START") {
-                userCoins += 1000;
-                remainingAttempts += 2;
-                usedPromos.push("START");
-                saveProgress();
-                triggerHaptic('success');
-                showToast("Промокод активирован! 🎉", "Вы получили +1,000 🪙 и +2 доп. попытки!");
-            } else {
-                triggerHaptic('error');
-                showToast("Ошибка", "Неверный промокод!");
-            }
+        
+        if (hasInput) {
+            input.style.display = 'block';
+            input.value = '';
         } else {
-            document.getElementById('toastModal').style.display = 'none';
+            input.style.display = 'none';
         }
-    };
 
-    // НАВИГАЦИЯ
-    document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-    document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
-    document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
-    document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
-    document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
+        document.getElementById('toastModal').style.display = 'flex';
 
-    // КНОПКИ НАЗАД
-    document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-    document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+        document.getElementById('btnToastOk').onclick = function() {
+            document.getElementById('toastModal').style.display = 'none';
+            if (hasInput && callback) callback(input.value);
+        };
+    }
 
-    // СЕЙФЫ
-    document.querySelectorAll('.case-card').forEach(function(card) {
-        card.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON') return;
+    function updateUI() {
+        document.getElementById('globalCoins').innerText = userCoins;
 
-            var caseId = card.getAttribute('data-id');
-            var price = parseInt(card.getAttribute('data-price'));
-            var jackpot = parseInt(card.getAttribute('data-jackpot'));
-
-            if (unlockedCases.indexOf(caseId) === -1) {
-                triggerHaptic('error');
-                showToast('Заблокировано', 'Сначала разблокируйте этот сейф!');
-                return;
+        ['bronze', 'silver', 'gold'].forEach(function(tier) {
+            var el = document.getElementById('case-' + tier);
+            if (el) {
+                if (unlockedCases.indexOf(tier) !== -1) {
+                    el.classList.remove('locked');
+                    var btn = el.querySelector('.unlock-btn');
+                    if (btn) btn.style.display = 'none';
+                } else {
+                    el.classList.add('locked');
+                }
             }
-
-            if (userCoins < price) {
-                triggerHaptic('error');
-                showToast('Мало монет', 'Для взлома требуется: ' + price + ' 🪙');
-                return;
-            }
-
-            userCoins -= price;
-            saveProgress();
-            startVaultGame(caseId, jackpot);
         });
-    });
+    }
 
-    // БАРАБАНЫ
-    document.querySelectorAll('.drum-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var drumIdx = parseInt(btn.getAttribute('data-drum'));
-            var dir = parseInt(btn.getAttribute('data-dir'));
-
-            currentDrumValues[drumIdx] += dir;
-            if (currentDrumValues[drumIdx] > 9) currentDrumValues[drumIdx] = 1;
-            if (currentDrumValues[drumIdx] < 1) currentDrumValues[drumIdx] = 9;
-
-            document.getElementById('drum-' + drumIdx).innerText = currentDrumValues[drumIdx];
-            triggerHaptic('impact');
-        });
-    });
-
-    // ПРОВЕРКА КОДА
-    document.getElementById('btnCheckCode').onclick = function() {
-        if (remainingAttempts <= 0) {
+    // -------------------------------------------------------------
+    // ИГРОВАЯ ЛОГИКА (ВЗЛОМ)
+    // -------------------------------------------------------------
+    function unlockCase(tier, cost, e) {
+        if (e) e.stopPropagation();
+        if (userCoins < cost) {
+            showToast("Недостаточно монет", "Вам нужно " + cost + " 🪙");
             triggerHaptic('error');
-            showToast('Блокировка', 'У вас закончились попытки! Докупите попытки в магазине!');
+            return;
+        }
+        userCoins -= cost;
+        unlockedCases.push(tier);
+        saveProgress();
+        triggerHaptic('success');
+        showToast("Успех!", "Сейф успешно разблокирован!");
+    }
+
+    function startVaultGame(caseId) {
+        var casePrices = { wood: 10, bronze: 25, silver: 50, gold: 100 };
+        var price = casePrices[caseId];
+
+        if (userCoins < price) {
+            showToast("Недостаточно монет", "Вход стоит " + price + " 🪙");
+            triggerHaptic('error');
             return;
         }
 
-        remainingAttempts--;
-        document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+        userCoins -= price;
+        currentCase = caseId;
+        attemptsLeft = maxAttempts;
+        currentDrums = [1, 1, 1, 1, 1];
 
-        var correctCount = 0;
+        secretCode = [];
         for (var i = 0; i < 5; i++) {
-            if (currentDrumValues[i] === currentSecretCode[i]) {
-                correctCount++;
+            secretCode.push(Math.floor(Math.random() * 9) + 1);
+        }
+
+        for (var j = 0; j < 5; j++) {
+            document.getElementById('drum-' + j).innerText = '1';
+        }
+
+        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/' + maxAttempts;
+        document.getElementById('radarDisplay').innerText = "ГОТОВ";
+        document.getElementById('radarDisplay').style.color = "var(--radar-yellow)";
+
+        saveProgress();
+        showScreen('gamePlayScreen');
+        triggerHaptic('impact');
+    }
+
+    function checkCodeAttempt() {
+        if (attemptsLeft <= 0) return;
+
+        attemptsLeft--;
+        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/' + maxAttempts;
+
+        var exactMatches = 0;
+        var totalDiff = 0;
+
+        for (var i = 0; i < 5; i++) {
+            if (currentDrums[i] === secretCode[i]) {
+                exactMatches++;
+            }
+            totalDiff += Math.abs(currentDrums[i] - secretCode[i]);
+        }
+
+        if (exactMatches === 5) {
+            var jackpots = { wood: 30, bronze: 80, silver: 180, gold: 400 };
+            var winAmount = jackpots[currentCase];
+            userCoins += winAmount;
+            saveProgress();
+            triggerHaptic('success');
+
+            showToast("ПОБЕДА! 🎉", "Вы взломали сейф и забрали " + winAmount + " 🪙!", false, function() {
+                showScreen('casesScreen');
+            });
+            return;
+        }
+
+        if (attemptsLeft <= 0) {
+            saveProgress();
+            triggerHaptic('error');
+            showToast("ВЗЛОМ ПРОВАЛЕН! 💥", "Замок заблокировался. Попробуйте еще раз!", false, function() {
+                showScreen('casesScreen');
+            });
+            return;
+        }
+
+        var radarText = "";
+        var radarColor = "";
+
+        if (totalDiff <= 3) {
+            radarText = "ГОРЯЧО 🔥";
+            radarColor = "var(--radar-red)";
+            triggerHaptic('impact');
+        } else if (totalDiff <= 8) {
+            radarText = "ТЕПЛО ⚡";
+            radarColor = "var(--radar-yellow)";
+            triggerHaptic('impact');
+        } else {
+            radarText = "ХОЛОДНО ❄️";
+            radarColor = "var(--accent-blue)";
+            triggerHaptic('impact');
+        }
+
+        document.getElementById('radarDisplay').innerText = radarText + " (" + exactMatches + " точных)";
+        document.getElementById('radarDisplay').style.color = radarColor;
+    }
+        // -------------------------------------------------------------
+    // МАГАЗИН И TELEGRAM STARS
+    // -------------------------------------------------------------
+    function buyStarsPack(coinsAmount, starsCost) {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openInvoice) {
+            showToast("Оплата Stars 🌟", "Списание " + starsCost + " Stars временно в демо-режиме. Начислено +" + coinsAmount + " 🪙!");
+            userCoins += coinsAmount;
+            saveProgress();
+            triggerHaptic('success');
+        } else {
+            showToast("Тестовый режим", "В браузере Stars не списываются. Начислено +" + coinsAmount + " 🪙");
+            userCoins += coinsAmount;
+            saveProgress();
+            triggerHaptic('success');
+        }
+    }
+
+    function buyExtraAttempts() {
+        if (userCoins < 30) {
+            showToast("Ошибка", "Недостаточно монет (нужно 30 🪙)!");
+            triggerHaptic('error');
+            return;
+        }
+        userCoins -= 30;
+        maxAttempts += 3;
+        saveProgress();
+        triggerHaptic('success');
+        showToast("Успех!", "Максимум попыток увеличен до " + maxAttempts + "!");
+    }
+
+    // -------------------------------------------------------------
+    // АКТИВЫ И МАЙНИНГ
+    // -------------------------------------------------------------
+    function buyMiner(type, cost) {
+        if (userCoins < cost) {
+            showToast("Ошибка", "Недостаточно монет!");
+            triggerHaptic('error');
+            return;
+        }
+        userCoins -= cost;
+        if (type === 1) miners.m1++;
+        if (type === 2) miners.m2++;
+        saveProgress();
+        triggerHaptic('success');
+        showToast("Успешно!", "Актив приобретен и приносит пассивный доход!");
+    }
+
+    function processMiners() {
+        var income = (miners.m1 * 5) + (miners.m2 * 20);
+        if (income > 0) {
+            userCoins += income;
+            saveProgress();
+        }
+    }
+
+    function inviteFriend() {
+        if (tg) {
+            tg.openTelegramLink("https://t.me/share/url?url=https://t.me/YourBotName_bot/app?startapp=ref12345");
+        } else {
+            showToast("Реферальная ссылка", "Скопируйте ссылку: https://t.me/YourBotName_bot/app?start=123");
+        }
+    }
+
+    // -------------------------------------------------------------
+    // ЕЖЕДНЕВНЫЕ БОНУСЫ
+    // -------------------------------------------------------------
+    function renderDailyCalendar() {
+        var grid = document.getElementById('dailyGrid');
+        grid.innerHTML = '';
+        var rewards = [50, 100, 150, 250, 500];
+
+        for (var i = 1; i <= 5; i++) {
+            var card = document.createElement('div');
+            card.className = 'day-card';
+            if (i < streakDays) card.classList.add('claimed');
+            if (i === streakDays) card.classList.add('today');
+
+            card.innerHTML = '<div>ДЕНЬ ' + i + '</div><div style="font-size:16px;">🎁</div><div style="font-weight:800; color:var(--accent-gold);">' + rewards[i-1] + ' 🪙</div>';
+            
+            if (i === streakDays) {
+                card.onclick = claimDailyReward;
+            }
+            grid.appendChild(card);
+        }
+
+        document.getElementById('streakDisplay').innerText = streakDays + " ДЕНЬ";
+    }
+
+    function claimDailyReward() {
+        var now = Date.now();
+        if (now - lastDailyClaim < 86400000 && lastDailyClaim !== 0) {
+            showToast("Забрано", "Возвращайтесь завтра за новым бонусом!");
+            return;
+        }
+
+        var rewards = [50, 100, 150, 250, 500];
+        var win = rewards[streakDays - 1] || 50;
+
+        userCoins += win;
+        lastDailyClaim = now;
+        streakDays++;
+        if (streakDays > 5) streakDays = 1;
+
+        saveProgress();
+        triggerHaptic('success');
+        showToast("Ежедневный бонус!", "Вы получили +" + win + " 🪙!");
+        renderDailyCalendar();
+    }
+
+    // -------------------------------------------------------------
+    // ЛИДЕРБОРД
+    // -------------------------------------------------------------
+    function switchLeaderTab(tab) {
+        document.getElementById('tabCoins').classList.remove('active');
+        document.getElementById('tabTime').classList.remove('active');
+        if (tab === 'coins') document.getElementById('tabCoins').classList.add('active');
+        if (tab === 'time') document.getElementById('tabTime').classList.add('active');
+        renderLeaderboard();
+        triggerHaptic('impact');
+    }
+
+    function renderLeaderboard() {
+        var fakeData = [
+            { name: "Satoshi_N", val: "15,400 🪙" },
+            { name: "CyberHacker", val: "9,200 🪙" },
+            { name: "VaultMaster", val: "6,100 🪙" },
+            { name: "StarHunter", val: "4,500 🪙" },
+            { name: "Anon_x86", val: "3,200 🪙" }
+        ];
+
+        document.getElementById('p1-name').innerText = fakeData[0].name;
+        document.getElementById('p1-val').innerText = fakeData[0].val;
+
+        document.getElementById('p2-name').innerText = fakeData[1].name;
+        document.getElementById('p2-val').innerText = fakeData[1].val;
+
+        document.getElementById('p3-name').innerText = fakeData[2].name;
+        document.getElementById('p3-val').innerText = fakeData[2].val;
+
+        var list = document.getElementById('leaderList');
+        list.innerHTML = '';
+
+        for (var i = 3; i < fakeData.length; i++) {
+            var item = document.createElement('div');
+            item.className = 'leader-item';
+            item.innerHTML = '<div class="leader-rank">#' + (i + 1) + '</div><div class="leader-info"><div style="font-weight:800; font-size:12px;">' + fakeData[i].name + '</div></div><div class="leader-score">' + fakeData[i].val + '</div>';
+            list.appendChild(item);
+        }
+
+        document.getElementById('myRankVal').innerText = userCoins + " 🪙";
+    }
+
+    // -------------------------------------------------------------
+    // СОХРАНЕНИЕ В LOCALSTORAGE
+    // -------------------------------------------------------------
+    function saveProgress() {
+        var data = {
+            coins: userCoins,
+            unlocked: unlockedCases,
+            sound: soundEnabled,
+            haptic: hapticEnabled,
+            streak: streakDays,
+            lastClaim: lastDailyClaim,
+            miners: miners
+        };
+        localStorage.setItem('starvault_save', JSON.stringify(data));
+        updateUI();
+    }
+
+    function loadProgress() {
+        var raw = localStorage.getItem('starvault_save');
+        if (raw) {
+            try {
+                var data = JSON.parse(raw);
+                userCoins = data.coins || 100;
+                unlockedCases = data.unlocked || ['wood'];
+                soundEnabled = data.sound !== undefined ? data.sound : true;
+                hapticEnabled = data.haptic !== undefined ? data.haptic : true;
+                streakDays = data.streak || 1;
+                lastDailyClaim = data.lastClaim || 0;
+                miners = data.miners || { m1: 0, m2: 0 };
+
+                document.getElementById('toggleSound').checked = soundEnabled;
+                document.getElementById('toggleHaptic').checked = hapticEnabled;
+            } catch(e) {
+                console.log("Ошибка загрузки сохранения");
             }
         }
-
-        var radarEl = document.getElementById('radarDisplay');
-
-        if (correctCount === 5) {
-            triggerHaptic('success');
-            userCoins += currentJackpot;
-            saveProgress();
-            showToast('🎉 ПОБЕДА!', 'Вы успешно взломали сейф и забрали ' + currentJackpot + ' 🪙!');
-            showScreen('casesScreen');
-        } else if (correctCount >= 3) {
-            triggerHaptic('impact');
-            radarEl.innerText = "🔥 БЛИЗКО (" + correctCount + "/5)";
-            radarEl.style.color = "var(--radar-yellow)";
-        } else {
-            triggerHaptic('error');
-            radarEl.innerText = "❌ ХОЛОДНО (" + correctCount + "/5)";
-            radarEl.style.color = "var(--radar-red)";
-        }
-
-        if (remainingAttempts <= 0 && correctCount < 5) {
-            triggerHaptic('error');
-            showToast('Сейф заблокирован', 'Попытки закончились! Код был: ' + currentSecretCode.join(''));
-        }
-    };
-});
+    }
 </script>
 </body>
 </html>
-

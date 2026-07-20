@@ -53,9 +53,7 @@
       font-weight: 800; font-size: 18px; border: 2px solid var(--accent-cyan);
     }
 
-    .user-title-tag {
-      font-size: 10px; color: var(--accent-gold); font-weight: 700;
-    }
+    .user-title-tag { font-size: 10px; color: var(--accent-gold); font-weight: 700; }
 
     .balance-pill {
       background: rgba(255, 183, 0, 0.1); border: 1px solid rgba(255, 183, 0, 0.3);
@@ -91,10 +89,7 @@
       align-items: center; text-align: center; position: relative;
     }
 
-    .setting-row {
-      flex-direction: row; justify-content: space-between; align-items: center;
-      padding: 16px; margin-bottom: 10px; text-align: left;
-    }
+    .setting-row { flex-direction: row; justify-content: space-between; align-items: center; padding: 16px; margin-bottom: 10px; text-align: left; }
 
     .safe-img, .item-img { width: 80px; height: 80px; object-fit: contain; margin: 8px 0; }
     .item-img { width: 55px; height: 55px; }
@@ -159,7 +154,7 @@
   <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
-    <div class="user-badge" onclick="openProfileModal()">
+    <div class="user-badge" id="userBadgeBtn" onclick="openProfileModal()">
       <div class="avatar" id="uAvatar">U</div>
       <div>
         <div style="font-weight:700; font-size:14px" id="uName">Игрок</div>
@@ -183,15 +178,14 @@
   </main>
 
   <main class="tab-page" id="page-bonus">
-    <div class="section-title"><span>🎁 Ежедневные Награды</span></div>
+    <div class="section-title"><span>📅 Ежедневный Календарь</span></div>
     <div class="daily-card" style="margin-bottom:16px;">
-      <div style="font-size:12px; color:var(--text-sub)">Дней в ударе (Streak):</div>
-      <div style="font-size:32px; font-weight:900; color:var(--accent-gold); margin:4px 0" id="streakDays">0 ДНЕЙ</div>
-      <button class="btn-hack" id="claimBonusBtn" onclick="claimDailyBonus()">Забрать Награду</button>
-      <button class="btn-hack" id="restoreStreakBtn" style="display:none; background:var(--accent-pink); margin-top:8px" onclick="restoreStreak()">Восстановить серию (500 🪙)</button>
+      <div style="font-size:12px; color:var(--text-sub)">Текущая серия посещений:</div>
+      <div style="font-size:28px; font-weight:900; color:var(--accent-gold); margin:4px 0" id="streakDays">0 ДНЕЙ</div>
+      <button class="btn-hack" id="claimBonusBtn" onclick="claimDailyBonus()">Забрать награду</button>
     </div>
-    <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--text-sub)">Награды:</div>
-    <div id="streakRewardsList"></div>
+    <div style="font-size:12px; font-weight:700; margin-bottom:10px; color:var(--text-sub)">Календарь на месяц:</div>
+    <div id="calendarGrid" style="display:grid; grid-template-columns: repeat(6, 1fr); gap:8px;"></div>
   </main>
 
   <main class="tab-page" id="page-inventory">
@@ -213,7 +207,6 @@
 
   <main class="tab-page" id="page-settings">
     <div class="section-title"><span>Настройки</span></div>
-    
     <div class="setting-row">
       <div>
         <div style="font-weight:700; font-size:14px">🎵 Фоновая музыка</div>
@@ -224,7 +217,6 @@
         <span class="slider"></span>
       </label>
     </div>
-
     <div class="setting-row">
       <div>
         <div style="font-weight:700; font-size:14px">⏱️ Игровое время</div>
@@ -250,12 +242,10 @@
       </div>
       <div id="gTimer" style="font-family:var(--font-mono); font-size:20px; color:var(--accent-pink); font-weight:bold;"></div>
     </div>
-
     <div>
       <div class="digits-container" id="digitsRow"></div>
       <p id="gameHint" style="text-align:center; font-size:12px; color:var(--accent-cyan); min-height:18px;"></p>
     </div>
-
     <div class="numpad">
       <div class="num-btn" onclick="pressKey(1)">1</div><div class="num-btn" onclick="pressKey(2)">2</div><div class="num-btn" onclick="pressKey(3)">3</div>
       <div class="num-btn" onclick="pressKey(4)">4</div><div class="num-btn" onclick="pressKey(5)">5</div><div class="num-btn" onclick="pressKey(6)">6</div>
@@ -264,7 +254,6 @@
       <div class="num-btn" onclick="pressKey(0)">0</div>
       <div class="num-btn" style="color:#00ff66" onclick="submitCode()">OK</div>
     </div>
-
     <button class="btn-hack" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Выход</button>
   </div>
 
@@ -273,104 +262,96 @@
     <div class="nav-item" onclick="switchTab('pvp', this)"><span>⚔️</span><span>PVP</span></div>
     <div class="nav-item" onclick="switchTab('bonus', this)"><span>🎁</span><span>Бонус</span></div>
     <div class="nav-item" onclick="switchTab('inventory', this)"><span>🎒</span><span>Багаж</span></div>
-    <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Ррынок</span></div>
+    <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Рынок</span></div>
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
     <script>
-    // TELEGRAM INIT
-    const tg = window.Telegram ? window.Telegram.WebApp : null;
-    let telegramUsername = "";
-    if (tg) {
-      tg.expand();
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        document.getElementById('uName').innerText = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name;
-        document.getElementById('uAvatar').innerText = (tg.initDataUnsafe.user.first_name || 'U')[0].toUpperCase();
-        telegramUsername = (tg.initDataUnsafe.user.username || "").toLowerCase();
-      }
-    }
-
-    // СПИСОК СЕЙФОВ
-    const VAULTS = [
-      { id: 1, name: "🪵 Сундук", img: "IMG_20260719_180634.png", mode: "logic", cost: 20, len: 3, attempts: 8, reward: 50, dropId: 1, dropRate: 0.35 },
-      { id: 2, name: "🟤 Чугунный", img: "IMG_20260719_181100.png", mode: "logic", cost: 50, len: 3, attempts: 8, reward: 120, dropId: 2, dropRate: 0.30 },
-      { id: 3, name: "🥉 Медный", img: "IMG_20260719_181706.png", mode: "time", cost: 80, len: 4, time: 45, reward: 200, dropId: 3, dropRate: 0.25 },
-      { id: 4, name: "⚙️ Штурвал", img: "IMG_20260719_183142.png", mode: "logic", cost: 120, len: 4, attempts: 8, reward: 300, dropId: 4, dropRate: 0.20 },
-      { id: 5, name: "🗝️ Тёмный", img: "IMG_20260719_183244.png", mode: "time", cost: 200, len: 4, time: 40, reward: 500, dropId: 5, dropRate: 0.15 },
-      { id: 6, name: "🥈 Серебряный", img: "IMG_20260719_183338.png", mode: "logic", cost: 350, len: 5, attempts: 10, reward: 900, dropId: 6, dropRate: 0.12 },
-      { id: 7, name: "🥇 Золотой", img: "IMG_20260719_183351.png", mode: "time", cost: 500, len: 5, time: 35, reward: 1400, dropId: 7, dropRate: 0.10 },
-      { id: 8, name: "🔘 Сканер", img: "IMG_20260719_183406.png", mode: "time", cost: 800, len: 5, time: 30, reward: 2200, dropId: 8, dropRate: 0.08 },
-      { id: 9, name: "💎 Куб", img: "IMG_20260719_183425.png", mode: "time", cost: 1200, len: 5, time: 25, reward: 3500, dropId: 9, dropRate: 0.05 }
-    ];
-
-    // ИНВЕНТАРЬ И ДОХОДЫ
-    const ITEMS = [
-      { id: 1, name: "Стетоскоп", img: "IMG_20260720_115622.png", income: 100 },
-      { id: 2, name: "Отмычка", img: "IMG_20260720_115636.png", income: 250 },
-      { id: 3, name: "Резак", img: "IMG_20260720_115645.png", income: 500 },
-      { id: 4, name: "Майнер-Слиток", img: "IMG_20260720_115658.png", income: 1000 },
-      { id: 5, name: "Чип 'Призрак'", img: "IMG_20260720_115724.png", income: 2000 },
-      { id: 6, name: "Перчатка", img: "IMG_20260720_115747.png", income: 4000 },
-      { id: 7, name: "Дешифратор", img: "IMG_20260720_115800.png", income: 7500 },
-      { id: 8, name: "Тюнер", img: "IMG_20260720_115813.png", income: 12000 },
-      { id: 9, name: "Мастер-Карта", img: "IMG_20260720_115823.png", income: 25000 }
-    ];
-
-    // СПИСОК ТИТУЛОВ
+    // 1. БАЗА ДАННЫХ И КОНСТАНТЫ
     const ALL_TITLES = [
-      { id: "starter", name: "🟢 Новичок", desc: "Базовый титул" },
-      { id: "dev", name: "👑 Разработчик", desc: "Только для Создателя" },
-      { id: "spent10k", name: "🪙 Транжира", desc: "Потратить 10,000 🪙" },
-      { id: "earned10k", name: "💰 Магнат", desc: "Заработать 10,000 🪙" },
-      { id: "logic10", name: "🧠 Тактик", desc: "Взломать 10 логических сейфов" },
-      { id: "time10", name: "⚡ Спринтер", desc: "Взломать 10 сейфов на время" },
-      { id: "pvp5", name: "⚔️ Гладиатор", desc: "Выиграть 5 PVP дуэлей" },
-      { id: "collector", name: "🎒 Коллекционер", desc: "Собрать 9/9 предметов" }
+      { id: "newbie", name: "🟢 Новичок", desc: "Выдается при старте" },
+      { id: "hacker", name: "💻 Взломщик", desc: "Успешно взломать 5 сейфов" },
+      { id: "collector", name: "🎒 Коллекционер", desc: "Собрать 3 уникальных предмета" },
+      { id: "pvp_master", name: "⚔️ Дуэлянт", desc: "Победить в 3 PVP дуэлях" },
+      { id: "rich", name: "💎 Магнат", desc: "Накопить 10,000 монет" }
     ];
 
-    // СОСТОЯНИЕ ИГРОКА
-    let state = JSON.parse(localStorage.getItem('starvault_state')) || {
+    const VAULTS = [
+      { id: 1, name: "📦 Деревянный Сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.4, img: "https://cdn-icons-png.flaticon.com/512/3064/3064155.png" },
+      { id: 2, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 150, reward: 450, dropId: 102, dropRate: 0.35, img: "https://cdn-icons-png.flaticon.com/512/2092/2092663.png" },
+      { id: 3, name: "🔐 Электронный Сейф", len: 4, mode: "logic", attempts: 6, cost: 300, reward: 900, dropId: 103, dropRate: 0.3, img: "https://cdn-icons-png.flaticon.com/512/2592/2592317.png" },
+      { id: 4, name: "💎 Бриллиантовый Сейф", len: 5, mode: "time", time: 20, cost: 800, reward: 2500, dropId: 104, dropRate: 0.25, img: "https://cdn-icons-png.flaticon.com/512/2885/2885440.png" }
+    ];
+
+    const ITEMS = [
+      { id: 101, name: "🔑 Старый Ключ", income: 10, img: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png" },
+      { id: 102, name: "💾 Флешка с Данными", income: 30, img: "https://cdn-icons-png.flaticon.com/512/2885/2885449.png" },
+      { id: 103, name: "💎 Черный Алмаз", income: 80, img: "https://cdn-icons-png.flaticon.com/512/616/616490.png" },
+      { id: 104, name: "👑 Золотая Корона", income: 200, img: "https://cdn-icons-png.flaticon.com/512/2645/2645897.png" }
+    ];
+
+    // 2. ИНИЦИАЛИЗАЦИЯ И СОХРАНЕНИЕ СОСТОЯНИЯ
+    let tg = window.Telegram?.WebApp;
+    if (tg) tg.expand();
+
+    let defaultState = {
       coins: 500,
-      inventory: [],
-      playTimeSeconds: 0,
-      lastMiningTime: Date.now(),
-      musicOn: false,
-      selectedTitle: "🟢 Новичок",
-      unlockedTitles: ["starter"],
+      totalEarned: 500,
       totalSpent: 0,
-      totalEarned: 0,
+      selectedTitle: "🟢 Новичок",
+      unlockedTitles: ["newbie"],
+      inventory: [],
+      streak: 0,
+      lastBonusTime: 0,
+      lastMiningTime: Date.now(),
       logicWins: 0,
       timeWins: 0,
       pvpWins: 0,
-      streak: 0,
-      lastBonusTime: 0,
-      canRestoreStreak: false
+      playTimeSeconds: 0
     };
 
+    let state = JSON.parse(localStorage.getItem('starvault_state')) || defaultState;
+
     function saveState() {
-      checkTitleAchievements();
       localStorage.setItem('starvault_state', JSON.stringify(state));
+      updateUI();
+    }
+
+    function updateUI() {
       document.getElementById('uBalance').innerText = state.coins.toLocaleString();
       document.getElementById('uTitle').innerText = state.selectedTitle;
+      
+      const uName = tg?.initDataUnsafe?.user?.first_name || "Игрок";
+      document.getElementById('uName').innerText = uName;
+      document.getElementById('uAvatar').innerText = uName.charAt(0).toUpperCase();
+
+      const mins = Math.floor(state.playTimeSeconds / 60);
+      document.getElementById('settingsPlaytime').innerText = `Зафиксировано: ${mins} мин`;
     }
 
-    // ПРОВЕРКА И РАЗБЛОКИРОВКА ТИТУЛОВ
-    function checkTitleAchievements() {
-      if (telegramUsername === "vqc_2" || telegramUsername === "@vqc_2") {
-        if (!state.unlockedTitles.includes("dev")) state.unlockedTitles.push("dev");
-      }
-      if (state.totalSpent >= 10000 && !state.unlockedTitles.includes("spent10k")) state.unlockedTitles.push("spent10k");
-      if (state.totalEarned >= 10000 && !state.unlockedTitles.includes("earned10k")) state.unlockedTitles.push("earned10k");
-      if (state.logicWins >= 10 && !state.unlockedTitles.includes("logic10")) state.unlockedTitles.push("logic10");
-      if (state.timeWins >= 10 && !state.unlockedTitles.includes("time10")) state.unlockedTitles.push("time10");
-      if (state.pvpWins >= 5 && !state.unlockedTitles.includes("pvp5")) state.unlockedTitles.push("pvp5");
-      if (state.inventory.length >= 9 && !state.unlockedTitles.includes("collector")) state.unlockedTitles.push("collector");
+    // ТАЙМЕР ИГРОВОГО ВРЕМЕНИ
+    setInterval(() => {
+      state.playTimeSeconds += 1;
+      if (state.playTimeSeconds % 10 === 0) saveState();
+    }, 1000);
+
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+      document.getElementById(`page-${tabId}`).classList.add('active');
+      el.classList.add('active');
+
+      if (tabId === 'safes') renderSafes();
+      if (tabId === 'pvp') renderPvp();
+      if (tabId === 'bonus') renderBonusTab();
+      if (tabId === 'inventory') renderInventory();
+      if (tabId === 'market') renderMarket();
     }
 
-    // МУЗЫКА И ТАЙМЕР
+    // МУЗЫКА
     function toggleMusic(enabled) {
       const audio = document.getElementById('bgMusic');
-      state.musicOn = enabled;
-      saveState();
       if (enabled) {
         audio.play().catch(() => {});
       } else {
@@ -378,43 +359,31 @@
       }
     }
 
-    if (state.musicOn) {
-      document.getElementById('musicToggle').checked = true;
+    // ПРОВЕРКА ДОСТИЖЕНИЙ И ТИТУЛОВ
+    function checkTitleAchievements() {
+      const totalWins = state.logicWins + state.timeWins;
+      
+      if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) {
+        state.unlockedTitles.push("hacker");
+      }
+      if (state.inventory.length >= 3 && !state.unlockedTitles.includes("collector")) {
+        state.unlockedTitles.push("collector");
+      }
+      if (state.pvpWins >= 3 && !state.unlockedTitles.includes("pvp_master")) {
+        state.unlockedTitles.push("pvp_master");
+      }
+      if (state.coins >= 10000 && !state.unlockedTitles.includes("rich")) {
+        state.unlockedTitles.push("rich");
+      }
+      saveState();
     }
 
-    setInterval(() => {
-      state.playTimeSeconds = (state.playTimeSeconds || 0) + 1;
-      const mins = Math.floor(state.playTimeSeconds / 60);
-      const hours = Math.floor(mins / 60);
-      let timeStr = `${mins} мин`;
-      if (hours > 0) timeStr = `${hours} ч ${mins % 60} мин`;
-
-      const settingsTimer = document.getElementById('settingsPlaytime');
-      if (settingsTimer) settingsTimer.innerText = `Зафиксировано: ${timeStr}`;
-
-      if (state.playTimeSeconds % 10 === 0) saveState();
-    }, 1000);
-
-    // ВКЛАДКИ
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById(`page-${tabId}`).classList.add('active');
-      el.classList.add('active');
-
-      if (tabId === 'safes') renderSafes();
-      if (tabId === 'inventory') renderInventory();
-      if (tabId === 'market') renderMarket();
-      if (tabId === 'pvp') renderPvp();
-      if (tabId === 'bonus') renderBonusTab();
-    }
-
-    // ПРОФИЛЬ И ТИТУЛЫ
+    // ОКНО ПРОФИЛЯ
     function openProfileModal() {
       checkTitleAchievements();
       const container = document.getElementById('unlockedTitlesList');
-      container.innerHTML = "";
-
+      if (!container) return;
+      
       const availableTitles = ALL_TITLES.filter(t => state.unlockedTitles.includes(t.id));
 
       container.innerHTML = availableTitles.map(t => {
@@ -445,7 +414,7 @@
       saveState();
       openProfileModal();
     }
-          // ИГРОВОЙ ДВИЖОК СЕЙФОВ
+          // 3. ИГРОВОЙ ДВИЖОК СЕЙФОВ
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
@@ -457,6 +426,7 @@
 
     function renderSafes() {
       const container = document.getElementById('safesContainer');
+      if (!container) return;
       container.innerHTML = VAULTS.map(s => `
         <div class="safe-card">
           <div style="font-weight:800; font-size:13px">${s.name}</div>
@@ -500,6 +470,7 @@
         document.getElementById('gSafeMode').innerText = `Время: ${activeBox.time} с`;
         document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
 
+        if (gameTimer) clearInterval(gameTimer);
         gameTimer = setInterval(() => {
           secondsLeft--;
           document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
@@ -528,6 +499,7 @@
 
     function updateDigitsDisplay() {
       const container = document.getElementById('digitsRow');
+      if (!container) return;
       container.innerHTML = "";
       for (let i = 0; i < activeBox.len; i++) {
         const char = currentInput[i] || "_";
@@ -564,7 +536,7 @@
               state.inventory.push({ id: activeBox.dropId, count: 1 });
             }
             const droppedItem = ITEMS.find(i => i.id === activeBox.dropId);
-            droppedMsg = `\n\n🎁 Находка: ${droppedItem.name}!`;
+            if (droppedItem) droppedMsg = `\n\n🎁 Находка: ${droppedItem.name}!`;
           }
 
           saveState();
@@ -598,88 +570,89 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // ЕЖЕДНЕВНЫЕ БОНУСЫ
+    // 4. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ (30/31 ДЕНЬ)
     function renderBonusTab() {
-      const now = Date.now();
-      const oneDayMs = 24 * 60 * 60 * 1000;
-      const timeDiff = now - state.lastBonusTime;
+      const now = new Date();
+      const currentDay = now.getDate();
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
-      document.getElementById('streakDays').innerText = `${state.streak} ДНЕЙ`;
+      const streakEl = document.getElementById('streakDays');
+      if (streakEl) streakEl.innerText = `${state.streak || 0} ДНЕЙ`;
+
+      const lastClaim = new Date(state.lastBonusTime || 0);
+      const isClaimedToday = lastClaim.toDateString() === now.toDateString();
 
       const claimBtn = document.getElementById('claimBonusBtn');
-      const restoreBtn = document.getElementById('restoreStreakBtn');
-
-      if (timeDiff > 2 * oneDayMs && state.streak > 0 && state.lastBonusTime !== 0) {
-        state.canRestoreStreak = true;
-      }
-
-      if (state.canRestoreStreak) {
-        restoreBtn.style.display = 'block';
-        claimBtn.disabled = true;
-        claimBtn.innerText = "Серия сгорела!";
-      } else {
-        restoreBtn.style.display = 'none';
-        if (timeDiff >= oneDayMs || state.lastBonusTime === 0) {
-          claimBtn.disabled = false;
-          claimBtn.innerText = "Забрать Награду";
-        } else {
+      if (claimBtn) {
+        if (isClaimedToday) {
           claimBtn.disabled = true;
-          const hoursLeft = Math.ceil((oneDayMs - timeDiff) / (1000 * 60 * 60));
-          claimBtn.innerText = `Доступно через ~${hoursLeft} ч`;
+          claimBtn.style.opacity = "0.5";
+          claimBtn.innerText = "✅ Награда за сегодня получена";
+        } else {
+          claimBtn.disabled = false;
+          claimBtn.style.opacity = "1";
+          claimBtn.innerText = `Забрать награду (${currentDay}-й день)`;
         }
       }
 
-      const list = document.getElementById('streakRewardsList');
-      const rewards = [
-        { day: 1, reward: "100 🪙" },
-        { day: 2, reward: "250 🪙" },
-        { day: 3, reward: "500 🪙" },
-        { day: 10, reward: "🎁 СУПЕР-ПРИЗ (2,500 🪙)" },
-        { day: 30, reward: "👑 МЕГА-ПРИЗ (10,000 🪙)" }
-      ];
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      grid.innerHTML = "";
 
-      list.innerHTML = rewards.map(r => `
-        <div class="leader-row">
-          <span>${r.day}-й день</span>
-          <span style="font-weight:800; color:var(--accent-gold)">${r.reward}</span>
-        </div>
-      `).join('');
+      for (let day = 1; day <= daysInMonth; day++) {
+        const isToday = day === currentDay;
+        const isPast = day < currentDay;
+
+        let bg = "rgba(255,255,255,0.05)";
+        let border = "var(--glass-border)";
+        let color = "var(--text-sub)";
+
+        if (isToday) {
+          bg = "rgba(0, 240, 255, 0.2)";
+          border = "var(--accent-cyan)";
+          color = "#fff";
+        } else if (isPast) {
+          bg = "rgba(255, 255, 255, 0.02)";
+          color = "rgba(255,255,255,0.2)";
+        }
+
+        grid.innerHTML += `
+          <div style="background:${bg}; border:1px solid ${border}; border-radius:10px; padding:10px 4px; text-align:center; color:${color}; font-size:11px; font-weight:700;">
+            <div>${day}</div>
+            <div style="font-size:14px; margin-top:2px">${isToday ? '🎁' : (isPast ? '✔' : '🔒')}</div>
+          </div>
+        `;
+      }
     }
 
     function claimDailyBonus() {
-      const now = Date.now();
-      const rewardCoins = 100 + (state.streak * 50);
+      const now = new Date();
+      const lastClaim = new Date(state.lastBonusTime || 0);
 
-      state.streak += 1;
-      state.lastBonusTime = now;
+      if (lastClaim.toDateString() === now.toDateString()) {
+        alert("⏱️ Вы уже забирали бонус сегодня! Приходите завтра.");
+        return;
+      }
+
+      const currentDay = now.getDate();
+      const rewardCoins = 150 + (currentDay * 20);
+
+      state.streak = (state.streak || 0) + 1;
+      state.lastBonusTime = Date.now();
       state.coins += rewardCoins;
       state.totalEarned += rewardCoins;
 
       saveState();
       renderBonusTab();
-      alert(`🎁 Забрано: +${rewardCoins} 🪙!\nТекущая серия: ${state.streak} дней!`);
+      alert(`🎉 Награда за ${currentDay}-й день получена: +${rewardCoins} 🪙!`);
     }
 
-    function restoreStreak() {
-      if (state.coins < 500) {
-        alert("❌ Нужно 500 🪙 для восстановления серии!");
-        return;
-      }
-
-      state.coins -= 500;
-      state.totalSpent += 500;
-      state.canRestoreStreak = false;
-      state.lastBonusTime = Date.now();
-
-      saveState();
-      renderBonusTab();
-      alert("🔥 Серия успешно восстановлена!");
-    }
-
-    // ИНВЕНТАРЬ
+    // 5. ИНВЕНТАРЬ И ПАССИВНЫЙ ДОХОД
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
-      document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
+      if (!grid) return;
+
+      document.getElementById('collCount').innerText = `${state.inventory.length} / ${ITEMS.length}`;
 
       let totalIncome = 0;
       grid.innerHTML = ITEMS.map(item => {
@@ -702,7 +675,29 @@
       document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
     }
 
-    // МАРКЕТ
+    function claimMining() {
+      const now = Date.now();
+      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
+
+      let totalRate = 0;
+      state.inventory.forEach(inv => {
+        const it = ITEMS.find(i => i.id === inv.id);
+        if (it) totalRate += it.income * inv.count;
+      });
+
+      const earned = Math.floor(hoursPassed * totalRate);
+      if (earned > 0) {
+        state.coins += earned;
+        state.totalEarned += earned;
+        state.lastMiningTime = now;
+        saveState();
+        alert(`💰 Собрано пассивного дохода: +${earned} 🪙`);
+      } else {
+        alert("⏱️ Награда пока накапливается!");
+      }
+    }
+
+    // 6. P2P МАРКЕТ
     function tradeItem(itemId) {
       const item = ITEMS.find(i => i.id === itemId);
       const invIndex = state.inventory.findIndex(i => i.id === itemId);
@@ -740,6 +735,8 @@
 
     function renderMarket() {
       const list = document.getElementById('marketList');
+      if (!list) return;
+
       let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
 
       if (marketItems.length === 0) {
@@ -749,6 +746,7 @@
 
       list.innerHTML = marketItems.map(lot => {
         const item = ITEMS.find(i => i.id === lot.itemId);
+        if (!item) return '';
         const isMyLot = lot.seller === document.getElementById('uName').innerText;
 
         return `
@@ -798,9 +796,9 @@
       alert("🎉 Покупка совершена!");
     }
 
-    // PVP ДУЭЛИ
+    // 7. PVP ДУЭЛИ
     function createPvpMatch() {
-      const code = prompt("Придумайте секретный код (3-5 цифр):", "1234");
+      const code = prompt("Придумыйте секретный код (3-5 цифр):", "1234");
       if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
         alert("❌ Код должен содержать от 3 до 5 цифр!");
         return;
@@ -849,6 +847,8 @@
 
     function renderPvp() {
       const list = document.getElementById('pvpList');
+      if (!list) return;
+
       let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
       const myName = document.getElementById('uName').innerText;
 
@@ -919,6 +919,7 @@
       } else {
         secondsLeft = match.limit;
         document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft}с`;
+        if (gameTimer) clearInterval(gameTimer);
         gameTimer = setInterval(() => {
           secondsLeft--;
           document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
@@ -932,32 +933,9 @@
       updateDigitsDisplay();
     }
 
-    function claimMining() {
-      const now = Date.now();
-      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
-
-      let totalRate = 0;
-      state.inventory.forEach(inv => {
-        const it = ITEMS.find(i => i.id === inv.id);
-        if (it) totalRate += it.income * inv.count;
-      });
-
-      const earned = Math.floor(hoursPassed * totalRate);
-      if (earned > 0) {
-        state.coins += earned;
-        state.totalEarned += earned;
-        state.lastMiningTime = now;
-        saveState();
-        alert(`💰 Собрано: +${earned} 🪙`);
-      } else {
-        alert("⏱️ Награда пока накапливается!");
-      }
-    }
-
+    // ИНИЦИАЛИЗАЦИЯ
     saveState();
     renderSafes();
   </script>
 </body>
 </html>
-
-      

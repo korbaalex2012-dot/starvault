@@ -106,7 +106,6 @@
     }
 
     .pvp-card { margin-bottom: 12px; align-items: stretch; text-align: left; }
-    .pvp-header { display: flex; justify-content: space-between; align-items: center; }
 
     .game-overlay, .modal-overlay {
       position: fixed; inset: 0; background: rgba(6, 8, 12, 0.96);
@@ -117,9 +116,7 @@
 
     #profileModal { z-index: 99999 !important; }
 
-    .in-game-boosts {
-      display: flex; justify-content: center; gap: 10px; margin: 8px 0;
-    }
+    .in-game-boosts { display: flex; justify-content: center; gap: 10px; margin: 8px 0; }
     .boost-btn-game {
       background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
       border-radius: 10px; padding: 6px 10px; display: flex; align-items: center; gap: 6px;
@@ -138,18 +135,9 @@
     .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 300px; margin: 0 auto; }
     .num-btn { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 14px; border-radius: 10px; font-size: 18px; font-weight: 800; text-align: center; }
 
-    .leader-row {
-      background: var(--card-bg); border: 1px solid var(--glass-border);
-      border-radius: 14px; padding: 12px; margin-bottom: 8px; display: flex;
-      align-items: center; justify-content: space-between;
-    }
-
-    .title-item {
-      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
-      border-radius: 12px; padding: 10px 14px; margin-bottom: 8px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .title-item.active { border-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.1); }
+    .inv-tabs { display: flex; gap: 8px; margin-bottom: 12px; width: 100%; }
+    .inv-tab-btn { flex: 1; padding: 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-sub); font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
+    .inv-tab-btn.active { background: var(--accent-purple); color: #fff; border-color: var(--accent-cyan); }
 
     .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -214,14 +202,21 @@
   </main>
 
   <main class="tab-page" id="page-inventory">
-    <div class="section-title"><span>Инвентарь</span><span id="collCount" style="color:var(--accent-gold)">0/9</span></div>
-    <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+    <div class="section-title"><span>Инвентарь & Майнинг</span><span id="collCount" style="color:var(--accent-gold)">0/9</span></div>
+    
+    <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
       <div>
-        <div style="font-size:11px; color:var(--text-sub)">Пассивный доход</div>
-        <div style="font-size:15px; font-weight:800; color:#00ff66" id="passiveIncome">+0 🪙/ч</div>
+        <div style="font-size:11px; color:var(--text-sub)">Офлайн-доход</div>
+        <div style="font-size:16px; font-weight:800; color:#00ff66" id="passiveIncome">+0 🪙/ч</div>
       </div>
-      <button class="btn-hack" style="width:auto; padding:6px 14px" onclick="claimMining()">Собрать</button>
+      <button class="btn-hack" style="width:auto; padding:8px 16px" onclick="claimMining()">Собрать</button>
     </div>
+
+    <div class="inv-tabs">
+      <div class="inv-tab-btn active" id="btnTabInv" onclick="switchInvSubTab('bag')">🎒 Багаж</div>
+      <div class="inv-tab-btn" id="btnTabRig" onclick="switchInvSubTab('rig')">⚡ На Майнинге</div>
+    </div>
+
     <div class="items-grid" id="inventoryGrid"></div>
   </main>
 
@@ -241,12 +236,6 @@
         <input type="checkbox" id="musicToggle" onchange="toggleMusic(this.checked)">
         <span class="slider"></span>
       </label>
-    </div>
-    <div class="setting-row">
-      <div>
-        <div style="font-weight:700; font-size:14px">⏱️ Игровое время</div>
-        <div style="font-size:10px; color:var(--text-sub)" id="settingsPlaytime">Зафиксировано: 0 мин</div>
-      </div>
     </div>
   </main>
 
@@ -303,818 +292,390 @@
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
     <script>
-    // 1. БАЗА ДАННЫХ: ТИТУЛЫ
-    const ALL_TITLES = [
-      { id: "newbie", name: "🟢 Новичок", desc: "Выдается при старте" },
-      { id: "hacker", name: "💻 Взломщик", desc: "Успешно взломать 5 сейфов" },
-      { id: "collector", name: "🎒 Коллекционер", desc: "Собрать 3 уникальных предмета" },
-      { id: "pvp_master", name: "⚔️ Дуэлянт", desc: "Победить в 3 PVP дуэлях" },
-      { id: "rich", name: "💎 Магнат", desc: "Накопить 10,000 монет" }
-    ];
+    // 1. ИНИЦИАЛИЗАЦИЯ И СОСТОЯНИЕ
+    let tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg) { tg.ready(); tg.expand(); }
 
-    // 2. БАЗА ДАННЫХ: БУСТЫ (С ТВОИМИ ИКОНКАМИ)
-    const BOOSTS = [
-      { id: "attempts", name: "🧠 +2 Попытки", cost: 150, img: "IMG_20260720_153330.png", desc: "Только для логических сейфов" },
-      { id: "time", name: "⏱️ +10 Секунд", cost: 150, img: "IMG_20260720_153341.png", desc: "Только для сейфов на время" },
-      { id: "xray", name: "👁️ Рентген-Сканер", cost: 300, img: "IMG_20260720_153349.png", desc: "Открывает 1 точную цифру" },
-      { id: "shield", name: "🛡️ Силовой Щит", cost: 500, img: "IMG_20260720_153359.png", desc: "Спасает при поражении" }
-    ];
-
-    // 3. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ
-    const ITEMS = [
-      { id: 101, name: "🎙️ Стимпанк Стетоскоп", income: 15, img: "IMG_20260720_115622.png" },
-      { id: 102, name: "🗝️ Механическая Отмычка", income: 35, img: "IMG_20260720_115636.png" },
-      { id: 103, name: "🔦 Лазерный Резак", income: 60, img: "IMG_20260720_115645.png" },
-      { id: 104, name: "🪙 Майнер-Слиток", income: 100, img: "IMG_20260720_115658.png" },
-      { id: 105, name: "👾 Чип 'Призрак'", income: 150, img: "IMG_20260720_115724.png" },
-      { id: 106, name: "🥊 Кибер-Перчатка", income: 220, img: "IMG_20260720_115747.png" },
-      { id: 107, name: "📱 Матричный Дек", income: 320, img: "IMG_20260720_115800.png" },
-      { id: 108, name: "🌀 Квантовый Настройщик", income: 500, img: "IMG_20260720_115813.png" },
-      { id: 109, name: "💳 Мастер-Карта", income: 850, img: "IMG_20260720_115823.png" }
-    ];
-
-    // 4. БАЗА ДАННЫХ: 9 СЕЙФОВ
-    const VAULTS = [
-      { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.5, img: "IMG_20260719_180634.png" },
-      { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 8, cost: 100, reward: 300, dropId: 102, dropRate: 0.45, img: "IMG_20260719_181100.png" },
-      { id: 3, name: "⚙️ Стальной сейф", len: 4, mode: "time", time: 35, cost: 200, reward: 600, dropId: 103, dropRate: 0.4, img: "IMG_20260719_181706.png" },
-      { id: 4, name: "👑 Золотой Банк", len: 4, mode: "time", time: 30, cost: 350, reward: 1000, dropId: 104, dropRate: 0.35, img: "IMG_20260719_183142.png" },
-      { id: 5, name: "🌐 Кибер-Хранилище", len: 4, mode: "time", time: 25, cost: 500, reward: 1500, dropId: 105, dropRate: 0.3, img: "IMG_20260719_183244.png" },
-      { id: 6, name: "🛡️ Силовой Бункер", len: 4, mode: "logic", attempts: 7, cost: 800, reward: 2400, dropId: 106, dropRate: 0.25, img: "IMG_20260719_183338.png" },
-      { id: 7, name: "💾 Крипто-Сервер", len: 5, mode: "time", time: 20, cost: 1200, reward: 4000, dropId: 107, dropRate: 0.2, img: "IMG_20260719_183351.png" },
-      { id: 8, name: "⚛️ Квантовый Сейф", len: 5, mode: "time", time: 18, cost: 2000, reward: 7000, dropId: 108, dropRate: 0.15, img: "IMG_20260719_183406.png" },
-      { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.1, img: "IMG_20260719_183425.png" }
-    ];
-
-    // 5. СОХРАНЕНИЯ
-    let tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
-
-    let defaultState = {
-      coins: 500,
-      totalEarned: 500,
-      totalSpent: 0,
-      selectedTitle: "🟢 Новичок",
-      unlockedTitles: ["newbie"],
-      inventory: [],
-      boosts: { attempts: 0, time: 0, xray: 0, shield: 0 },
-      streak: 0,
-      lastBonusTime: 0,
-      lastMiningTime: Date.now(),
-      logicWins: 0,
-      timeWins: 0,
-      pvpWins: 0,
-      playTimeSeconds: 0
-    };
-
-    let state = JSON.parse(localStorage.getItem('starvault_state')) || defaultState;
-    if (!state.boosts) state.boosts = { attempts: 0, time: 0, xray: 0, shield: 0 };
-
-    function saveState() {
-      localStorage.setItem('starvault_state', JSON.stringify(state));
-      updateUI();
-    }
-
-    function updateUI() {
-      document.getElementById('uBalance').innerText = state.coins.toLocaleString();
-      document.getElementById('uTitle').innerText = state.selectedTitle;
-      
-      const uName = tg?.initDataUnsafe?.user?.first_name || "Игрок";
-      document.getElementById('uName').innerText = uName;
-      document.getElementById('uAvatar').innerText = uName.charAt(0).toUpperCase();
-
-      const mins = Math.floor(state.playTimeSeconds / 60);
-      document.getElementById('settingsPlaytime').innerText = `Зафиксировано: ${mins} мин`;
-    }
-
-    setInterval(() => {
-      state.playTimeSeconds += 1;
-      if (state.playTimeSeconds % 10 === 0) saveState();
-    }, 1000);
-
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-
-      document.getElementById(`page-${tabId}`).classList.add('active');
-      el.classList.add('active');
-
-      if (tabId === 'safes') renderSafes();
-      if (tabId === 'pvp') renderPvp();
-      if (tabId === 'bonus') renderBonusTab();
-      if (tabId === 'inventory') renderInventory();
-      if (tabId === 'market') renderMarket();
-    }
-
-    function toggleMusic(enabled) {
-      const audio = document.getElementById('bgMusic');
-      if (enabled) { audio.play().catch(() => {}); } else { audio.pause(); }
-    }
-
-    // 6. ПРАВИЛЬНАЯ ЛОГИКА ТИТУЛОВ (ГАРАНТИРОВАННО РАБОТАЕТ)
-    function checkTitleAchievements() {
-      const totalWins = state.logicWins + state.timeWins;
-      if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) state.unlockedTitles.push("hacker");
-      if (state.inventory.length >= 3 && !state.unlockedTitles.includes("collector")) state.unlockedTitles.push("collector");
-      if (state.pvpWins >= 3 && !state.unlockedTitles.includes("pvp_master")) state.unlockedTitles.push("pvp_master");
-      if (state.coins >= 10000 && !state.unlockedTitles.includes("rich")) state.unlockedTitles.push("rich");
-      saveState();
-    }
-
-    window.openProfileModal = function() {
-      checkTitleAchievements();
-      
-      const modal = document.getElementById('profileModal');
-      const container = document.getElementById('unlockedTitlesList');
-      if (!modal || !container) return;
-
-      const availableTitles = ALL_TITLES.filter(t => state.unlockedTitles.includes(t.id));
-
-      container.innerHTML = availableTitles.map(t => {
-        const isSelected = state.selectedTitle === t.name;
-        return `
-          <div class="title-item ${isSelected ? 'active' : ''}">
-            <div>
-              <div style="font-weight:800; font-size:14px">${t.name}</div>
-              <div style="font-size:10px; color:var(--text-sub)">${t.desc}</div>
-            </div>
-            ${isSelected 
-              ? `<span style="font-size:11px; color:var(--accent-cyan); font-weight:800">Надет</span>`
-              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="selectTitle('${t.name}')">Надеть</button>`
-            }
-          </div>
-        `;
-      }).join('');
-
-      modal.style.display = 'flex';
-      modal.classList.add('active');
-    };
-
-    window.closeProfileModal = function() {
-      const modal = document.getElementById('profileModal');
-      if (modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('active');
-      }
-    };
-
-    window.selectTitle = function(titleName) {
-      state.selectedTitle = titleName;
-      saveState();
-      window.closeProfileModal();
-      alert(`✅ Титул "${titleName}" успешно надет!`);
-    };
-
-    // 7. ЛОГИКА МАГАЗИНА БУСТОВ
-    function openShopModal() {
-      const container = document.getElementById('shopBoostsGrid');
-      if (!container) return;
-
-      container.innerHTML = BOOSTS.map(b => `
-        <div class="boost-card">
-          <img src="${b.img}" class="boost-img" alt="${b.name}">
-          <div style="font-weight:800; font-size:12px">${b.name}</div>
-          <div style="font-size:9px; color:var(--text-sub); margin:2px 0">${b.desc}</div>
-          <div style="font-size:11px; color:var(--accent-gold); font-weight:700">У вас: ${state.boosts[b.id] || 0} шт.</div>
-          <button class="btn-hack" onclick="buyBoost('${b.id}')">Купить (${b.cost} 🪙)</button>
-        </div>
-      `).join('');
-
-      document.getElementById('shopModal').style.display = 'flex';
-      document.getElementById('shopModal').classList.add('active');
-    }
-
-    function closeShopModal() {
-      document.getElementById('shopModal').style.display = 'none';
-      document.getElementById('shopModal').classList.remove('active');
-    }
-
-    function buyBoost(boostId) {
-      const boost = BOOSTS.find(b => b.id === boostId);
-      if (!boost) return;
-
-      if (state.coins < boost.cost) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      state.coins -= boost.cost;
-      state.totalSpent += boost.cost;
-      state.boosts[boostId] = (state.boosts[boostId] || 0) + 1;
-
-      saveState();
-      openShopModal();
-    }
-          // 8. ИГРОВОЙ ДВИЖОК ВЗЛОМА
+    let userBalance = parseInt(localStorage.getItem('sv_balance')) || 500;
+    let currentTitle = localStorage.getItem('sv_title') || "🟢 Новичок";
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
-    let gameTimer = null;
-    let secondsLeft = 0;
     let attemptsLeft = 0;
-    let isPvpGame = false;
-    let pvpBet = 0;
-    let isShieldActive = false;
+    let secondsLeft = 0;
+    let gameTimer = null;
+    let activeSubTab = "bag"; // bag | rig
 
+    // 2. РЕДКИЕ ШАНСЫ И ПРЕДМЕТЫ (Завязано на стоимость!)
+    // Чем дороже сейф, тем меньше шанс
+    const VAULTS = [
+      { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.30, img: "IMG_20260719_180634.png" }, // 30%
+      { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 8, cost: 100, reward: 300, dropId: 102, dropRate: 0.22, img: "IMG_20260719_181100.png" },   // 22%
+      { id: 3, name: "⚙️ Стальной сейф", len: 4, mode: "time", time: 35, cost: 200, reward: 600, dropId: 103, dropRate: 0.18, img: "IMG_20260719_181706.png" },     // 18%
+      { id: 4, name: "👑 Золотой Банк", len: 4, mode: "time", time: 30, cost: 350, reward: 1000, dropId: 104, dropRate: 0.14, img: "IMG_20260719_183142.png" },   // 14%
+      { id: 5, name: "🌐 Кибер-Хранилище", len: 4, mode: "time", time: 25, cost: 500, reward: 1500, dropId: 105, dropRate: 0.10, img: "IMG_20260719_183244.png" }, // 10%
+      { id: 6, name: "🛡️ Силовой Бункер", len: 4, mode: "logic", attempts: 7, cost: 800, reward: 2400, dropId: 106, dropRate: 0.07, img: "IMG_20260719_183338.png" },// 7%
+      { id: 7, name: "💾 Крипто-Сервер", len: 5, mode: "time", time: 20, cost: 1200, reward: 4000, dropId: 107, dropRate: 0.05, img: "IMG_20260719_183351.png" },  // 5%
+      { id: 8, name: "⚛️ Квантовый Сейф", len: 5, mode: "time", time: 18, cost: 2000, reward: 7000, dropId: 108, dropRate: 0.03, img: "IMG_20260719_183406.png" },  // 3%
+      { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.015, img: "IMG_20260719_183425.png" }// 1.5%
+    ];
+
+    // Доход майнинга зависит от редкости предмета (худший = 100 монеты/час)
+    const COLLECTION_ITEMS = [
+      { id: 101, name: "Деревянный Жетон", rarity: "Обычный", income: 100, img: "IMG_20260719_183437.png" },
+      { id: 102, name: "Бронзовая Медаль", rarity: "Обычный", income: 180, img: "IMG_20260719_183446.png" },
+      { id: 103, name: "Стальной Шестереночник", rarity: "Редкий", income: 300, img: "IMG_20260719_183501.png" },
+      { id: 104, name: "Золотой Слиток Vault", rarity: "Редкий", income: 550, img: "IMG_20260719_183510.png" },
+      { id: 105, name: "Кибер-Флешка 2077", rarity: "Эпический", income: 900, img: "IMG_20260719_183518.png" },
+      { id: 106, name: "Силовой Ядро-Акум", rarity: "Эпический", income: 1500, img: "IMG_20260719_183526.png" },
+      { id: 107, name: "Крипто-Процессор", rarity: "Легендарный", income: 2600, img: "IMG_20260719_183533.png" },
+      { id: 108, name: "Квантовый Кубит", rarity: "Легендарный", income: 4500, img: "IMG_20260719_183542.png" },
+      { id: 109, name: "Черный ЧИП-Взломщик", rarity: "МИФИЧЕСКИЙ", income: 10000, img: "IMG_20260719_183554.png" }
+    ];
+
+    // Инвентарь и майнинг ферма
+    let userInventory = JSON.parse(localStorage.getItem('sv_inventory')) || [];
+    let miningRig = JSON.parse(localStorage.getItem('sv_mining_rig')) || [];
+    let lastClaimTime = parseInt(localStorage.getItem('sv_last_claim')) || Date.now();
+
+    // Market / PVP
+    let pvpMatches = JSON.parse(localStorage.getItem('sv_pvp_matches')) || [];
+    let marketOffers = JSON.parse(localStorage.getItem('sv_market_offers')) || [];
+
+    // 3. ПАССИВНЫЙ ОФЛАЙН-МАЙНИНГ
+    function getMiningRatePerHour() {
+      return miningRig.reduce((sum, item) => sum + (item.income || 100), 0);
+    }
+
+    function calculateOfflineMining() {
+      const now = Date.now();
+      const hoursPassed = (now - lastClaimTime) / (1000 * 60 * 60);
+      const rate = getMiningRatePerHour();
+      const earned = Math.floor(hoursPassed * rate);
+      return { earned, hoursPassed };
+    }
+
+    function claimMining() {
+      const { earned } = calculateOfflineMining();
+      if (earned <= 0) {
+        alert("Пока нет накопленных монет от майнинга!");
+        return;
+      }
+      userBalance += earned;
+      lastClaimTime = Date.now();
+      saveData();
+      updateUI();
+      alert(`💰 Вы собрали ${earned} 🪙 пассивного дохода!`);
+    }
+
+    // 4. ТАБЫ И ИНВЕНТАРЬ
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.getElementById(`page-${tabId}`).classList.add('active');
+      if (el) el.classList.add('active');
+      if (tabId === 'inventory') renderInventory();
+      if (tabId === 'market') renderMarket();
+      if (tabId === 'pvp') renderPvp();
+    }
+
+    function switchInvSubTab(type) {
+      activeSubTab = type;
+      document.getElementById('btnTabInv').classList.toggle('active', type === 'bag');
+      document.getElementById('btnTabRig').classList.toggle('active', type === 'rig');
+      renderInventory();
+    }
+
+    function toggleMiningItem(instanceId) {
+      if (activeSubTab === 'bag') {
+        const idx = userInventory.findIndex(i => i.instanceId === instanceId);
+        if (idx !== -1) {
+          const item = userInventory.splice(idx, 1)[0];
+          miningRig.push(item);
+        }
+      } else {
+        const idx = miningRig.findIndex(i => i.instanceId === instanceId);
+        if (idx !== -1) {
+          const item = miningRig.splice(idx, 1)[0];
+          userInventory.push(item);
+        }
+      }
+      saveData();
+      renderInventory();
+    }
+
+    function renderInventory() {
+      const grid = document.getElementById('inventoryGrid');
+      const rate = getMiningRatePerHour();
+      document.getElementById('passiveIncome').innerText = `+${rate} 🪙/ч`;
+
+      const currentList = activeSubTab === 'bag' ? userInventory : miningRig;
+      document.getElementById('collCount').innerText = `${currentList.length} шт`;
+
+      if (currentList.length === 0) {
+        grid.innerHTML = `<div style="grid-column:span 2; color:var(--text-sub); font-size:12px; padding:20px; text-align:center;">
+          ${activeSubTab === 'bag' ? 'Инвентарь пуст. Взламывай сейфы!' : 'Нет предметов на майнинге. Перенеси их из багажа!'}
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = "";
+      currentList.forEach(item => {
+        grid.innerHTML += `
+          <div class="item-card">
+            <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/70'">
+            <div style="font-weight:800; font-size:12px;">${item.name}</div>
+            <div style="font-size:10px; color:var(--accent-gold); margin:2px 0;">⚡ +${item.income} 🪙/ч</div>
+            <div style="display:flex; gap:4px; width:100%; margin-top:6px;">
+              <button class="btn-hack" style="font-size:10px; padding:4px 0;" onclick="toggleMiningItem(${item.instanceId})">
+                ${activeSubTab === 'bag' ? '⛏️ Майнить' : '🎒 В багаж'}
+              </button>
+              ${activeSubTab === 'bag' ? `<button class="btn-hack" style="font-size:10px; padding:4px 0; background:var(--accent-pink);" onclick="sellToMarketPrompt(${item.instanceId})">🏷️ Продать</button>` : ''}
+            </div>
+          </div>
+        `;
+      });
+    }
+        // 5. РЫНОК P2P (Исправлен баг продажи и покупки)
+    function sellToMarketPrompt(instanceId) {
+      const item = userInventory.find(i => i.instanceId === instanceId);
+      if (!item) return;
+
+      const priceStr = prompt(`За сколько 🪙 хочешь выставить "${item.name}" на продажу?`);
+      const price = parseInt(priceStr);
+
+      if (!price || price <= 0) {
+        alert("Некорректная цена!");
+        return;
+      }
+
+      // Удаляем из инвентаря и добавляем на маркет
+      userInventory = userInventory.filter(i => i.instanceId !== instanceId);
+      const offer = {
+        id: Date.now(),
+        seller: "Ты",
+        item: item,
+        price: price
+      };
+      marketOffers.push(offer);
+
+      saveData();
+      renderInventory();
+      renderMarket();
+      alert(`🏷️ Предмет "${item.name}" выставлен на рынок за ${price} 🪙!`);
+    }
+
+    function renderMarket() {
+      const container = document.getElementById('marketList');
+      if (!container) return;
+
+      if (marketOffers.length === 0) {
+        container.innerHTML = `<div style="color:var(--text-sub); font-size:12px; padding:20px; text-align:center;">На рынке пока нет лотов. Выстави свои предметы из багажа!</div>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      marketOffers.forEach(offer => {
+        container.innerHTML += `
+          <div class="pvp-card" style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="${offer.item.img}" style="width:45px; height:45px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/45'">
+              <div>
+                <div style="font-weight:800; font-size:13px;">${offer.item.name}</div>
+                <div style="font-size:10px; color:var(--text-sub);">Продавец: ${offer.seller}</div>
+                <div style="font-size:11px; color:var(--accent-gold); font-weight:700;">⚡ +${offer.item.income || 100} 🪙/ч</div>
+              </div>
+            </div>
+            <div>
+              <button class="btn-hack" style="padding:6px 12px; font-size:11px;" onclick="buyFromMarket(${offer.id})">Купить (${offer.price} 🪙)</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function buyFromMarket(offerId) {
+      const offerIndex = marketOffers.findIndex(o => o.id === offerId);
+      if (offerIndex === -1) return;
+
+      const offer = marketOffers[offerIndex];
+      if (userBalance < offer.price) {
+        alert("❌ Недостаточно монет на балансе!");
+        return;
+      }
+
+      userBalance -= offer.price;
+      userInventory.push(offer.item);
+      marketOffers.splice(offerIndex, 1);
+
+      saveData();
+      updateUI();
+      renderMarket();
+      alert(`🎉 Успешная покупка: ${offer.item.name}!`);
+    }
+
+    // 6. ОТРИСОВКА СЕЙФОВ И ЛОГИКА ВЗЛОМА
     function renderSafes() {
       const container = document.getElementById('safesContainer');
       if (!container) return;
-      container.innerHTML = VAULTS.map(s => `
-        <div class="safe-card">
-          <div style="font-weight:800; font-size:13px">${s.name}</div>
-          <img src="${s.img}" class="safe-img" alt="${s.name}">
-          <div style="font-size:11px; color:var(--text-sub)">Вход: ${s.cost} 🪙</div>
-          <div style="font-size:11px; color:var(--accent-gold); font-weight:700">Приз: +${s.reward} 🪙</div>
-          <button class="btn-hack" onclick="startBoxGame(${s.id})">ОТКРЫТЬ</button>
-        </div>
-      `).join('');
-    }
-
-    function renderInGameBoosts() {
-      const container = document.getElementById('gameBoostsContainer');
-      if (!container) return;
       container.innerHTML = "";
 
-      if (activeBox.mode === 'logic') {
+      VAULTS.forEach(vault => {
+        const dropPercent = Math.round(vault.dropRate * 100);
         container.innerHTML += `
-          <div class="boost-btn-game" onclick="useBoost('attempts')">
-            <img src="IMG_20260720_153330.png">
-            <span>+2 (${state.boosts.attempts || 0})</span>
+          <div class="safe-card">
+            <img src="${vault.img}" class="safe-img" onerror="this.src='https://via.placeholder.com/70'">
+            <div style="font-weight:800; font-size:13px;">${vault.name}</div>
+            <div style="font-size:11px; color:var(--accent-gold); margin:2px 0;">+${vault.reward} 🪙</div>
+            <div style="font-size:10px; color:var(--accent-cyan); margin-bottom:6px;">Шанс лута: ${dropPercent}%</div>
+            <button class="btn-hack" onclick="startGame(${vault.id})">ВЗЛОМАТЬ (${vault.cost} 🪙)</button>
           </div>
         `;
-      } else {
-        container.innerHTML += `
-          <div class="boost-btn-game" onclick="useBoost('time')">
-            <img src="IMG_20260720_153341.png">
-            <span>+10с (${state.boosts.time || 0})</span>
-          </div>
-        `;
-      }
-
-      container.innerHTML += `
-        <div class="boost-btn-game" onclick="useBoost('xray')">
-          <img src="IMG_20260720_153349.png">
-          <span>👁️ (${state.boosts.xray || 0})</span>
-        </div>
-        <div class="boost-btn-game" onclick="useBoost('shield')" style="${isShieldActive ? 'border-color:var(--accent-gold)' : ''}">
-          <img src="IMG_20260720_153359.png">
-          <span>${isShieldActive ? 'АКТИВЕН' : '🛡️ (' + (state.boosts.shield || 0) + ')'}</span>
-        </div>
-      `;
+      });
     }
 
-    function useBoost(type) {
-      if ((state.boosts[type] || 0) <= 0 && type !== 'shield_active') {
-        alert("❌ У вас нет этого буста! Купите его в магазине.");
+    function startGame(vaultId) {
+      activeBox = VAULTS.find(v => v.id === vaultId);
+      if (!activeBox) return;
+
+      if (userBalance < activeBox.cost) {
+        alert("❌ Недостаточно монет для взлома!");
         return;
       }
 
-      if (type === 'attempts') {
-        attemptsLeft += 2;
-        state.boosts.attempts -= 1;
-        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-      } else if (type === 'time') {
-        secondsLeft += 10;
-        state.boosts.time -= 1;
-        document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
-      } else if (type === 'xray') {
-        state.boosts.xray -= 1;
-        const randomIndex = Math.floor(Math.random() * activeBox.len);
-        const digit = targetCode[randomIndex];
-        alert(`👁️ Рентген-Сканер: Позиция №${randomIndex + 1} — цифра [ ${digit} ]!`);
-      } else if (type === 'shield') {
-        if (isShieldActive) return;
-        state.boosts.shield -= 1;
-        isShieldActive = true;
-        alert("🛡️ Щит активирован! В случае поражения вы получите второй шанс.");
-      }
-
-      saveState();
-      renderInGameBoosts();
-    }
-
-    function startBoxGame(boxId) {
-      isPvpGame = false;
-      isShieldActive = false;
-      activeBox = VAULTS.find(s => s.id === boxId);
-
-      if (state.coins < activeBox.cost) {
-        alert(`❌ Нужно ${activeBox.cost} 🪙 для входа!`);
-        return;
-      }
-
-      state.coins -= activeBox.cost;
-      state.totalSpent += activeBox.cost;
-      saveState();
+      userBalance -= activeBox.cost;
+      updateUI();
 
       targetCode = "";
       for (let i = 0; i < activeBox.len; i++) {
-        targetCode += Math.floor(Math.random() * 10).toString();
+        targetCode += Math.floor(Math.random() * 10);
       }
-      currentInput = "";
 
+      currentInput = "";
       document.getElementById('gSafeName').innerText = activeBox.name;
       document.getElementById('gameHint').innerText = "";
-      renderInGameBoosts();
-      
-      const gModal = document.getElementById('gameModal');
-      gModal.style.display = 'flex';
-      gModal.classList.add('active');
+      renderDigits();
 
       if (activeBox.mode === 'logic') {
         attemptsLeft = activeBox.attempts;
-        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+        document.getElementById('gSafeMode').innerText = `Попыток оставлось: ${attemptsLeft}`;
+        document.getElementById('gTimer').innerText = "";
       } else {
         secondsLeft = activeBox.time;
-        document.getElementById('gSafeMode').innerText = `Время: ${activeBox.time} с`;
-        document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+        document.getElementById('gSafeMode').innerText = "Взлом на время!";
+        document.getElementById('gTimer').innerText = `${secondsLeft}s`;
 
         if (gameTimer) clearInterval(gameTimer);
         gameTimer = setInterval(() => {
           secondsLeft--;
-          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+          document.getElementById('gTimer').innerText = `${secondsLeft}s`;
           if (secondsLeft <= 0) {
-            if (isShieldActive) {
-              isShieldActive = false;
-              secondsLeft += 10;
-              alert("🛡️ Щит спас вас! Добавлено +10 секунд.");
-              renderInGameBoosts();
-            } else {
-              clearInterval(gameTimer);
-              alert("⏰ Время вышло!");
-              closeGame();
-            }
+            clearInterval(gameTimer);
+            alert("⏰ Время вышло! Сейф заблокирован.");
+            closeGame();
           }
         }, 1000);
       }
 
-      updateDigitsDisplay();
+      document.getElementById('gameModal').classList.add('active');
+    }
+
+    function renderDigits() {
+      const box = document.getElementById('digitsRow');
+      box.innerHTML = "";
+      for (let i = 0; i < activeBox.len; i++) {
+        const char = currentInput[i] || "_";
+        box.innerHTML += `<div class="digit-box">${char}</div>`;
+      }
     }
 
     function pressKey(num) {
       if (currentInput.length < activeBox.len) {
-        currentInput += num.toString();
-        updateDigitsDisplay();
+        currentInput += num;
+        renderDigits();
       }
     }
 
     function clearKey() {
       currentInput = "";
-      updateDigitsDisplay();
-    }
-
-    function updateDigitsDisplay() {
-      const container = document.getElementById('digitsRow');
-      if (!container) return;
-      container.innerHTML = "";
-      for (let i = 0; i < activeBox.len; i++) {
-        const char = currentInput[i] || "_";
-        container.innerHTML += `<div class="digit-box">${char}</div>`;
-      }
+      renderDigits();
     }
 
     function submitCode() {
-      if (currentInput.length < activeBox.len) return;
+      if (currentInput.length !== activeBox.len) return;
 
       if (currentInput === targetCode) {
         if (gameTimer) clearInterval(gameTimer);
 
-        if (isPvpGame) {
-          const winAmount = Math.floor(pvpBet * 2 * 0.9);
-          state.coins += winAmount;
-          state.totalEarned += winAmount;
-          state.pvpWins += 1;
-          saveState();
-          alert(`⚔️ ПОБЕДА В ДУЭЛИ!\nЗаработано: +${winAmount} 🪙`);
-        } else {
-          state.coins += activeBox.reward;
-          state.totalEarned += activeBox.reward;
+        // Награда монетами
+        userBalance += activeBox.reward;
 
-          if (activeBox.mode === 'logic') state.logicWins += 1;
-          if (activeBox.mode === 'time') state.timeWins += 1;
+        // ПРОВЕРКА РЕДКОГО ШАНСА ВЫПАДЕНИЯ
+        const roll = Math.random();
+        let itemMessage = "";
 
-          let droppedMsg = "";
-          if (Math.random() <= activeBox.dropRate) {
-            const invItem = state.inventory.find(i => i.id === activeBox.dropId);
-            if (invItem) {
-              invItem.count += 1;
-            } else {
-              state.inventory.push({ id: activeBox.dropId, count: 1 });
-            }
-            const droppedItem = ITEMS.find(i => i.id === activeBox.dropId);
-            if (droppedItem) droppedMsg = `\n\n🎁 Находка: ${droppedItem.name}!`;
-          }
-
-          saveState();
-          alert(`🎉 УСПЕХ!\nНаграда: +${activeBox.reward} 🪙${droppedMsg}`);
+        if (roll <= activeBox.dropRate) {
+          const itemTemplate = COLLECTION_ITEMS.find(c => c.id === activeBox.dropId) || COLLECTION_ITEMS[0];
+          const newItem = { ...itemTemplate, instanceId: Date.now() + Math.random() };
+          userInventory.push(newItem);
+          itemMessage = `\n🎁 ВАУ! ТЕБЕ ВЫПАЛ РЕДКИЙ ПРЕДМЕТ: ${newItem.name}!`;
         }
+
+        alert(`🎉 ВЗЛОМ УСПЕШЕН!\nПолучено: +${activeBox.reward} 🪙${itemMessage}`);
+        saveData();
+        updateUI();
         closeGame();
       } else {
-        let correctDigits = 0;
-        for (let i = 0; i < activeBox.len; i++) {
-          if (currentInput[i] === targetCode[i]) correctDigits++;
-        }
+        currentInput = "";
+        renderDigits();
 
         if (activeBox.mode === 'logic') {
           attemptsLeft--;
-          document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-          document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-
+          document.getElementById('gSafeMode').innerText = `Попыток оставлось: ${attemptsLeft}`;
+          document.getElementById('gameHint').innerText = "Неверная комбинация!";
           if (attemptsLeft <= 0) {
-            if (isShieldActive) {
-              isShieldActive = false;
-              attemptsLeft += 2;
-              alert("🛡️ Щит спас вас! Добавлено +2 попытки.");
-              document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-              document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-              renderInGameBoosts();
-            } else {
-              alert("❌ Попытки закончились!");
-              closeGame();
-              return;
-            }
+            alert("❌ Попытки закончились! Сейф заблокирован.");
+            closeGame();
           }
+        } else {
+          document.getElementById('gameHint').innerText = "Неверный код!";
         }
-
-        document.getElementById('gameHint').innerText = `❌ Совпадений мест: ${correctDigits}`;
       }
     }
 
     function closeGame() {
       if (gameTimer) clearInterval(gameTimer);
-      const gModal = document.getElementById('gameModal');
-      gModal.style.display = 'none';
-      gModal.classList.remove('active');
+      document.getElementById('gameModal').classList.remove('active');
     }
 
-    // 9. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
-    function renderBonusTab() {
-      const now = new Date();
-      const currentDay = now.getDate();
-      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-      const streakEl = document.getElementById('streakDays');
-      if (streakEl) streakEl.innerText = `${state.streak || 0} ДНЕЙ`;
-
-      const lastClaim = new Date(state.lastBonusTime || 0);
-      const isClaimedToday = lastClaim.toDateString() === now.toDateString();
-
-      const claimBtn = document.getElementById('claimBonusBtn');
-      if (claimBtn) {
-        if (isClaimedToday) {
-          claimBtn.disabled = true;
-          claimBtn.style.opacity = "0.5";
-          claimBtn.innerText = "✅ Награда за сегодня получена";
-        } else {
-          claimBtn.disabled = false;
-          claimBtn.style.opacity = "1";
-          claimBtn.innerText = `Забрать награду (${currentDay}-й день)`;
-        }
-      }
-
-      const grid = document.getElementById('calendarGrid');
-      if (!grid) return;
-      grid.innerHTML = "";
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const isToday = day === currentDay;
-        const isPast = day < currentDay;
-
-        let bg = "rgba(255,255,255,0.05)";
-        let border = "var(--glass-border)";
-        let color = "var(--text-sub)";
-
-        if (isToday) {
-          bg = "rgba(0, 240, 255, 0.2)";
-          border = "var(--accent-cyan)";
-          color = "#fff";
-        } else if (isPast) {
-          bg = "rgba(255, 255, 255, 0.02)";
-          color = "rgba(255,255,255,0.2)";
-        }
-
-        grid.innerHTML += `
-          <div style="background:${bg}; border:1px solid ${border}; border-radius:10px; padding:10px 4px; text-align:center; color:${color}; font-size:11px; font-weight:700;">
-            <div>${day}</div>
-            <div style="font-size:14px; margin-top:2px">${isToday ? '🎁' : (isPast ? '✔' : '🔒')}</div>
-          </div>
-        `;
-      }
+    // 7. СОХРАНЕНИЕ И ОБНОВЛЕНИЕ UI
+    function saveData() {
+      localStorage.setItem('sv_balance', userBalance);
+      localStorage.setItem('sv_title', currentTitle);
+      localStorage.setItem('sv_inventory', JSON.stringify(userInventory));
+      localStorage.setItem('sv_mining_rig', JSON.stringify(miningRig));
+      localStorage.setItem('sv_last_claim', lastClaimTime);
+      localStorage.setItem('sv_market_offers', JSON.stringify(marketOffers));
     }
 
-    function claimDailyBonus() {
-      const now = new Date();
-      const lastClaim = new Date(state.lastBonusTime || 0);
-
-      if (lastClaim.toDateString() === now.toDateString()) {
-        alert("⏱️ Вы уже забирали бонус сегодня!");
-        return;
-      }
-
-      const currentDay = now.getDate();
-      const rewardCoins = 150 + (currentDay * 20);
-
-      state.streak = (state.streak || 0) + 1;
-      state.lastBonusTime = Date.now();
-      state.coins += rewardCoins;
-      state.totalEarned += rewardCoins;
-
-      saveState();
-      renderBonusTab();
-      alert(`🎉 Награда за ${currentDay}-й день получена: +${rewardCoins} 🪙!`);
+    function updateUI() {
+      document.getElementById('uBalance').innerText = userBalance;
+      document.getElementById('uTitle').innerText = currentTitle;
     }
 
-    // 10. ИНВЕНТАРЬ
-    function renderInventory() {
-      const grid = document.getElementById('inventoryGrid');
-      if (!grid) return;
+    function openShopModal() { document.getElementById('shopModal').classList.add('active'); }
+    function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
+    function openProfileModal() { document.getElementById('profileModal').classList.add('active'); }
+    function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
 
-      document.getElementById('collCount').innerText = `${state.inventory.length} / ${ITEMS.length}`;
-
-      let totalIncome = 0;
-      grid.innerHTML = ITEMS.map(item => {
-        const invItem = state.inventory.find(i => i.id === item.id);
-        const count = invItem ? invItem.count : 0;
-        const owned = count > 0;
-
-        if (owned) totalIncome += item.income * count;
-
-        return `
-          <div class="item-card ${owned ? '' : 'locked'}" style="${owned ? '' : 'opacity:0.35'}">
-            <img src="${item.img}" class="item-img" alt="${item.name}">
-            <div style="font-size:10px; font-weight:700">${item.name} ${count > 1 ? `<span style="color:var(--accent-gold)">x${count}</span>` : ''}</div>
-            <div style="font-size:9px; color:#00ff66; margin-top:2px">+${item.income * (count || 1)}🪙/ч</div>
-            ${owned ? `<button class="btn-hack" style="padding:2px 0; font-size:9px; background:var(--accent-pink)" onclick="tradeItem(${item.id})">Продать 1шт</button>` : ''}
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
+    function toggleMusic(play) {
+      const audio = document.getElementById('bgMusic');
+      if (audio) { play ? audio.play() : audio.pause(); }
     }
 
-    function claimMining() {
-      const now = Date.now();
-      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
-
-      let totalRate = 0;
-      state.inventory.forEach(inv => {
-        const it = ITEMS.find(i => i.id === inv.id);
-        if (it) totalRate += it.income * inv.count;
-      });
-
-      const earned = Math.floor(hoursPassed * totalRate);
-      if (earned > 0) {
-        state.coins += earned;
-        state.totalEarned += earned;
-        state.lastMiningTime = now;
-        saveState();
-        alert(`💰 Собрано пассивного дохода: +${earned} 🪙`);
-      } else {
-        alert("⏱️ Награда пока накапливается!");
-      }
-    }
-
-    // 11. P2P МАРКЕТ
-    function tradeItem(itemId) {
-      const item = ITEMS.find(i => i.id === itemId);
-      const invIndex = state.inventory.findIndex(i => i.id === itemId);
-      if (invIndex === -1) return;
-
-      const priceStr = prompt(`Выставить 1 шт. "${item.name}" на Маркет.\nЦена в монетах:`, "500");
-      if (!priceStr) return;
-
-      const price = parseInt(priceStr);
-      if (isNaN(price) || price <= 0) {
-        alert("❌ Неверная цена!");
-        return;
-      }
-
-      if (state.inventory[invIndex].count > 1) {
-        state.inventory[invIndex].count -= 1;
-      } else {
-        state.inventory.splice(invIndex, 1);
-      }
-
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-      marketItems.push({
-        id: Date.now(),
-        itemId: item.id,
-        seller: document.getElementById('uName').innerText,
-        sellerTitle: state.selectedTitle,
-        price: price
-      });
-      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
-
-      saveState();
-      renderInventory();
-      alert(`✅ Лот выставлен за ${price} 🪙!`);
-    }
-
-    function renderMarket() {
-      const list = document.getElementById('marketList');
-      if (!list) return;
-
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-
-      if (marketItems.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">На рынке нет лотов.</p>`;
-        return;
-      }
-
-      list.innerHTML = marketItems.map(lot => {
-        const item = ITEMS.find(i => i.id === lot.itemId);
-        if (!item) return '';
-        const isMyLot = lot.seller === document.getElementById('uName').innerText;
-
-        return `
-          <div class="leader-row">
-            <div style="display:flex; align-items:center; gap:10px">
-              <img src="${item.img}" style="width:35px; height:35px; object-fit:contain">
-              <div>
-                <div style="font-weight:800; font-size:13px">${item.name}</div>
-                <div style="font-size:10px; color:var(--accent-gold)">@${lot.seller} [${lot.sellerTitle || '🟢 Новичок'}]</div>
-              </div>
-            </div>
-            ${isMyLot 
-              ? `<span style="font-size:11px; color:var(--accent-gold)">Мой лот (${lot.price} 🪙)</span>`
-              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="buyMarketItem(${lot.id})">${lot.price} 🪙</button>`
-            }
-          </div>
-        `;
-      }).join('');
-    }
-
-    function buyMarketItem(lotId) {
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-      const lotIndex = marketItems.findIndex(l => l.id === lotId);
-      if (lotIndex === -1) return;
-
-      const lot = marketItems[lotIndex];
-      if (state.coins < lot.price) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      state.coins -= lot.price;
-      state.totalSpent += lot.price;
-
-      const invItem = state.inventory.find(i => i.id === lot.itemId);
-      if (invItem) {
-        invItem.count += 1;
-      } else {
-        state.inventory.push({ id: lot.itemId, count: 1 });
-      }
-
-      marketItems.splice(lotIndex, 1);
-      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
-
-      saveState();
-      renderMarket();
-      alert("🎉 Покупка совершена!");
-    }
-
-    // 12. PVP ДУЭЛИ
-    function createPvpMatch() {
-      const code = prompt("Придумайте код (3-5 цифр):", "1234");
-      if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
-        alert("❌ Код от 3 до 5 цифр!");
-        return;
-      }
-
-      const mode = confirm("ОК — Попытки | Отмена — Время") ? "logic" : "time";
-      let limit = mode === "logic" ? 5 : 30;
-
-      const betStr = prompt("Ставка (от 50 до 50,000):", "200");
-      const bet = parseInt(betStr);
-
-      if (isNaN(bet) || bet < 50 || bet > state.coins) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      state.coins -= bet;
-      state.totalSpent += bet;
-      saveState();
-
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      pvpMatches.push({
-        id: Date.now(),
-        host: document.getElementById('uName').innerText,
-        hostTitle: state.selectedTitle,
-        code: code,
-        mode: mode,
-        limit: limit,
-        bet: bet
-      });
-      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
-
-      renderPvp();
-      alert("⚔️ Дуэль создана!");
-    }
-
-    function renderPvp() {
-      const list = document.getElementById('pvpList');
-      if (!list) return;
-
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      const myName = document.getElementById('uName').innerText;
-
-      if (pvpMatches.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">Нет активных дуэлей.</p>`;
-        return;
-      }
-
-      list.innerHTML = pvpMatches.map(m => {
-        const isMyMatch = m.host === myName;
-        const winAmount = Math.floor(m.bet * 2 * 0.9);
-        return `
-          <div class="pvp-card">
-            <div class="pvp-header">
-              <div>
-                <div style="font-weight:800; font-size:14px">Дуэль от @${m.host}</div>
-                <div style="font-size:10px; color:var(--accent-gold)">[${m.hostTitle || '🟢 Новичок'}]</div>
-                <div style="font-size:11px; color:var(--accent-gold); margin-top:2px">Куш: ${winAmount} 🪙</div>
-              </div>
-              ${isMyMatch 
-                ? `<span style="font-size:11px; color:var(--accent-pink)">Ваш вызов</span>`
-                : `<button class="btn-hack" style="width:auto; padding:6px 12px" onclick="acceptPvp(${m.id})">Принять</button>`
-              }
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function acceptPvp(matchId) {
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      const match = pvpMatches.find(m => m.id === matchId);
-      if (!match) return;
-
-      const myName = document.getElementById('uName').innerText;
-      if (match.host === myName) {
-        alert("❌ Вы не можете принять дуэль от самого себя!");
-        return;
-      }
-
-      if (state.coins < match.bet) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      state.coins -= match.bet;
-      state.totalSpent += match.bet;
-      saveState();
-
-      pvpMatches = pvpMatches.filter(m => m.id !== matchId);
-      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
-
-      isPvpGame = true;
-      pvpBet = match.bet;
-      targetCode = match.code;
-      currentInput = "";
-
-            activeBox = {
-        name: "⚔️ PVP Дуэль",
-        mode: match.mode,
-        len: match.code.length,
-        attempts: match.limit,
-        time: match.limit
-      };
-
-      document.getElementById('gSafeName').innerText = "⚔️ PVP Дуэль";
-      document.getElementById('gameHint').innerText = "";
-      renderInGameBoosts();
-
-      const gModal = document.getElementById('gameModal');
-      gModal.style.display = 'flex';
-      gModal.classList.add('active');
-
-      if (match.mode === 'logic') {
-        attemptsLeft = match.limit;
-        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-      } else {
-        secondsLeft = match.limit;
-        document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft}с`;
-        if (gameTimer) clearInterval(gameTimer);
-        gameTimer = setInterval(() => {
-          secondsLeft--;
-          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
-          if (secondsLeft <= 0) {
-            clearInterval(gameTimer);
-            alert("⏰ Время вышло!");
-            closeGame();
-          }
-        }, 1000);
-      }
-      updateDigitsDisplay();
-    }
-          // ИНИЦИАЛИЗАЦИЯ И СТАРТ
-    saveState();
+    // ИНИЦИАЛИЗАЦИЯ
     renderSafes();
+    updateUI();
   </script>
 </body>
 </html>
-

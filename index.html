@@ -1,608 +1,793 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StarVault</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --bg-main: #0B0F19;
-            --accent-gold: #FFD700;
-            --accent-blue: #00BFFF;
-            --text-main: #FFFFFF;
-            --text-muted: #8A96A8;
-            --card-bg: rgba(20, 29, 47, 0.85);
-            --radar-red: #FF4D4D;
-            --radar-yellow: #FFC107;
-            --radar-green: #00E676;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-main); 
-            color: var(--text-main); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            overflow: hidden; 
-        }
-        .app-container { 
-            width: 100%; 
-            max-width: 420px; 
-            height: 100vh; 
-            max-height: 880px; 
-            background: url('IMG_20260719_173450.png') center/cover no-repeat; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative; 
-            overflow: hidden; 
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+  <title>StarVault - Ultimate Hack Game</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090a0f;
+      --card-bg: rgba(18, 22, 36, 0.75);
+      --border-glow: #1f293d;
+      --accent-cyan: #00f0ff;
+      --accent-purple: #7000ff;
+      --accent-pink: #ff007f;
+      --accent-gold: #ffb700;
+      --text-main: #f0f4f8;
+      --text-sub: #7a889b;
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --font-main: 'Outfit', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+    }
 
-        .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .toast-card { background: #141d2f; border: 1px solid var(--accent-gold); border-radius: 16px; padding: 20px; width: 85%; max-width: 320px; text-align: center; }
-        .toast-title { font-weight: 800; font-size: 16px; color: var(--accent-gold); margin-bottom: 8px; }
-        .toast-msg { font-size: 13px; color: var(--text-main); margin-bottom: 14px; }
-        .toast-input { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #FFF; font-size: 14px; text-align: center; margin-bottom: 12px; outline: none; text-transform: uppercase; }
-        .toast-btn { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 10px 18px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        .top-left-controls { position: absolute; top: 15px; left: 15px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
-        .control-icon-btn { font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); }
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(112, 0, 255, 0.15), transparent 70%),
+        radial-gradient(circle at 0% 100%, rgba(0, 240, 255, 0.1), transparent 50%);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
 
-        .top-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px; gap: 10px; z-index: 10; }
-        .coin-counter { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: var(--accent-gold); display: flex; align-items: center; gap: 6px; }
-        .screen { display: none; flex-direction: column; flex: 1; padding: 15px; overflow-y: auto; position: relative; }
+    /* Top Navigation Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(9, 10, 15, 0.85);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .main-action-zone { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px 0; }
-        .main-button { 
-            width: 100%; 
-            height: 150px; 
-            border-radius: 20px; 
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('IMG_20260719_172011_593.jpg') center/cover no-repeat; 
-            border: 2px solid var(--accent-gold); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 6px; 
-            cursor: pointer; 
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); 
-        }
-        .main-button .title { color: var(--accent-gold); font-weight: 900; font-size: 22px; text-transform: uppercase; text-shadow: 0 2px 4px #000; }
-        .main-button .subtitle { color: #FFF; font-size: 12px; font-weight: 700; text-shadow: 0 1px 3px #000; }
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .middle-zone { display: flex; gap: 10px; margin-bottom: 12px; }
-        .mid-button { flex: 1; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 13px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-assets { background: rgba(20, 29, 47, 0.85); }
-        .btn-pvp { background: rgba(136, 14, 79, 0.85); }
-        .bottom-zone { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .bottom-button { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
 
-        .screen-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .btn-back { background: rgba(0,0,0,0.5); border: none; color: #FFF; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
-        .screen-title { font-size: 18px; font-weight: 800; }
+    .user-info .username {
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.2;
+    }
 
-        .cases-grid-wrapper { flex: 1; overflow-y: auto; }
-        .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .case-card { background: var(--card-bg); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; }
-        .case-card.locked { opacity: 0.6; }
-        .case-img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; }
-        .case-name { font-weight: 800; font-size: 13px; }
-        .case-price { font-size: 11px; color: var(--accent-gold); margin-bottom: 6px; }
-        .case-jackpot { font-size: 10px; color: var(--text-muted); }
-        .unlock-btn { margin-top: 8px; width: 100%; background: var(--accent-gold); color: #000; border: none; padding: 6px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
+    .user-info .rank {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
 
-        .game-screen-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; }
-        .radar-panel { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 15px; border-radius: 16px; text-align: center; }
-        .radar-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
-        .radar-value { font-size: 20px; font-weight: 900; color: var(--radar-yellow); }
-        .attempts-bar { margin-top: 6px; font-size: 12px; color: var(--accent-gold); font-weight: 700; }
-        .lock-container { display: flex; gap: 8px; margin: 20px 0; }
-        .drum-column { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .drum-display { width: 48px; height: 60px; background: #000; border: 2px solid var(--accent-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #FFF; }
-        .drum-btn { background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 48px; height: 30px; border-radius: 6px; font-size: 12px; cursor: pointer; }
-        .btn-action-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, #00e676, #00b0ff); border: none; border-radius: 14px; color: #000; font-weight: 900; font-size: 16px; cursor: pointer; }
+    .balance-pill {
+      background: rgba(255, 183, 0, 0.1);
+      border: 1px solid rgba(255, 183, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      font-size: 15px;
+      box-shadow: 0 0 12px rgba(255, 183, 0, 0.15);
+    }
 
-        /* МАГАЗИН STARS */
-        .shop-container { display: flex; flex-direction: column; gap: 12px; }
-        .stars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .star-card { background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,215,0,0.3); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
-        .star-amount { font-weight: 900; font-size: 14px; color: var(--accent-gold); }
-        .star-price { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 10px; }
+    /* Navigation Tabs Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: rgba(12, 15, 23, 0.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+    }
 
-        .leader-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
-        .leader-item { background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .leader-rank { font-weight: 900; width: 30px; font-size: 12px; color: var(--accent-blue); }
-        .leader-info { flex: 1; }
-        .leader-score { font-weight: 800; font-size: 12px; color: var(--accent-gold); }
-    </style>
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--text-sub);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 25%;
+    }
+
+    .nav-item .icon {
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--accent-cyan);
+    }
+
+    .nav-item.active .icon {
+      transform: translateY(-2px) scale(1.15);
+      text-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    /* Tab Content Wrappers */
+    .tab-page {
+      display: none;
+      padding: 16px;
+      max-width: 500px;
+      margin: 0 auto;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: -0.5px;
+    }
+
+    .section-title span {
+      background: linear-gradient(90deg, #fff, var(--text-sub));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Safes Grid */
+    .safes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .safe-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .safe-card:active {
+      transform: scale(0.97);
+    }
+
+    .safe-mode-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .safe-mode-badge.logic {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .safe-mode-badge.time {
+      background: rgba(255, 0, 127, 0.15);
+      color: var(--accent-pink);
+      border: 1px solid rgba(255, 0, 127, 0.3);
+    }
+
+    .safe-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin: 12px 0 8px 0;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+    }
+
+    .safe-name {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .safe-reward {
+      font-size: 11px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .btn-hack {
+      width: 100%;
+      padding: 8px 0;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+      color: #fff;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(112, 0, 255, 0.3);
+    }
+
+    /* Modal Gameplay Overlay */
+    .game-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 12, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 16px;
+    }
+
+    .game-overlay.active {
+      display: flex;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .game-timer-box {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--accent-pink);
+      text-shadow: 0 0 10px var(--accent-pink);
+    }
+
+    .digits-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 30px 0;
+    }
+
+    .digit-box {
+      width: 50px;
+      height: 65px;
+      background: rgba(18, 22, 36, 0.9);
+      border: 2px solid var(--glass-border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--accent-cyan);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .num-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .num-btn:active {
+      background: var(--accent-purple);
+    }
+
+    .collection-counter {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      padding: 12px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .item-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .item-card.locked {
+      opacity: 0.35;
+      filter: grayscale(1);
+    }
+
+    .item-img {
+      width: 65px;
+      height: 65px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+
+    .item-title {
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .leader-row {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .leader-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rank-num {
+      font-weight: 900;
+      font-size: 16px;
+      width: 24px;
+    }
+
+    .rank-1 { color: #ffd700; }
+
+    .trophy-mini-list {
+      display: flex;
+      gap: 3px;
+      margin-top: 4px;
+    }
+
+    .trophy-mini-img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+  </style>
 </head>
 <body>
 
-<div class="app-container">
+  <header>
+    <div class="user-badge">
+      <div class="avatar" id="uAvatar">H</div>
+      <div class="user-info">
+        <div class="username" id="uName">Hacker_01</div>
+        <div class="rank" id="uRank">Медвежатник</div>
+      </div>
+    </div>
+    <div class="balance-pill">
+      <span>🪙</span>
+      <span id="uBalance">1,250</span>
+    </div>
+  </header>
 
-    <div class="top-left-controls" id="mainHeaderControls">
-        <div class="control-icon-btn" id="btnOpenSettings" title="Настройки">⚙️</div>
-        <div class="control-icon-btn" id="btnCup" title="Лидерборд">🏆</div>
+  <main class="tab-page active" id="page-safes">
+    <div class="section-title">
+      <span>Выбери Сейф</span>
+      <small style="font-size: 12px; color: var(--accent-cyan)">9 Хранилищ</small>
+    </div>
+    <div class="safes-grid" id="safesContainer"></div>
+  </main>
+
+  <main class="tab-page" id="page-inventory">
+    <div class="section-title">
+      <span>Коллекция Трофеев</span>
+      <span style="font-size: 14px; color: var(--accent-gold)" id="collCount">0 / 9</span>
     </div>
 
-    <div class="top-bar">
-        <div class="coin-counter">🪙 <span id="globalCoins">100</span></div>
-        <div style="font-size: 12px; color: var(--text-muted);" id="userTag">Игрок</div>
+    <div class="collection-counter">
+      <div>
+        <div style="font-size: 12px; color: var(--text-sub)">Пассивный майнинг</div>
+        <div style="font-weight: 800; color: #00ff66; font-size: 16px" id="passiveIncome">+0 🪙/час</div>
+      </div>
+      <button class="btn-hack" style="width: auto; padding: 8px 16px;" onclick="claimMining()">Собрать</button>
     </div>
 
-    <div class="toast-modal" id="settingsModal">
-        <div class="toast-card" style="text-align: left;">
-            <div class="toast-title" style="text-align: center; margin-bottom: 15px;">⚙️ Настройки</div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 13px; font-weight: 700;">🔊 Звук / Музыка</span>
-                <input type="checkbox" id="toggleSound" checked style="width: 18px; height: 18px; cursor: pointer;">
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 13px; font-weight: 700;">📳 Виброотклик</span>
-                <input type="checkbox" id="toggleHaptic" checked style="width: 18px; height: 18px; cursor: pointer;">
-            </div>
-            <button class="toast-btn" id="btnCloseSettings" style="margin-top: 10px;">Сохранить</button>
-        </div>
+    <div class="items-grid" id="inventoryGrid"></div>
+  </main>
+
+  <main class="tab-page" id="page-market">
+    <div class="section-title">
+      <span>P2P Маркет</span>
+      <small style="font-size: 11px; color: var(--text-sub)">Торговля с игроками</small>
+    </div>
+    <div id="marketList"></div>
+  </main>
+
+  <main class="tab-page" id="page-leaders">
+    <div class="section-title">
+      <span>Топ Взломщиков</span>
+      <small style="font-size: 11px; color: var(--accent-pink)">Сезон 1</small>
+    </div>
+    <div id="leaderList"></div>
+  </main>
+
+  <div class="game-overlay" id="gameModal">
+    <div class="game-header">
+      <div>
+        <h3 id="gSafeName" style="font-size: 18px; font-weight: 800">Сейф</h3>
+        <p id="gSafeMode" style="font-size: 12px; color: var(--text-sub)">Режим: Логика</p>
+      </div>
+      <div class="game-timer-box" id="gTimer">00:30</div>
     </div>
 
-    <div class="toast-modal" id="toastModal">
-        <div class="toast-card">
-            <div class="toast-title" id="toastTitle">Уведомление</div>
-            <div class="toast-msg" id="toastMsg">Сообщение</div>
-            <input type="text" class="toast-input" id="toastInput" placeholder="ВВЕДИТЕ ПРОМОКОД" style="display:none;">
-            <button class="toast-btn" id="btnToastOk">ОК</button>
-        </div>
+    <div>
+      <div class="digits-container" id="digitsRow"></div>
+      <p id="gameHint" style="text-align: center; font-size: 13px; color: var(--accent-cyan); min-height: 20px;"></p>
     </div>
 
-    <div id="mainMenuScreen" class="screen" style="display: flex;">
-        <div class="main-action-zone">
-            <div class="main-button" id="btnGoToCases">
-                <div class="title">Открыть сейф</div>
-                <div class="subtitle">Взламывай замки и забирай куш</div>
-            </div>
-        </div>
-
-        <div class="middle-zone">
-            <div class="mid-button btn-assets" id="btnGoToAssets">Активы</div>
-            <div class="mid-button btn-pvp" id="btnGoToPvp">PVP Дуэли</div>
-        </div>
-
-        <div class="bottom-zone">
-            <div class="bottom-button" id="btnGoToDaily"><span>🎁</span><span>Дейли</span></div>
-            <div class="bottom-button" id="btnPromoCode"><span>🔑</span><span>Промокод</span></div>
-            <div class="bottom-button" id="btnGoToShop"><span>🛒</span><span>Магазин</span></div>
-        </div>
-    </div>
-        <div id="casesScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromCases">⬅</button>
-            <div class="screen-title">Выбор хранилища</div>
-        </div>
-        <div class="cases-grid-wrapper">
-            <div class="cases-grid">
-                <div class="case-card" data-id="wood">
-                    <img src="IMG_20260719_181100.png" class="case-img" alt="Деревянный">
-                    <div class="case-name">Деревянный</div>
-                    <div class="case-price">🪙 10 монет</div>
-                    <div class="case-jackpot">Куш: 30</div>
-                </div>
-                <div class="case-card locked" id="case-bronze" data-id="bronze">
-                    <img src="IMG_20260719_181706.png" class="case-img" alt="Бронзовый">
-                    <div class="case-name">Бронзовый</div>
-                    <div class="case-price">🪙 25 монет</div>
-                    <div class="case-jackpot">Куш: 80</div>
-                    <button class="unlock-btn" onclick="unlockCase('bronze', 150, event)">Открыть (150 🪙)</button>
-                </div>
-                <div class="case-card locked" id="case-silver" data-id="silver">
-                    <img src="IMG_20260719_183142.png" class="case-img" alt="Стальной">
-                    <div class="case-name">Стальной</div>
-                    <div class="case-price">🪙 50 монет</div>
-                    <div class="case-jackpot">Куш: 180</div>
-                    <button class="unlock-btn" onclick="unlockCase('silver', 300, event)">Открыть (300 🪙)</button>
-                </div>
-                <div class="case-card locked" id="case-gold" data-id="gold">
-                    <img src="IMG_20260719_183338.png" class="case-img" alt="Золотой">
-                    <div class="case-name">Золотой</div>
-                    <div class="case-price">🪙 100 монет</div>
-                    <div class="case-jackpot">Куш: 400</div>
-                    <button class="unlock-btn" onclick="unlockCase('gold', 500, event)">Открыть (500 🪙)</button>
-                </div>
-            </div>
-        </div>
+    <div class="numpad">
+      <div class="num-btn" onclick="pressKey(1)">1</div>
+      <div class="num-btn" onclick="pressKey(2)">2</div>
+      <div class="num-btn" onclick="pressKey(3)">3</div>
+      <div class="num-btn" onclick="pressKey(4)">4</div>
+      <div class="num-btn" onclick="pressKey(5)">5</div>
+      <div class="num-btn" onclick="pressKey(6)">6</div>
+      <div class="num-btn" onclick="pressKey(7)">7</div>
+      <div class="num-btn" onclick="pressKey(8)">8</div>
+      <div class="num-btn" onclick="pressKey(9)">9</div>
+      <div class="num-btn" style="color: var(--accent-pink)" onclick="clearKey()">C</div>
+      <div class="num-btn" onclick="pressKey(0)">0</div>
+      <div class="num-btn" style="color: #00ff66" onclick="submitCode()">OK</div>
     </div>
 
-    <div id="gamePlayScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToCases">⬅</button>
-            <div class="screen-title">Подбор кода</div>
-        </div>
-        <div class="game-screen-content">
-            <div class="radar-panel">
-                <div class="radar-title">Сигнал взлома</div>
-                <div class="radar-value" id="radarDisplay">ГОТОВ</div>
-                <div class="attempts-bar">Попыток: <span id="attemptsDisplay">5/5</span></div>
-            </div>
-            <div class="lock-container">
-                <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
-                    <div class="drum-display" id="drum-0">1</div>
-                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
-                </div>
-                <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
-                    <div class="drum-display" id="drum-1">1</div>
-                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
-                </div>
-                <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
-                    <div class="drum-display" id="drum-2">1</div>
-                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
-                </div>
-                <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
-                    <div class="drum-display" id="drum-3">1</div>
-                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
-                </div>
-                <div class="drum-column">
-                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
-                    <div class="drum-display" id="drum-4">1</div>
-                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
-                </div>
-            </div>
-            <button class="btn-action-submit" id="btnCheckCode">Проверить код</button>
-        </div>
+    <button class="btn-hack" style="background: rgba(255,255,255,0.1); margin-top: 10px;" onclick="closeGame()">Сдаться / Выход</button>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('safes', this)">
+      <span class="icon">🔒</span>
+      <span>Сейфы</span>
     </div>
-
-    <div id="shopScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
-            <div class="screen-title">Магазин</div>
-        </div>
-        <div class="shop-container">
-            <div style="font-size: 13px; font-weight: 800; color: var(--accent-gold); margin-bottom: 5px;">🌟 Покупка монет (Telegram Stars)</div>
-            <div class="stars-grid">
-                <div class="star-card" onclick="buyStarsPack(250, 10)">
-                    <div style="font-size: 20px;">🪙</div>
-                    <div class="star-amount">+250 🪙</div>
-                    <div class="star-price">🌟 10 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(750, 25)">
-                    <div style="font-size: 20px;">💰</div>
-                    <div class="star-amount">+750 🪙</div>
-                    <div class="star-price">🌟 25 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(1800, 50)">
-                    <div style="font-size: 20px;">💳</div>
-                    <div class="star-amount">+1,800 🪙</div>
-                    <div class="star-price">🌟 50 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(4000, 100)">
-                    <div style="font-size: 20px;">💎</div>
-                    <div class="star-amount">+4,000 🪙</div>
-                    <div class="star-price">🌟 100 Stars</div>
-                </div>
-            </div>
-        </div>
+    <div class="nav-item" onclick="switchTab('inventory', this)">
+      <span class="icon">🎒</span>
+      <span>Инвентарь</span>
     </div>
-
-    <div id="dailyScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
-            <div class="screen-title">Ежедневный бонус</div>
-        </div>
-        <div style="background: rgba(15,22,36,0.85); border: 1px solid var(--accent-gold); padding: 20px; border-radius: 16px; text-align: center;">
-            <div style="font-size: 30px; margin-bottom: 10px;">🎁</div>
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 15px;">Награда за вход</div>
-            <button class="toast-btn" onclick="claimDailyReward()">Забрать +50 🪙</button>
-        </div>
+    <div class="nav-item" onclick="switchTab('market', this)">
+      <span class="icon">🏪</span>
+      <span>Маркет</span>
     </div>
-
-    <div id="pvpScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
-            <div class="screen-title">PVP Дуэли</div>
-        </div>
-        <div style="text-align: center; color: var(--text-muted); padding: 20px;">Режим дуэлей в разработке...</div>
+    <div class="nav-item" onclick="switchTab('leaders', this)">
+      <span class="icon">🏆</span>
+      <span>Топ</span>
     </div>
-
-    <div id="assetsScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
-            <div class="screen-title">Активы</div>
-        </div>
-        <div style="text-align: center; color: var(--text-muted); padding: 20px;">Пассивный майнинг активен!</div>
-    </div>
-
-    <div id="leaderboardScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromLeaderboard">⬅</button>
-            <div class="screen-title">Таблица лидеров</div>
-        </div>
-        <div class="leader-list" id="leaderList"></div>
-    </div>
-
-</div>
-
-<script>
-    var tg = window.Telegram ? window.Telegram.WebApp : null;
+  </nav>
+    <script>
+    // ИНИЦИАЛИЗА TELEGRAM WEB APP
+    const tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) {
-        tg.expand();
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('userTag').innerText = tg.initDataUnsafe.user.first_name || "Игрок";
-        }
+      tg.expand();
+      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        document.getElementById('uName').innerText = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name;
+        document.getElementById('uAvatar').innerText = (tg.initDataUnsafe.user.first_name || 'H')[0].toUpperCase();
+      }
     }
 
-    var userCoins = 100;
-    var unlockedCases = ['wood'];
-    var soundEnabled = true;
-    var hapticEnabled = true;
+    // 9 СЕЙФОВ С ПРИВЯЗАННЫМИ ФАЙЛАМИ
+    const SAFES = [
+      { id: 1, name: "🪵 Сундук", img: "IMG_20260719_180634.png", mode: "logic", len: 3, reward: 150, dropId: 1, dropRate: 0.30 },
+      { id: 2, name: "🟤 Чугунный", img: "IMG_20260719_181100.png", mode: "logic", len: 3, reward: 300, dropId: 2, dropRate: 0.25 },
+      { id: 3, name: "🥉 Медный", img: "IMG_20260719_181706.png", mode: "time", len: 4, time: 30, reward: 500, dropId: 3, dropRate: 0.20 },
+      { id: 4, name: "⚙️ Штурвал", img: "IMG_20260719_183142.png", mode: "logic", len: 4, reward: 800, dropId: 4, dropRate: 0.15 },
+      { id: 5, name: "🗝️ Темный Сейф", img: "IMG_20260719_183244.png", mode: "time", len: 4, time: 25, reward: 1200, dropId: 5, dropRate: 0.12 },
+      { id: 6, name: "🥈 Серебряный", img: "IMG_20260719_183338.png", mode: "logic", len: 5, reward: 2000, dropId: 6, dropRate: 0.10 },
+      { id: 7, name: "🥇 Золотой Банк", img: "IMG_20260719_183351.png", mode: "time", len: 5, time: 20, reward: 3500, dropId: 7, dropRate: 0.08 },
+      { id: 8, name: "🔘 Сканер Пальца", img: "IMG_20260719_183406.png", mode: "time", len: 5, time: 18, reward: 5000, dropId: 8, dropRate: 0.05 },
+      { id: 9, name: "💎 Кибер-Куб", img: "IMG_20260719_183425.png", mode: "time", len: 5, time: 15, reward: 10000, dropId: 9, dropRate: 0.03 }
+    ];
 
-    var currentCase = null;
-    var secretCode = [];
-    var currentDrums = [1, 1, 1, 1, 1];
-    var attemptsLeft = 5;
+    // 9 УНИКАЛЬНЫХ ПРЕДМЕТОВ С ИХ КАРТИНКАМИ
+    const ITEMS = [
+      { id: 1, name: "Стетоскоп", img: "IMG_20260720_115622.png", income: 2 },
+      { id: 2, name: "Отмычка", img: "IMG_20260720_115636.png", income: 5 },
+      { id: 3, name: "Лазерный резак", img: "IMG_20260720_115645.png", income: 10 },
+      { id: 4, name: "Майнер-Слиток", img: "IMG_20260720_115658.png", income: 25 },
+      { id: 5, name: "Чип 'Призрак'", img: "IMG_20260720_115724.png", income: 50 },
+      { id: 6, name: "Кибер-Перчатка", img: "IMG_20260720_115747.png", income: 80 },
+      { id: 7, name: "Дешифратор", img: "IMG_20260720_115800.png", income: 120 },
+      { id: 8, name: "Квантовый Тюнер", img: "IMG_20260720_115813.png", income: 200 },
+      { id: 9, name: "Мастер-Карта", img: "IMG_20260720_115823.png", income: 500 }
+    ];
 
-    // МУЗЫКА
-    var bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-    bgMusic.loop = true;
+    // СОСТОЯНИЕ ИГРОКА (СОХРАНЯЕТСЯ В LOCALSTORAGE)
+    let state = JSON.parse(localStorage.getItem('starvault_state')) || {
+      coins: 1250,
+      inventory: [1], // Стартовый первый предмет
+      lastMiningTime: Date.now()
+    };
 
-    function toggleMusic(enable) {
-        if (enable) {
-            bgMusic.play().catch(function() {});
-        } else {
-            bgMusic.pause();
-            bgMusic.currentTime = 0;
-        }
+    function saveState() {
+      localStorage.setItem('starvault_state', JSON.stringify(state));
+      document.getElementById('uBalance').innerText = state.coins.toLocaleString();
     }
 
-    // НАДЕЖНАЯ ВИБРАЦИЯ (СВЯЗАНА С POINTERDOWN)
-    function triggerHaptic() {
-        if (!hapticEnabled) return;
-        
-        try {
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            } else if (navigator.vibrate) {
-                navigator.vibrate(40);
-            }
-        } catch(e) {}
+    // ТЕКУЩАЯ СЕССИЯ ВЗЛОМА
+    let activeSafe = null;
+    let targetCode = "";
+    let currentInput = "";
+    let gameTimer = null;
+    let secondsLeft = 0;
+
+    // РЕНДЕР СЕЙФОВ
+    function renderSafes() {
+      const container = document.getElementById('safesContainer');
+      container.innerHTML = SAFES.map(s => `
+        <div class="safe-card">
+          <span class="safe-mode-badge ${s.mode}">${s.mode === 'logic' ? '🧠 Логика' : '⚡ Время'}</span>
+          <img src="${s.img}" class="safe-img" alt="${s.name}">
+          <div class="safe-name">${s.name}</div>
+          <div class="safe-reward">+${s.reward.toLocaleString()} 🪙</div>
+          <button class="btn-hack" onclick="startHack(${s.id})">ВЗЛОМ</button>
+        </div>
+      `).join('');
     }
 
-    // ПОКАЗ ЭКРАНОВ
-    function showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
-        document.getElementById(screenId).style.display = 'flex';
+    // РЕНДЕР ИНВЕНТАРЯ И КОЛЛЕКЦИИ
+    function renderInventory() {
+      const grid = document.getElementById('inventoryGrid');
+      document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
+      
+      let totalIncome = 0;
+      grid.innerHTML = ITEMS.map(item => {
+        const owned = state.inventory.includes(item.id);
+        if (owned) totalIncome += item.income;
 
-        // Кнопки Настройки и Кубок — ТОЛЬКО НА ГЛАВНОМ ЭКРАНЕ
-        var mainControls = document.getElementById('mainHeaderControls');
-        if (screenId === 'mainMenuScreen') {
-            mainControls.style.display = 'flex';
-        } else {
-            mainControls.style.display = 'none';
-        }
+        return `
+          <div class="item-card ${owned ? '' : 'locked'}">
+            <img src="${item.img}" class="item-img">
+            <div class="item-title">${item.name}</div>
+            <div style="font-size:9px; color:#00ff66; margin-top:2px;">+${item.income}🪙/ч</div>
+          </div>
+        `;
+      }).join('');
 
-        updateUI();
+      document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        loadProgress();
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(`page-${tabId}`).classList.add('active');
+      el.classList.add('active');
 
-        // Активация звука
-        document.body.addEventListener('pointerdown', function startAudio() {
-            if (soundEnabled && bgMusic.paused) {
-                toggleMusic(true);
-            }
-            document.body.removeEventListener('pointerdown', startAudio);
-        }, { once: true });
-
-        // Единый обработчик вибрации при клике на любые кнопки
-        document.addEventListener('pointerdown', function(e) {
-            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('mid-button') || e.target.classList.contains('bottom-button') || e.target.classList.contains('control-icon-btn') || e.target.classList.contains('star-card')) {
-                triggerHaptic();
-            }
-        });
-
-        // Настройки
-        document.getElementById('btnOpenSettings').onclick = function() {
-            document.getElementById('settingsModal').style.display = 'flex';
-        };
-
-        document.getElementById('btnCloseSettings').onclick = function() {
-            soundEnabled = document.getElementById('toggleSound').checked;
-            hapticEnabled = document.getElementById('toggleHaptic').checked;
-
-            toggleMusic(soundEnabled);
-            saveProgress();
-            document.getElementById('settingsModal').style.display = 'none';
-        };
-
-        // Главные кнопки
-        document.getElementById('btnGoToCases').onclick = function() { showScreen('casesScreen'); };
-        document.getElementById('btnGoToShop').onclick = function() { showScreen('shopScreen'); };
-        document.getElementById('btnGoToDaily').onclick = function() { showScreen('dailyScreen'); };
-        document.getElementById('btnGoToPvp').onclick = function() { showScreen('pvpScreen'); };
-        document.getElementById('btnGoToAssets').onclick = function() { showScreen('assetsScreen'); };
-        document.getElementById('btnCup').onclick = function() { renderLeaderboard(); showScreen('leaderboardScreen'); };
-
-        // КНОПКА ВВОДА ПРОМОКОДА
-        document.getElementById('btnPromoCode').onclick = function() {
-            showToast("🔑 Промокод", "Введите секретный код:", true, function(code) {
-                if (code && code.trim().toUpperCase() === "STAR2026") {
-                    userCoins += 500;
-                    saveProgress();
-                    showToast("🎉 Успешно!", "Вам зачислено +500 🪙!");
-                } else if (code) {
-                    showToast("❌ Ошибка", "Неверный промокод!");
-                }
-            });
-        };
-
-        // Кнопки "Назад"
-        document.getElementById('btnBackToMenuFromCases').onclick = function() { showScreen('mainMenuScreen'); };
-        document.getElementById('btnBackToCases').onclick = function() { showScreen('casesScreen'); };
-        document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { showScreen('mainMenuScreen'); };
-
-        // Клик по кейсам
-        document.querySelectorAll('.case-card').forEach(function(card) {
-            card.onclick = function(e) {
-                if (e.target.classList.contains('unlock-btn')) return;
-                var id = card.getAttribute('data-id');
-                if (unlockedCases.indexOf(id) === -1) {
-                    showToast("Заблокировано", "Сначала разблокируйте этот сейф!");
-                    return;
-                }
-                startVaultGame(id);
-            };
-        });
-
-        document.getElementById('btnCheckCode').onclick = checkCodeAttempt;
-    });
-
-    // ИГРА И БАРАБАНЫ
-    function changeDrum(index, dir) {
-        currentDrums[index] += dir;
-        if (currentDrums[index] > 9) currentDrums[index] = 1;
-        if (currentDrums[index] < 1) currentDrums[index] = 9;
-        document.getElementById('drum-' + index).innerText = currentDrums[index];
+      if (tabId === 'inventory') renderInventory();
+      if (tabId === 'market') renderMarket();
+      if (tabId === 'leaders') renderLeaders();
     }
 
-    function startVaultGame(caseId) {
-        currentCase = caseId;
-        attemptsLeft = 5;
-        currentDrums = [1, 1, 1, 1, 1];
-        secretCode = [];
+    // ЗАПУСК ИГРЫ
+    function startHack(safeId) {
+      activeSafe = SAFES.find(s => s.id === safeId);
+      targetCode = "";
+      for (let i = 0; i < activeSafe.len; i++) {
+        targetCode += Math.floor(Math.random() * 10).toString();
+      }
+      currentInput = "";
 
-        for (var i = 0; i < 5; i++) {
-            secretCode.push(Math.floor(Math.random() * 9) + 1);
-            document.getElementById('drum-' + i).innerText = '1';
-        }
+      document.getElementById('gSafeName').innerText = activeSafe.name;
+      document.getElementById('gSafeMode').innerText = activeSafe.mode === 'logic' ? 'Режим: Логический подбор' : `Таймер: ${activeSafe.time} сек`;
+      document.getElementById('gameHint').innerText = "";
+      document.getElementById('gameModal').classList.add('active');
+      
+      updateDigitsDisplay();
 
-        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/5';
-        document.getElementById('radarDisplay').innerText = "ГОТОВ";
-        showScreen('gamePlayScreen');
+      if (activeSafe.mode === 'time') {
+        secondsLeft = activeSafe.time;
+        document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+        gameTimer = setInterval(() => {
+          secondsLeft--;
+          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+          if (secondsLeft <= 0) {
+            clearInterval(gameTimer);
+            alert("⏰ Время вышло! Сейф заблокирован!");
+            closeGame();
+          }
+        }, 1000);
+      } else {
+        document.getElementById('gTimer').innerText = "🧠 ∞";
+      }
     }
 
-    function checkCodeAttempt() {
-        if (attemptsLeft <= 0) return;
-        attemptsLeft--;
-        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/5';
-
-        var matches = 0;
-        for (var i = 0; i < 5; i++) {
-            if (currentDrums[i] === secretCode[i]) matches++;
-        }
-
-        if (matches === 5) {
-            userCoins += 100;
-            saveProgress();
-            showToast("ПОБЕДА! 🎉", "Сейф взломан! Вы получили +100 🪙!");
-            showScreen('casesScreen');
-        } else if (attemptsLeft <= 0) {
-            showToast("ПРОВАЛ!", "Попытки закончились.");
-            showScreen('casesScreen');
-        } else {
-            document.getElementById('radarDisplay').innerText = "Совпадений: " + matches;
-        }
+    function pressKey(num) {
+      if (currentInput.length < activeSafe.len) {
+        currentInput += num.toString();
+        updateDigitsDisplay();
+      }
     }
 
-    function unlockCase(tier, cost, e) {
-        e.stopPropagation();
-        if (userCoins >= cost) {
-            userCoins -= cost;
-            unlockedCases.push(tier);
-            saveProgress();
-            showToast("Успех!", "Сейф успешно открыт!");
-        } else {
-            showToast("Ошибка", "Недостаточно монет!");
-        }
+    function clearKey() {
+      currentInput = "";
+      updateDigitsDisplay();
     }
 
-    // ПОКУПКА В МАГАЗИНЕ
-    function buyStarsPack(coins, stars) {
-        userCoins += coins;
-        saveProgress();
-        showToast("Успешно!", "Вам зачислено +" + coins + " 🪙!");
+    function updateDigitsDisplay() {
+      const container = document.getElementById('digitsRow');
+      container.innerHTML = "";
+      for (let i = 0; i < activeSafe.len; i++) {
+        const char = currentInput[i] || "_";
+        container.innerHTML += `<div class="digit-box">${char}</div>`;
+      }
     }
 
-    function claimDailyReward() {
-        userCoins += 50;
-        saveProgress();
-        showToast("Бонус забран!", "Получено +50 🪙!");
-    }
+    function submitCode() {
+      if (currentInput.length < activeSafe.len) return;
 
-    // УНИВЕРСАЛЬНАЯ МОДАЛКА ДЛЯ СООБЩЕНИЙ И ВВОДА
-    function showToast(title, msg, hasInput, callback) {
-        document.getElementById('toastTitle').innerText = title;
-        document.getElementById('toastMsg').innerText = msg;
-        var input = document.getElementById('toastInput');
+      if (currentInput === targetCode) {
+        if (gameTimer) clearInterval(gameTimer);
+        state.coins += activeSafe.reward;
 
-        if (hasInput) {
-            input.style.display = 'block';
-            input.value = '';
-        } else {
-            input.style.display = 'none';
+        let droppedMsg = "";
+        if (Math.random() <= activeSafe.dropRate) {
+          if (!state.inventory.includes(activeSafe.dropId)) {
+            state.inventory.push(activeSafe.dropId);
+            const droppedItem = ITEMS.find(i => i.id === activeSafe.dropId);
+            droppedMsg = `\n\n🎁 НОВЫЙ ТРОФЕЙ ВЫБИТ: ${droppedItem.name}!`;
+          }
         }
 
-        document.getElementById('toastModal').style.display = 'flex';
-
-        document.getElementById('btnToastOk').onclick = function() {
-            document.getElementById('toastModal').style.display = 'none';
-            if (hasInput && callback) callback(input.value);
-        };
-    }
-
-    function renderLeaderboard() {
-        var list = document.getElementById('leaderList');
-        list.innerHTML = '';
-
-        var myName = "Ты (Вы)";
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            myName = tg.initDataUnsafe.user.first_name || myName;
+        saveState();
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        alert(`🎉 УСПЕШНЫЙ ВЗЛОМ!\nПолучено: +${activeSafe.reward} 🪙${droppedMsg}`);
+        closeGame();
+      } else {
+        let correctDigits = 0;
+        for (let i = 0; i < activeSafe.len; i++) {
+          if (currentInput[i] === targetCode[i]) correctDigits++;
         }
-
-        var myCard = document.createElement('div');
-        myCard.className = 'leader-item';
-        myCard.style.border = "1px solid var(--accent-gold)";
-        myCard.innerHTML = '<div class="leader-rank">#1</div><div class="leader-info"><div style="font-weight:800; color:var(--accent-gold);">' + myName + '</div></div><div class="leader-score">' + userCoins + ' 🪙</div>';
-        
-        list.appendChild(myCard);
+        document.getElementById('gameHint').innerText = `❌ Неверно! Совпадений позиций: ${correctDigits}`;
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+      }
     }
 
-    function updateUI() {
-        document.getElementById('globalCoins').innerText = userCoins;
-        ['bronze', 'silver', 'gold'].forEach(function(tier) {
-            var el = document.getElementById('case-' + tier);
-            if (el && unlockedCases.indexOf(tier) !== -1) {
-                el.classList.remove('locked');
-                var btn = el.querySelector('.unlock-btn');
-                if (btn) btn.style.display = 'none';
-            }
-        });
+    function closeGame() {
+      if (gameTimer) clearInterval(gameTimer);
+      document.getElementById('gameModal').classList.remove('active');
     }
 
-    function saveProgress() {
-        var data = { coins: userCoins, unlocked: unlockedCases, sound: soundEnabled, haptic: hapticEnabled };
-        localStorage.setItem('starvault_save_v3', JSON.stringify(data));
-        updateUI();
+    // МАРКЕТ И ЛИДЕРБОРД
+    function renderMarket() {
+      const list = document.getElementById('marketList');
+      list.innerHTML = `
+        <div class="leader-row">
+          <div class="leader-left">
+            <img src="IMG_20260720_115724.png" style="width:40px; height:40px;">
+            <div>
+              <div style="font-weight:800; font-size:14px;">Чип 'Призрак'</div>
+              <div style="font-size:11px; color:var(--text-sub)">Продавец: @cyber_king</div>
+            </div>
+          </div>
+          <button class="btn-hack" style="width:auto; padding:6px 12px;">5,000 🪙</button>
+        </div>
+      `;
     }
 
-    function loadProgress() {
-        var raw = localStorage.getItem('starvault_save_v3');
-        if (raw) {
-            try {
-                var data = JSON.parse(raw);
-                userCoins = data.coins || 100;
-                unlockedCases = data.unlocked || ['wood'];
-                soundEnabled = data.sound !== undefined ? data.sound : true;
-                hapticEnabled = data.haptic !== undefined ? data.haptic : true;
-
-                document.getElementById('toggleSound').checked = soundEnabled;
-                document.getElementById('toggleHaptic').checked = hapticEnabled;
-            } catch(e) {}
-        }
+    function renderLeaders() {
+      const list = document.getElementById('leaderList');
+      list.innerHTML = `
+        <div class="leader-row">
+          <div class="leader-left">
+            <span class="rank-num rank-1">#1</span>
+            <div>
+              <div style="font-weight:800; font-size:14px;">@alex_ghost</div>
+              <div class="trophy-mini-list">
+                <img src="IMG_20260720_115724.png" class="trophy-mini-img">
+                <img src="IMG_20260720_115823.png" class="trophy-mini-img">
+              </div>
+            </div>
+          </div>
+          <div style="font-weight:900; color:var(--accent-gold)">45,000 🪙</div>
+        </div>
+      `;
     }
-</script>
+
+    function claimMining() {
+      const now = Date.now();
+      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
+      
+      let totalIncomeRate = 0;
+      state.inventory.forEach(id => {
+        const item = ITEMS.find(i => i.id === id);
+        if (item) totalIncomeRate += item.income;
+      });
+
+      const earned = Math.floor(hoursPassed * totalIncomeRate);
+      if (earned > 0) {
+        state.coins += earned;
+        state.lastMiningTime = now;
+        saveState();
+        alert(`💰 Собрано ${earned} монет!`);
+      } else {
+        alert("⏱️ Монеты еще накопились! Загляни чуть позже.");
+      }
+    }
+
+    // СТАРТ
+    saveState();
+    renderSafes();
+  </script>
 </body>
 </html>

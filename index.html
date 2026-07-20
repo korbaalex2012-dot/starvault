@@ -19,7 +19,6 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
-        /* ОБЩИЙ ФОН ПРИЛОЖЕНИЯ */
         body { 
             background-color: var(--bg-main); 
             color: var(--text-main); 
@@ -41,7 +40,6 @@
             overflow: hidden; 
         }
 
-        /* МОДАЛЬНЫЕ ОКНА И НАСТРОЙКИ */
         .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .toast-card { background: #141d2f; border: 1px solid var(--accent-gold); border-radius: 16px; padding: 20px; width: 85%; max-width: 320px; text-align: center; }
         .toast-title { font-weight: 800; font-size: 16px; color: var(--accent-gold); margin-bottom: 8px; }
@@ -49,7 +47,7 @@
         .toast-input { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #FFF; font-size: 14px; text-align: center; margin-bottom: 12px; outline: none; text-transform: uppercase; }
         .toast-btn { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 10px 18px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
 
-        /* ВЕРХНИЕ КНОПКИ (ШЕСТЕРЕНКА И КУБОК) */
+        /* ВЕРХНИЕ КНОПКИ (ТОЛЬКО НА ГЛАВНОМ ЭКРАНЕ) */
         .top-left-controls { position: absolute; top: 15px; left: 15px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
         .control-icon-btn { font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); }
 
@@ -57,7 +55,6 @@
         .coin-counter { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: var(--accent-gold); display: flex; align-items: center; gap: 6px; }
         .screen { display: none; flex-direction: column; flex: 1; padding: 15px; overflow-y: auto; position: relative; }
 
-        /* ГЛАВНАЯ КНОПКА С ТВОЕЙ КАРТИНКОЙ */
         .main-action-zone { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px 0; }
         .main-button { 
             width: 100%; 
@@ -108,53 +105,25 @@
         .drum-btn { background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 48px; height: 30px; border-radius: 6px; font-size: 12px; cursor: pointer; }
         .btn-action-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, #00e676, #00b0ff); border: none; border-radius: 14px; color: #000; font-weight: 900; font-size: 16px; cursor: pointer; }
 
-        .shop-container { display: flex; flex-direction: column; gap: 12px; }
-        .shop-section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-        .stars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .star-card { background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,215,0,0.3); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
-        .star-amount { font-weight: 900; font-size: 14px; color: var(--accent-gold); }
-        .star-price { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 10px; }
-
-        .daily-container { display: flex; flex-direction: column; gap: 12px; }
-        .streak-card { background: linear-gradient(135deg, #ff9800, #f57c00); border-radius: 16px; padding: 16px; color: #000; text-align: center; }
-        .streak-title { font-size: 12px; font-weight: 800; text-transform: uppercase; }
-        .streak-count { font-size: 28px; font-weight: 900; }
-        .daily-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .day-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; }
-        .day-card.claimed { opacity: 0.4; border-color: transparent; }
-        .day-card.today { border-color: var(--accent-gold); background: rgba(255,215,0,0.15); }
-
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 2px; margin-bottom: 12px; }
-        .tab-btn { flex: 1; text-align: center; padding: 8px; font-size: 11px; font-weight: 800; border-radius: 8px; cursor: pointer; color: var(--text-muted); }
-        .tab-btn.active { background: var(--accent-blue); color: #000; }
-        .pedestal-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 120px; margin-bottom: 15px; }
-        .pedestal-item { display: flex; flex-direction: column; align-items: center; width: 70px; }
-        .pedestal-avatar { width: 40px; height: 40px; border-radius: 50%; background: #141d2f; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 16px; position: relative; }
-        .pedestal-name { font-size: 9px; font-weight: 700; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px;}
-        .pedestal-val { font-size: 10px; color: var(--accent-gold); font-weight: 800; }
-        .pedestal-bar { width: 100%; border-radius: 8px 8px 0 0; display: flex; justify-content: center; align-items: center; font-weight: 900; color: rgba(0,0,0,0.5); }
-        .p-1 { height: 60px; background: var(--accent-gold); }
-        .p-2 { height: 45px; background: #C0C0C0; }
-        .p-3 { height: 30px; background: #CD7F32; }
         .leader-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
         .leader-item { background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
         .leader-rank { font-weight: 900; width: 30px; font-size: 12px; color: var(--accent-blue); }
         .leader-info { flex: 1; }
         .leader-score { font-weight: 800; font-size: 12px; color: var(--accent-gold); }
-        .my-rank-card { background: rgba(0, 191, 255, 0.2); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
 
-    <div class="toast-modal" id="toastModal">
-        <div class="toast-card">
-            <div class="toast-title" id="toastTitle">Уведомление</div>
-            <div class="toast-msg" id="toastMsg">Сообщение системы</div>
-            <input type="text" class="toast-input" id="toastInput" placeholder="ВВЕДИТЕ ПРОМОКОД" style="display:none;">
-            <button class="toast-btn" id="btnToastOk">Понятно</button>
-        </div>
+    <div class="top-left-controls" id="mainHeaderControls">
+        <div class="control-icon-btn" id="btnOpenSettings" title="Настройки">⚙️</div>
+        <div class="control-icon-btn" id="btnCup" title="Лидерборд">🏆</div>
+    </div>
+
+    <div class="top-bar">
+        <div class="coin-counter">🪙 <span id="globalCoins">100</span></div>
+        <div style="font-size: 12px; color: var(--text-muted);" id="userTag">Игрок</div>
     </div>
 
     <div class="toast-modal" id="settingsModal">
@@ -171,23 +140,16 @@
                 <input type="checkbox" id="toggleHaptic" checked style="width: 18px; height: 18px; cursor: pointer;">
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                <span style="font-size: 13px; font-weight: 700;">🌐 Язык</span>
-                <span style="font-size: 12px; color: var(--accent-gold); font-weight: 800;">Русский</span>
-            </div>
-
-            <button class="toast-btn" id="btnCloseSettings">Сохранить</button>
+            <button class="toast-btn" id="btnCloseSettings" style="margin-top: 10px;">Сохранить</button>
         </div>
     </div>
 
-    <div class="top-left-controls">
-        <div class="control-icon-btn" id="btnOpenSettings" title="Настройки">⚙️</div>
-        <div class="control-icon-btn" id="btnCup" title="Лидерборд">🏆</div>
-    </div>
-
-    <div class="top-bar">
-        <div class="coin-counter">🪙 <span id="globalCoins">100</span></div>
-        <div style="font-size: 12px; color: var(--text-muted);" id="userTag">StarVault</div>
+    <div class="toast-modal" id="toastModal">
+        <div class="toast-card">
+            <div class="toast-title" id="toastTitle">Уведомление</div>
+            <div class="toast-msg" id="toastMsg">Сообщение</div>
+            <button class="toast-btn" id="btnToastOk">ОК</button>
+        </div>
     </div>
 
     <div id="mainMenuScreen" class="screen" style="display: flex;">
@@ -209,44 +171,39 @@
             <div class="bottom-button" id="btnGoToShop"><span>🛒</span><span>Магазин</span></div>
         </div>
     </div>
-
-    <div id="casesScreen" class="screen">
+        <div id="casesScreen" class="screen">
         <div class="screen-header">
             <button class="btn-back" id="btnBackToMenuFromCases">⬅</button>
             <div class="screen-title">Выбор хранилища</div>
         </div>
-
         <div class="cases-grid-wrapper">
             <div class="cases-grid">
-                <div class="case-card tier-bronze" data-id="wood" data-name="Деревянный" data-price="10" data-jackpot="30">
+                <div class="case-card" data-id="wood">
                     <img src="IMG_20260719_181100.png" class="case-img" alt="Деревянный">
                     <div class="case-name">Деревянный</div>
                     <div class="case-price">🪙 10 монет</div>
-                    <div class="case-jackpot">Куш: <span>30</span></div>
+                    <div class="case-jackpot">Куш: 30</div>
                 </div>
-
-                <div class="case-card tier-bronze" id="case-bronze" data-id="bronze" data-name="Бронзовый" data-price="25" data-jackpot="80" data-unlock-cost="150">
+                <div class="case-card locked" id="case-bronze" data-id="bronze">
                     <img src="IMG_20260719_181706.png" class="case-img" alt="Бронзовый">
                     <div class="case-name">Бронзовый</div>
                     <div class="case-price">🪙 25 монет</div>
-                    <div class="case-jackpot">Куш: <span>80</span></div>
-                    <button class="unlock-btn" onclick="unlockCase('bronze', 150, event)">Открыть за 150 🪙</button>
+                    <div class="case-jackpot">Куш: 80</div>
+                    <button class="unlock-btn" onclick="unlockCase('bronze', 150, event)">Разблокировать (150 🪙)</button>
                 </div>
-
-                <div class="case-card tier-silver" id="case-silver" data-id="silver" data-name="Стальной" data-price="50" data-jackpot="180" data-unlock-cost="300">
+                <div class="case-card locked" id="case-silver" data-id="silver">
                     <img src="IMG_20260719_183142.png" class="case-img" alt="Стальной">
                     <div class="case-name">Стальной</div>
                     <div class="case-price">🪙 50 монет</div>
-                    <div class="case-jackpot">Куш: <span>180</span></div>
-                    <button class="unlock-btn" onclick="unlockCase('silver', 300, event)">Открыть за 300 🪙</button>
+                    <div class="case-jackpot">Куш: 180</div>
+                    <button class="unlock-btn" onclick="unlockCase('silver', 300, event)">Разблокировать (300 🪙)</button>
                 </div>
-
-                <div class="case-card tier-gold" id="case-gold" data-id="gold" data-name="Золотой" data-price="100" data-jackpot="400" data-unlock-cost="500">
+                <div class="case-card locked" id="case-gold" data-id="gold">
                     <img src="IMG_20260719_183338.png" class="case-img" alt="Золотой">
                     <div class="case-name">Золотой</div>
                     <div class="case-price">🪙 100 монет</div>
-                    <div class="case-jackpot">Куш: <span>400</span></div>
-                    <button class="unlock-btn" onclick="unlockCase('gold', 500, event)">Открыть за 500 🪙</button>
+                    <div class="case-jackpot">Куш: 400</div>
+                    <button class="unlock-btn" onclick="unlockCase('gold', 500, event)">Разблокировать (500 🪙)</button>
                 </div>
             </div>
         </div>
@@ -255,339 +212,196 @@
     <div id="gamePlayScreen" class="screen">
         <div class="screen-header">
             <button class="btn-back" id="btnBackToCases">⬅</button>
-            <div class="screen-title" id="gameScreenTitle">Подбор кода</div>
+            <div class="screen-title">Подбор кода</div>
         </div>
-
         <div class="game-screen-content">
             <div class="radar-panel">
                 <div class="radar-title">Сигнал взлома</div>
-                <div class="radar-value" id="radarDisplay">---</div>
-                <div class="attempts-bar">
-                    <span>Осталось попыток:</span>
-                    <span id="attemptsDisplay" style="font-size:16px;">5/5</span>
-                </div>
+                <div class="radar-value" id="radarDisplay">ГОТОВ</div>
+                <div class="attempts-bar">Попыток: <span id="attemptsDisplay">5/5</span></div>
             </div>
-
             <div class="lock-container">
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="0" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(0, 1)">▲</button>
                     <div class="drum-display" id="drum-0">1</div>
-                    <button class="drum-btn" data-drum="0" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(0, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="1" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(1, 1)">▲</button>
                     <div class="drum-display" id="drum-1">1</div>
-                    <button class="drum-btn" data-drum="1" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(1, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="2" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(2, 1)">▲</button>
                     <div class="drum-display" id="drum-2">1</div>
-                    <button class="drum-btn" data-drum="2" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(2, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="3" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(3, 1)">▲</button>
                     <div class="drum-display" id="drum-3">1</div>
-                    <button class="drum-btn" data-drum="3" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(3, -1)">▼</button>
                 </div>
                 <div class="drum-column">
-                    <button class="drum-btn" data-drum="4" data-dir="1">▲</button>
+                    <button class="drum-btn" onclick="changeDrum(4, 1)">▲</button>
                     <div class="drum-display" id="drum-4">1</div>
-                    <button class="drum-btn" data-drum="4" data-dir="-1">▼</button>
+                    <button class="drum-btn" onclick="changeDrum(4, -1)">▼</button>
                 </div>
             </div>
-
             <button class="btn-action-submit" id="btnCheckCode">Проверить код</button>
-        </div>
-    </div>
-
-    <div id="shopScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromShop">⬅</button>
-            <div class="screen-title">Магазин</div>
-        </div>
-
-        <div class="shop-container">
-            <div class="shop-section-title">🌟 Наборы монет (Telegram Stars)</div>
-            <div class="stars-grid">
-                <div class="star-card" onclick="buyStarsPack(250, 10)">
-                    <div style="font-size: 20px;">🪙</div>
-                    <div class="star-amount">+250 🪙</div>
-                    <div class="star-price">🌟 10 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(750, 25)">
-                    <div style="font-size: 20px;">💰</div>
-                    <div class="star-amount">+750 🪙</div>
-                    <div class="star-price">🌟 25 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(1800, 50)">
-                    <div style="font-size: 20px;">💳</div>
-                    <div class="star-amount">+1,800 🪙</div>
-                    <div class="star-price">🌟 50 Stars</div>
-                </div>
-                <div class="star-card" onclick="buyStarsPack(4000, 100)">
-                    <div style="font-size: 20px;">💎</div>
-                    <div class="star-amount">+4,000 🪙</div>
-                    <div class="star-price">🌟 100 Stars</div>
-                </div>
-                <div class="star-card" style="grid-column: span 2;" onclick="buyStarsPack(12000, 250)">
-                    <div style="font-size: 22px;">👑 СУНДУК МАГНАТА</div>
-                    <div class="star-amount">+12,000 🪙</div>
-                    <div class="star-price">🌟 250 Stars</div>
-                </div>
-            </div>
-
-            <div class="shop-section-title">🎟️ Взлом и Попытки</div>
-            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-size: 13px; font-weight: 700;">➕ Доп. попытки (+3)</div>
-                    <div style="font-size: 11px; color: var(--text-muted);">Дает +3 попытки в игре</div>
-                </div>
-                <button class="unlock-btn" style="width: auto; padding: 8px 12px;" onclick="buyExtraAttempts()">30 🪙</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="dailyScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromDaily">⬅</button>
-            <div class="screen-title">Ежедневный бонус</div>
-        </div>
-
-        <div class="daily-container">
-            <div class="streak-card">
-                <div class="streak-title">Дней в ударе 🔥</div>
-                <div class="streak-count" id="streakDisplay">1 ДЕНЬ</div>
-            </div>
-
-            <div class="daily-grid" id="dailyGrid"></div>
-        </div>
-    </div>
-
-    <div id="pvpScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromPvp">⬅</button>
-            <div class="screen-title">PVP Дуэли</div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid var(--accent-gold); border-radius: 16px; padding: 14px;">
-                <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">🌐 Публичная Дуэль</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Сыграй против случайного взломщика. Комиссия: 10%</div>
-                <button class="unlock-btn" style="padding: 10px;" onclick="showToast('PVP Дуэль', 'Режим дуэлей будет доступен в следующем обновлении!')">Найти соперника</button>
-            </div>
-
-            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid var(--accent-blue); border-radius: 16px; padding: 14px;">
-                <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">🔒 Приватный Матч</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Вызови друга через ссылку Telegram!</div>
-                <button class="unlock-btn" style="padding: 10px; background: var(--accent-blue);" onclick="showToast('Дуэль с другом', 'Ссылка вызова отправлена в чат!')">Вызвать друга</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="assetsScreen" class="screen">
-        <div class="screen-header">
-            <button class="btn-back" id="btnBackToMenuFromAssets">⬅</button>
-            <div class="screen-title">Мои Активы</div>
-        </div>
-        
-        <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 15px;">
-            <div style="background: rgba(15, 22, 36, 0.9); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 15px; text-align: center;">
-                <div style="font-size: 16px; font-weight: 800; color: var(--accent-gold); margin-bottom: 4px;">🎁 Партнёрская программа</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-                    • +100 🪙 за каждого друга<br>
-                    • +15% монет от покупок друга в игре
-                </div>
-                
-                <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 10px; font-size: 11px; margin-bottom: 10px; color: var(--accent-blue);">
-                    Приглашено: <span id="refCount">0</span> чел. | Доход: <span id="refEarned">0</span> 🪙
-                </div>
-
-                <button class="unlock-btn" id="btnInviteFriend" style="padding: 10px; background: linear-gradient(135deg, #ffc107, #ff9800); color: #000;">➕ Пригласить друга</button>
-            </div>
-
-            <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); margin-top: 5px;">Пассивный майнинг</div>
-
-            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-size: 14px; font-weight: 700;">💻 Ноутбук скрипт-кидди</div>
-                    <div style="font-size: 11px; color: var(--accent-gold);">Доход: +5 🪙 / 5 мин</div>
-                </div>
-                <button class="unlock-btn" id="btnBuyMiner1" style="width: auto; padding: 8px 12px;" onclick="buyMiner(1, 150)">Купить: 150 🪙</button>
-            </div>
-
-            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-size: 14px; font-weight: 700;">🖥️ Серверная ферма</div>
-                    <div style="font-size: 11px; color: var(--accent-gold);">Доход: +20 🪙 / 5 мин</div>
-                </div>
-                <button class="unlock-btn" id="btnBuyMiner2" style="width: auto; padding: 8px 12px;" onclick="buyMiner(2, 500)">Купить: 500 🪙</button>
-            </div>
         </div>
     </div>
 
     <div id="leaderboardScreen" class="screen">
         <div class="screen-header">
             <button class="btn-back" id="btnBackToMenuFromLeaderboard">⬅</button>
-            <div class="screen-title">Топ Взломщиков</div>
+            <div class="screen-title">Таблица лидеров</div>
         </div>
-
-        <div class="tab-switcher">
-            <div class="tab-btn active" id="tabCoins" onclick="switchLeaderTab('coins')">🪙 Богачи</div>
-            <div class="tab-btn" id="tabTime" onclick="switchLeaderTab('time')">⏱️ В игре</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-align: center;">
+            Твой личный рейтинг среди взломщиков:
         </div>
-
-        <div class="pedestal-container">
-            <div class="pedestal-item">
-                <div class="pedestal-avatar">🥈<span id="p2-name" class="pedestal-name">---</span></div>
-                <div class="pedestal-val" id="p2-val">0</div>
-                <div class="pedestal-bar p-2">2</div>
-            </div>
-            <div class="pedestal-item">
-                <div class="pedestal-avatar" style="border-color: var(--accent-gold); width:52px; height:52px;">
-                    <span style="position:absolute; top:-12px; font-size:14px;">👑</span>🥇
-                </div>
-                <div class="pedestal-name" id="p1-name">---</div>
-                <div class="pedestal-val" id="p1-val">0</div>
-                <div class="pedestal-bar p-1">1</div>
-            </div>
-            <div class="pedestal-item">
-                <div class="pedestal-avatar">🥉<span id="p3-name" class="pedestal-name">---</span></div>
-                <div class="pedestal-val" id="p3-val">0</div>
-                <div class="pedestal-bar p-3">3</div>
-            </div>
-        </div>
-
         <div class="leader-list" id="leaderList"></div>
+    </div>
 
-        <div class="my-rank-card" id="myRankCard">
-            <div style="display:flex; align-items:center; gap:8px;">
-                <div style="font-weight:900; color:var(--accent-blue);" id="myRankPos">#1</div>
-                <div style="font-weight:800; font-size:13px;" id="myRankName">Ты (Вы)</div>
-            </div>
-            <div style="font-weight:900; color:var(--accent-gold);" id="myRankVal">100 🪙</div>
+    <div id="shopScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
+            <div class="screen-title">Магазин</div>
         </div>
+        <button class="toast-btn" onclick="buyStarsPack(250, 10)">Купить 250 🪙 (10 Stars)</button>
+    </div>
+
+    <div id="dailyScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
+            <div class="screen-title">Дейли Бонус</div>
+        </div>
+        <button class="toast-btn" onclick="claimDailyReward()">Забрать ежедневный бонус</button>
+    </div>
+
+    <div id="pvpScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
+            <div class="screen-title">PVP Дуэли</div>
+        </div>
+        <div style="text-align: center; color: var(--text-muted); padding: 20px;">Режим дуэлей в разработке...</div>
+    </div>
+
+    <div id="assetsScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('mainMenuScreen')">⬅</button>
+            <div class="screen-title">Активы</div>
+        </div>
+        <div style="text-align: center; color: var(--text-muted); padding: 20px;">Пассивный майнинг активен!</div>
     </div>
 
 </div>
+
 <script>
-    // -------------------------------------------------------------
-    // СОСТОЯНИЕ И НАСТРОЙКИ
-    // -------------------------------------------------------------
     var tg = window.Telegram ? window.Telegram.WebApp : null;
-    if (tg) tg.expand();
+    if (tg) {
+        tg.expand();
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('userTag').innerText = tg.initDataUnsafe.user.first_name || "Игрок";
+        }
+    }
 
     var userCoins = 100;
-    var currentCase = null;
-    var secretCode = [];
-    var currentDrums = [1, 1, 1, 1, 1];
-    var attemptsLeft = 5;
-    var maxAttempts = 5;
-
     var unlockedCases = ['wood'];
     var soundEnabled = true;
     var hapticEnabled = true;
 
-    var streakDays = 1;
-    var lastDailyClaim = 0;
+    var currentCase = null;
+    var secretCode = [];
+    var currentDrums = [1, 1, 1, 1, 1];
+    var attemptsLeft = 5;
 
-    var miners = { m1: 0, m2: 0 };
-    var friendsCount = 0;
-    var refIncome = 0;
-
-    // -------------------------------------------------------------
-    // МУЗЫКА И ВИБРАЦИЯ (ИСПРАВЛЕНО!)
-    // -------------------------------------------------------------
+    // МУЗЫКА
     var bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
     bgMusic.loop = true;
-    bgMusic.volume = 0.3;
 
     function toggleMusic(enable) {
         if (enable) {
-            bgMusic.play().catch(function(e) { console.log("Музыка заблокирована браузером до клика"); });
+            bgMusic.play().catch(function() {});
         } else {
             bgMusic.pause();
+            bgMusic.currentTime = 0; // Полный останов
         }
     }
 
-    function triggerHaptic(type) {
+    // ИСПРАВЛЕННАЯ НАДЕЖНАЯ ВИБРАЦИЯ
+    function triggerHaptic() {
         if (!hapticEnabled) return;
 
-        // 1. Telegram Haptic (внутри Telegram)
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-            if (type === 'impact') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-            if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+        // 1. Telegram WebApp Haptic
+        if (tg && tg.HapticFeedback) {
+            tg.HapticFeedback.impactOccurred('medium');
         } 
-        // 2. Запасной вариант для браузеров (Android / PC)
-        else if (navigator.vibrate) {
-            if (type === 'impact') navigator.vibrate(40);
-            if (type === 'success') navigator.vibrate([40, 60, 100]);
-            if (type === 'error') navigator.vibrate([100, 50, 100]);
+        // 2. Стандартная вибрация смартфона
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
         }
     }
 
-    // -------------------------------------------------------------
-    // ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ
-    // -------------------------------------------------------------
+    // НАВИГАЦИЯ И КНОПКИ НАСТРОЕК/ЛИДЕРБОРДА
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
+        document.getElementById(screenId).style.display = 'flex';
+
+        // Кнопки "Настройки" и "Кубок" ПОКАЗЫВАЮТСЯ ТОЛЬКО НА ГЛАВНОМ ЭКРАНЕ
+        var mainControls = document.getElementById('mainHeaderControls');
+        if (screenId === 'mainMenuScreen') {
+            mainControls.style.display = 'flex';
+        } else {
+            mainControls.style.display = 'none';
+        }
+
+        updateUI();
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         loadProgress();
-        updateUI();
 
-        // Старт музыки при первом клике
-        document.body.addEventListener('click', function initAudio() {
+        // Запуск аудио при первом взаимодействии
+        document.body.addEventListener('pointerdown', function startAudio() {
             if (soundEnabled && bgMusic.paused) {
                 toggleMusic(true);
             }
-            document.body.removeEventListener('click', initAudio);
+            document.body.removeEventListener('pointerdown', startAudio);
         }, { once: true });
 
-        // Окно настроек
+        // Обработка кликов с гарантированной вибрацией
+        document.addEventListener('pointerdown', function(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('mid-button') || e.target.classList.contains('bottom-button') || e.target.classList.contains('control-icon-btn')) {
+                triggerHaptic();
+            }
+        });
+
+        // Настройки
         document.getElementById('btnOpenSettings').onclick = function() {
             document.getElementById('settingsModal').style.display = 'flex';
-            triggerHaptic('impact');
         };
 
         document.getElementById('btnCloseSettings').onclick = function() {
             soundEnabled = document.getElementById('toggleSound').checked;
             hapticEnabled = document.getElementById('toggleHaptic').checked;
-            
-            toggleMusic(soundEnabled);
+
+            toggleMusic(soundEnabled); // Включает/выключает музыку мгновенно
             saveProgress();
             document.getElementById('settingsModal').style.display = 'none';
-            triggerHaptic('success');
         };
 
-        // Навигация
-        document.getElementById('btnGoToCases').onclick = function() { showScreen('casesScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnGoToShop').onclick = function() { showScreen('shopScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnGoToDaily').onclick = function() { renderDailyCalendar(); showScreen('dailyScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnGoToPvp').onclick = function() { showScreen('pvpScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnGoToAssets').onclick = function() { showScreen('assetsScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnCup').onclick = function() { renderLeaderboard(); showScreen('leaderboardScreen'); triggerHaptic('impact'); };
+        // Главные кнопки
+        document.getElementById('btnGoToCases').onclick = function() { showScreen('casesScreen'); };
+        document.getElementById('btnGoToShop').onclick = function() { showScreen('shopScreen'); };
+        document.getElementById('btnGoToDaily').onclick = function() { showScreen('dailyScreen'); };
+        document.getElementById('btnGoToPvp').onclick = function() { showScreen('pvpScreen'); };
+        document.getElementById('btnGoToAssets').onclick = function() { showScreen('assetsScreen'); };
+        document.getElementById('btnCup').onclick = function() { renderLeaderboard(); showScreen('leaderboardScreen'); };
 
-        // Кнопки "Назад"
-        document.getElementById('btnBackToMenuFromCases').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToCases').onclick = function() { showScreen('casesScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToMenuFromShop').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToMenuFromDaily').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToMenuFromPvp').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToMenuFromAssets').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-        document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { showScreen('mainMenuScreen'); triggerHaptic('impact'); };
-
-        // Промокод
-        document.getElementById('btnPromoCode').onclick = function() {
-            showToast("Промокод", "Введите секретный код для получения монет:", true, function(code) {
-                if (code && code.trim().toUpperCase() === "STAR2026") {
-                    userCoins += 500;
-                    saveProgress();
-                    triggerHaptic('success');
-                    showToast("Успех!", "Вам зачислено +500 🪙!");
-                } else {
-                    triggerHaptic('error');
-                    showToast("Ошибка", "Неверный промокод!");
-                }
-            });
-        };
+        // Кнопки Назад
+        document.getElementById('btnBackToMenuFromCases').onclick = function() { showScreen('mainMenuScreen'); };
+        document.getElementById('btnBackToCases').onclick = function() { showScreen('casesScreen'); };
+        document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { showScreen('mainMenuScreen'); };
 
         // Клик по кейсам
         document.querySelectorAll('.case-card').forEach(function(card) {
@@ -596,358 +410,134 @@
                 var id = card.getAttribute('data-id');
                 if (unlockedCases.indexOf(id) === -1) {
                     showToast("Заблокировано", "Сначала разблокируйте этот сейф!");
-                    triggerHaptic('error');
                     return;
                 }
                 startVaultGame(id);
             };
         });
 
-        // Барабаны
-        document.querySelectorAll('.drum-btn').forEach(function(btn) {
-            btn.onclick = function() {
-                var index = parseInt(btn.getAttribute('data-drum'));
-                var dir = parseInt(btn.getAttribute('data-dir'));
-                currentDrums[index] += dir;
-                if (currentDrums[index] > 9) currentDrums[index] = 1;
-                if (currentDrums[index] < 1) currentDrums[index] = 9;
-                document.getElementById('drum-' + index).innerText = currentDrums[index];
-                triggerHaptic('impact');
-            };
-        });
-
         document.getElementById('btnCheckCode').onclick = checkCodeAttempt;
-        document.getElementById('btnInviteFriend').onclick = inviteFriend;
-
-        // Пассивный доход раз в 5 минут
-        setInterval(processMiners, 300000);
     });
 
-    // -------------------------------------------------------------
-    // ЭКРАНЫ И УВЕДОМЛЕНИЯ
-    // -------------------------------------------------------------
-    function showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
-        document.getElementById(screenId).style.display = 'flex';
-        updateUI();
+    // ИГРА И БАРАБАНЫ
+    function changeDrum(index, dir) {
+        currentDrums[index] += dir;
+        if (currentDrums[index] > 9) currentDrums[index] = 1;
+        if (currentDrums[index] < 1) currentDrums[index] = 9;
+        document.getElementById('drum-' + index).innerText = currentDrums[index];
     }
 
-    function showToast(title, msg, hasInput, callback) {
-        document.getElementById('toastTitle').innerText = title;
-        document.getElementById('toastMsg').innerText = msg;
-        var input = document.getElementById('toastInput');
-        
-        if (hasInput) {
-            input.style.display = 'block';
-            input.value = '';
-        } else {
-            input.style.display = 'none';
+    function startVaultGame(caseId) {
+        currentCase = caseId;
+        attemptsLeft = 5;
+        currentDrums = [1, 1, 1, 1, 1];
+        secretCode = [];
+
+        for (var i = 0; i < 5; i++) {
+            secretCode.push(Math.floor(Math.random() * 9) + 1);
+            document.getElementById('drum-' + i).innerText = '1';
         }
 
-        document.getElementById('toastModal').style.display = 'flex';
+        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/5';
+        document.getElementById('radarDisplay').innerText = "ГОТОВ";
+        showScreen('gamePlayScreen');
+    }
 
+    function checkCodeAttempt() {
+        if (attemptsLeft <= 0) return;
+        attemptsLeft--;
+        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/5';
+
+        var matches = 0;
+        for (var i = 0; i < 5; i++) {
+            if (currentDrums[i] === secretCode[i]) matches++;
+        }
+
+        if (matches === 5) {
+            userCoins += 100;
+            saveProgress();
+            showToast("ПОБЕДА! 🎉", "Сейф взломан! Вы получили +100 🪙");
+            showScreen('casesScreen');
+        } else if (attemptsLeft <= 0) {
+            showToast("ПРОВАЛ!", "Попытки закончились.");
+            showScreen('casesScreen');
+        } else {
+            document.getElementById('radarDisplay').innerText = "Точных совпадений: " + matches;
+        }
+    }
+
+    function unlockCase(tier, cost, e) {
+        e.stopPropagation();
+        if (userCoins >= cost) {
+            userCoins -= cost;
+            unlockedCases.push(tier);
+            saveProgress();
+            showToast("Успех!", "Сейф разблокирован!");
+        } else {
+            showToast("Ошибка", "Недостаточно монет!");
+        }
+    }
+
+    // ЧЕСТНЫЙ И ЛОКАЛЬНЫЙ ЛИДЕРБОРД (БЕЗ ФЕЙКОВЫХ ИГРОКОВ)
+    function renderLeaderboard() {
+        var list = document.getElementById('leaderList');
+        list.innerHTML = '';
+
+        var myName = "Ты (Вы)";
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            myName = tg.initDataUnsafe.user.first_name || myName;
+        }
+
+        // Показывает честный результат игрока
+        var myCard = document.createElement('div');
+        myCard.className = 'leader-item';
+        myCard.style.border = "1px solid var(--accent-gold)";
+        myCard.innerHTML = '<div class="leader-rank">#1</div><div class="leader-info"><div style="font-weight:800; color:var(--accent-gold);">' + myName + '</div></div><div class="leader-score">' + userCoins + ' 🪙</div>';
+        
+        list.appendChild(myCard);
+    }
+
+    function buyStarsPack(coins, stars) {
+        userCoins += coins;
+        saveProgress();
+        showToast("Успешно!", "Зачислено +" + coins + " 🪙");
+    }
+
+    function claimDailyReward() {
+        userCoins += 50;
+        saveProgress();
+        showToast("Бонус!", "Получено +50 🪙");
+    }
+
+    function showToast(title, msg) {
+        document.getElementById('toastTitle').innerText = title;
+        document.getElementById('toastMsg').innerText = msg;
+        document.getElementById('toastModal').style.display = 'flex';
         document.getElementById('btnToastOk').onclick = function() {
             document.getElementById('toastModal').style.display = 'none';
-            if (hasInput && callback) callback(input.value);
         };
     }
 
     function updateUI() {
         document.getElementById('globalCoins').innerText = userCoins;
-
         ['bronze', 'silver', 'gold'].forEach(function(tier) {
             var el = document.getElementById('case-' + tier);
-            if (el) {
-                if (unlockedCases.indexOf(tier) !== -1) {
-                    el.classList.remove('locked');
-                    var btn = el.querySelector('.unlock-btn');
-                    if (btn) btn.style.display = 'none';
-                } else {
-                    el.classList.add('locked');
-                }
+            if (el && unlockedCases.indexOf(tier) !== -1) {
+                el.classList.remove('locked');
+                var btn = el.querySelector('.unlock-btn');
+                if (btn) btn.style.display = 'none';
             }
         });
     }
 
-    // -------------------------------------------------------------
-    // ИГРОВАЯ ЛОГИКА (ВЗЛОМ)
-    // -------------------------------------------------------------
-    function unlockCase(tier, cost, e) {
-        if (e) e.stopPropagation();
-        if (userCoins < cost) {
-            showToast("Недостаточно монет", "Вам нужно " + cost + " 🪙");
-            triggerHaptic('error');
-            return;
-        }
-        userCoins -= cost;
-        unlockedCases.push(tier);
-        saveProgress();
-        triggerHaptic('success');
-        showToast("Успех!", "Сейф успешно разблокирован!");
-    }
-
-    function startVaultGame(caseId) {
-        var casePrices = { wood: 10, bronze: 25, silver: 50, gold: 100 };
-        var price = casePrices[caseId];
-
-        if (userCoins < price) {
-            showToast("Недостаточно монет", "Вход стоит " + price + " 🪙");
-            triggerHaptic('error');
-            return;
-        }
-
-        userCoins -= price;
-        currentCase = caseId;
-        attemptsLeft = maxAttempts;
-        currentDrums = [1, 1, 1, 1, 1];
-
-        secretCode = [];
-        for (var i = 0; i < 5; i++) {
-            secretCode.push(Math.floor(Math.random() * 9) + 1);
-        }
-
-        for (var j = 0; j < 5; j++) {
-            document.getElementById('drum-' + j).innerText = '1';
-        }
-
-        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/' + maxAttempts;
-        document.getElementById('radarDisplay').innerText = "ГОТОВ";
-        document.getElementById('radarDisplay').style.color = "var(--radar-yellow)";
-
-        saveProgress();
-        showScreen('gamePlayScreen');
-        triggerHaptic('impact');
-    }
-
-    function checkCodeAttempt() {
-        if (attemptsLeft <= 0) return;
-
-        attemptsLeft--;
-        document.getElementById('attemptsDisplay').innerText = attemptsLeft + '/' + maxAttempts;
-
-        var exactMatches = 0;
-        var totalDiff = 0;
-
-        for (var i = 0; i < 5; i++) {
-            if (currentDrums[i] === secretCode[i]) {
-                exactMatches++;
-            }
-            totalDiff += Math.abs(currentDrums[i] - secretCode[i]);
-        }
-
-        if (exactMatches === 5) {
-            var jackpots = { wood: 30, bronze: 80, silver: 180, gold: 400 };
-            var winAmount = jackpots[currentCase];
-            userCoins += winAmount;
-            saveProgress();
-            triggerHaptic('success');
-
-            showToast("ПОБЕДА! 🎉", "Вы взломали сейф и забрали " + winAmount + " 🪙!", false, function() {
-                showScreen('casesScreen');
-            });
-            return;
-        }
-
-        if (attemptsLeft <= 0) {
-            saveProgress();
-            triggerHaptic('error');
-            showToast("ВЗЛОМ ПРОВАЛЕН! 💥", "Замок заблокировался. Попробуйте еще раз!", false, function() {
-                showScreen('casesScreen');
-            });
-            return;
-        }
-
-        var radarText = "";
-        var radarColor = "";
-
-        if (totalDiff <= 3) {
-            radarText = "ГОРЯЧО 🔥";
-            radarColor = "var(--radar-red)";
-            triggerHaptic('impact');
-        } else if (totalDiff <= 8) {
-            radarText = "ТЕПЛО ⚡";
-            radarColor = "var(--radar-yellow)";
-            triggerHaptic('impact');
-        } else {
-            radarText = "ХОЛОДНО ❄️";
-            radarColor = "var(--accent-blue)";
-            triggerHaptic('impact');
-        }
-
-        document.getElementById('radarDisplay').innerText = radarText + " (" + exactMatches + " точных)";
-        document.getElementById('radarDisplay').style.color = radarColor;
-    }
-        // -------------------------------------------------------------
-    // МАГАЗИН И TELEGRAM STARS
-    // -------------------------------------------------------------
-    function buyStarsPack(coinsAmount, starsCost) {
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openInvoice) {
-            showToast("Оплата Stars 🌟", "Списание " + starsCost + " Stars временно в демо-режиме. Начислено +" + coinsAmount + " 🪙!");
-            userCoins += coinsAmount;
-            saveProgress();
-            triggerHaptic('success');
-        } else {
-            showToast("Тестовый режим", "В браузере Stars не списываются. Начислено +" + coinsAmount + " 🪙");
-            userCoins += coinsAmount;
-            saveProgress();
-            triggerHaptic('success');
-        }
-    }
-
-    function buyExtraAttempts() {
-        if (userCoins < 30) {
-            showToast("Ошибка", "Недостаточно монет (нужно 30 🪙)!");
-            triggerHaptic('error');
-            return;
-        }
-        userCoins -= 30;
-        maxAttempts += 3;
-        saveProgress();
-        triggerHaptic('success');
-        showToast("Успех!", "Максимум попыток увеличен до " + maxAttempts + "!");
-    }
-
-    // -------------------------------------------------------------
-    // АКТИВЫ И МАЙНИНГ
-    // -------------------------------------------------------------
-    function buyMiner(type, cost) {
-        if (userCoins < cost) {
-            showToast("Ошибка", "Недостаточно монет!");
-            triggerHaptic('error');
-            return;
-        }
-        userCoins -= cost;
-        if (type === 1) miners.m1++;
-        if (type === 2) miners.m2++;
-        saveProgress();
-        triggerHaptic('success');
-        showToast("Успешно!", "Актив приобретен и приносит пассивный доход!");
-    }
-
-    function processMiners() {
-        var income = (miners.m1 * 5) + (miners.m2 * 20);
-        if (income > 0) {
-            userCoins += income;
-            saveProgress();
-        }
-    }
-
-    function inviteFriend() {
-        if (tg) {
-            tg.openTelegramLink("https://t.me/share/url?url=https://t.me/YourBotName_bot/app?startapp=ref12345");
-        } else {
-            showToast("Реферальная ссылка", "Скопируйте ссылку: https://t.me/YourBotName_bot/app?start=123");
-        }
-    }
-
-    // -------------------------------------------------------------
-    // ЕЖЕДНЕВНЫЕ БОНУСЫ
-    // -------------------------------------------------------------
-    function renderDailyCalendar() {
-        var grid = document.getElementById('dailyGrid');
-        grid.innerHTML = '';
-        var rewards = [50, 100, 150, 250, 500];
-
-        for (var i = 1; i <= 5; i++) {
-            var card = document.createElement('div');
-            card.className = 'day-card';
-            if (i < streakDays) card.classList.add('claimed');
-            if (i === streakDays) card.classList.add('today');
-
-            card.innerHTML = '<div>ДЕНЬ ' + i + '</div><div style="font-size:16px;">🎁</div><div style="font-weight:800; color:var(--accent-gold);">' + rewards[i-1] + ' 🪙</div>';
-            
-            if (i === streakDays) {
-                card.onclick = claimDailyReward;
-            }
-            grid.appendChild(card);
-        }
-
-        document.getElementById('streakDisplay').innerText = streakDays + " ДЕНЬ";
-    }
-
-    function claimDailyReward() {
-        var now = Date.now();
-        if (now - lastDailyClaim < 86400000 && lastDailyClaim !== 0) {
-            showToast("Забрано", "Возвращайтесь завтра за новым бонусом!");
-            return;
-        }
-
-        var rewards = [50, 100, 150, 250, 500];
-        var win = rewards[streakDays - 1] || 50;
-
-        userCoins += win;
-        lastDailyClaim = now;
-        streakDays++;
-        if (streakDays > 5) streakDays = 1;
-
-        saveProgress();
-        triggerHaptic('success');
-        showToast("Ежедневный бонус!", "Вы получили +" + win + " 🪙!");
-        renderDailyCalendar();
-    }
-
-    // -------------------------------------------------------------
-    // ЛИДЕРБОРД
-    // -------------------------------------------------------------
-    function switchLeaderTab(tab) {
-        document.getElementById('tabCoins').classList.remove('active');
-        document.getElementById('tabTime').classList.remove('active');
-        if (tab === 'coins') document.getElementById('tabCoins').classList.add('active');
-        if (tab === 'time') document.getElementById('tabTime').classList.add('active');
-        renderLeaderboard();
-        triggerHaptic('impact');
-    }
-
-    function renderLeaderboard() {
-        var fakeData = [
-            { name: "Satoshi_N", val: "15,400 🪙" },
-            { name: "CyberHacker", val: "9,200 🪙" },
-            { name: "VaultMaster", val: "6,100 🪙" },
-            { name: "StarHunter", val: "4,500 🪙" },
-            { name: "Anon_x86", val: "3,200 🪙" }
-        ];
-
-        document.getElementById('p1-name').innerText = fakeData[0].name;
-        document.getElementById('p1-val').innerText = fakeData[0].val;
-
-        document.getElementById('p2-name').innerText = fakeData[1].name;
-        document.getElementById('p2-val').innerText = fakeData[1].val;
-
-        document.getElementById('p3-name').innerText = fakeData[2].name;
-        document.getElementById('p3-val').innerText = fakeData[2].val;
-
-        var list = document.getElementById('leaderList');
-        list.innerHTML = '';
-
-        for (var i = 3; i < fakeData.length; i++) {
-            var item = document.createElement('div');
-            item.className = 'leader-item';
-            item.innerHTML = '<div class="leader-rank">#' + (i + 1) + '</div><div class="leader-info"><div style="font-weight:800; font-size:12px;">' + fakeData[i].name + '</div></div><div class="leader-score">' + fakeData[i].val + '</div>';
-            list.appendChild(item);
-        }
-
-        document.getElementById('myRankVal').innerText = userCoins + " 🪙";
-    }
-
-    // -------------------------------------------------------------
-    // СОХРАНЕНИЕ В LOCALSTORAGE
-    // -------------------------------------------------------------
     function saveProgress() {
-        var data = {
-            coins: userCoins,
-            unlocked: unlockedCases,
-            sound: soundEnabled,
-            haptic: hapticEnabled,
-            streak: streakDays,
-            lastClaim: lastDailyClaim,
-            miners: miners
-        };
-        localStorage.setItem('starvault_save', JSON.stringify(data));
+        var data = { coins: userCoins, unlocked: unlockedCases, sound: soundEnabled, haptic: hapticEnabled };
+        localStorage.setItem('starvault_save_v2', JSON.stringify(data));
         updateUI();
     }
 
     function loadProgress() {
-        var raw = localStorage.getItem('starvault_save');
+        var raw = localStorage.getItem('starvault_save_v2');
         if (raw) {
             try {
                 var data = JSON.parse(raw);
@@ -955,15 +545,10 @@
                 unlockedCases = data.unlocked || ['wood'];
                 soundEnabled = data.sound !== undefined ? data.sound : true;
                 hapticEnabled = data.haptic !== undefined ? data.haptic : true;
-                streakDays = data.streak || 1;
-                lastDailyClaim = data.lastClaim || 0;
-                miners = data.miners || { m1: 0, m2: 0 };
 
                 document.getElementById('toggleSound').checked = soundEnabled;
                 document.getElementById('toggleHaptic').checked = hapticEnabled;
-            } catch(e) {
-                console.log("Ошибка загрузки сохранения");
-            }
+            } catch(e) {}
         }
     }
 </script>

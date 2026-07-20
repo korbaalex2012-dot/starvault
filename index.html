@@ -445,4 +445,519 @@
       saveState();
       openProfileModal();
     }
+          // ИГРОВОЙ ДВИЖОК СЕЙФОВ
+    let activeBox = null;
+    let targetCode = "";
+    let currentInput = "";
+    let gameTimer = null;
+    let secondsLeft = 0;
+    let attemptsLeft = 0;
+    let isPvpGame = false;
+    let pvpBet = 0;
+
+    function renderSafes() {
+      const container = document.getElementById('safesContainer');
+      container.innerHTML = VAULTS.map(s => `
+        <div class="safe-card">
+          <div style="font-weight:800; font-size:13px">${s.name}</div>
+          <img src="${s.img}" class="safe-img" alt="${s.name}">
+          <div style="font-size:11px; color:var(--text-sub)">Вход: ${s.cost} 🪙</div>
+          <div style="font-size:11px; color:var(--accent-gold); font-weight:700">Приз: +${s.reward} 🪙</div>
+          <button class="btn-hack" onclick="startBoxGame(${s.id})">ОТКРЫТЬ</button>
+        </div>
+      `).join('');
+    }
+
+    function startBoxGame(boxId) {
+      isPvpGame = false;
+      activeBox = VAULTS.find(s => s.id === boxId);
+
+      if (state.coins < activeBox.cost) {
+        alert(`❌ Нужно ${activeBox.cost} 🪙 для входа!`);
+        return;
+      }
+
+      state.coins -= activeBox.cost;
+      state.totalSpent += activeBox.cost;
+      saveState();
+
+      targetCode = "";
+      for (let i = 0; i < activeBox.len; i++) {
+        targetCode += Math.floor(Math.random() * 10).toString();
+      }
+      currentInput = "";
+
+      document.getElementById('gSafeName').innerText = activeBox.name;
+      document.getElementById('gameHint').innerText = "";
+      document.getElementById('gameModal').classList.add('active');
+
+      if (activeBox.mode === 'logic') {
+        attemptsLeft = activeBox.attempts;
+        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
+        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+      } else {
+        secondsLeft = activeBox.time;
+        document.getElementById('gSafeMode').innerText = `Время: ${activeBox.time} с`;
+        document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+
+        gameTimer = setInterval(() => {
+          secondsLeft--;
+          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+          if (secondsLeft <= 0) {
+            clearInterval(gameTimer);
+            alert("⏰ Время вышло!");
+            closeGame();
+          }
+        }, 1000);
+      }
+
+      updateDigitsDisplay();
+    }
+
+    function pressKey(num) {
+      if (currentInput.length < activeBox.len) {
+        currentInput += num.toString();
+        updateDigitsDisplay();
+      }
+    }
+
+    function clearKey() {
+      currentInput = "";
+      updateDigitsDisplay();
+    }
+
+    function updateDigitsDisplay() {
+      const container = document.getElementById('digitsRow');
+      container.innerHTML = "";
+      for (let i = 0; i < activeBox.len; i++) {
+        const char = currentInput[i] || "_";
+        container.innerHTML += `<div class="digit-box">${char}</div>`;
+      }
+    }
+
+    function submitCode() {
+      if (currentInput.length < activeBox.len) return;
+
+      if (currentInput === targetCode) {
+        if (gameTimer) clearInterval(gameTimer);
+
+        if (isPvpGame) {
+          const winAmount = Math.floor(pvpBet * 2 * 0.9);
+          state.coins += winAmount;
+          state.totalEarned += winAmount;
+          state.pvpWins += 1;
+          saveState();
+          alert(`⚔️ ПОБЕДА В ДУЭЛИ!\nЗаработано: +${winAmount} 🪙`);
+        } else {
+          state.coins += activeBox.reward;
+          state.totalEarned += activeBox.reward;
+
+          if (activeBox.mode === 'logic') state.logicWins += 1;
+          if (activeBox.mode === 'time') state.timeWins += 1;
+
+          let droppedMsg = "";
+          if (Math.random() <= activeBox.dropRate) {
+            const invItem = state.inventory.find(i => i.id === activeBox.dropId);
+            if (invItem) {
+              invItem.count += 1;
+            } else {
+              state.inventory.push({ id: activeBox.dropId, count: 1 });
+            }
+            const droppedItem = ITEMS.find(i => i.id === activeBox.dropId);
+            droppedMsg = `\n\n🎁 Находка: ${droppedItem.name}!`;
+          }
+
+          saveState();
+          alert(`🎉 УСПЕХ!\nНаграда: +${activeBox.reward} 🪙${droppedMsg}`);
+        }
+        closeGame();
+      } else {
+        let correctDigits = 0;
+        for (let i = 0; i < activeBox.len; i++) {
+          if (currentInput[i] === targetCode[i]) correctDigits++;
+        }
+
+        if (activeBox.mode === 'logic') {
+          attemptsLeft--;
+          document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
+          document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+
+          if (attemptsLeft <= 0) {
+            alert("❌ Попытки закончились!");
+            closeGame();
+            return;
+          }
+        }
+
+        document.getElementById('gameHint').innerText = `❌ Совпадений мест: ${correctDigits}`;
+      }
+    }
+
+    function closeGame() {
+      if (gameTimer) clearInterval(gameTimer);
+      document.getElementById('gameModal').classList.remove('active');
+    }
+
+    // ЕЖЕДНЕВНЫЕ БОНУСЫ
+    function renderBonusTab() {
+      const now = Date.now();
+      const oneDayMs = 24 * 60 * 60 * 1000;
+      const timeDiff = now - state.lastBonusTime;
+
+      document.getElementById('streakDays').innerText = `${state.streak} ДНЕЙ`;
+
+      const claimBtn = document.getElementById('claimBonusBtn');
+      const restoreBtn = document.getElementById('restoreStreakBtn');
+
+      if (timeDiff > 2 * oneDayMs && state.streak > 0 && state.lastBonusTime !== 0) {
+        state.canRestoreStreak = true;
+      }
+
+      if (state.canRestoreStreak) {
+        restoreBtn.style.display = 'block';
+        claimBtn.disabled = true;
+        claimBtn.innerText = "Серия сгорела!";
+      } else {
+        restoreBtn.style.display = 'none';
+        if (timeDiff >= oneDayMs || state.lastBonusTime === 0) {
+          claimBtn.disabled = false;
+          claimBtn.innerText = "Забрать Награду";
+        } else {
+          claimBtn.disabled = true;
+          const hoursLeft = Math.ceil((oneDayMs - timeDiff) / (1000 * 60 * 60));
+          claimBtn.innerText = `Доступно через ~${hoursLeft} ч`;
+        }
+      }
+
+      const list = document.getElementById('streakRewardsList');
+      const rewards = [
+        { day: 1, reward: "100 🪙" },
+        { day: 2, reward: "250 🪙" },
+        { day: 3, reward: "500 🪙" },
+        { day: 10, reward: "🎁 СУПЕР-ПРИЗ (2,500 🪙)" },
+        { day: 30, reward: "👑 МЕГА-ПРИЗ (10,000 🪙)" }
+      ];
+
+      list.innerHTML = rewards.map(r => `
+        <div class="leader-row">
+          <span>${r.day}-й день</span>
+          <span style="font-weight:800; color:var(--accent-gold)">${r.reward}</span>
+        </div>
+      `).join('');
+    }
+
+    function claimDailyBonus() {
+      const now = Date.now();
+      const rewardCoins = 100 + (state.streak * 50);
+
+      state.streak += 1;
+      state.lastBonusTime = now;
+      state.coins += rewardCoins;
+      state.totalEarned += rewardCoins;
+
+      saveState();
+      renderBonusTab();
+      alert(`🎁 Забрано: +${rewardCoins} 🪙!\nТекущая серия: ${state.streak} дней!`);
+    }
+
+    function restoreStreak() {
+      if (state.coins < 500) {
+        alert("❌ Нужно 500 🪙 для восстановления серии!");
+        return;
+      }
+
+      state.coins -= 500;
+      state.totalSpent += 500;
+      state.canRestoreStreak = false;
+      state.lastBonusTime = Date.now();
+
+      saveState();
+      renderBonusTab();
+      alert("🔥 Серия успешно восстановлена!");
+    }
+
+    // ИНВЕНТАРЬ
+    function renderInventory() {
+      const grid = document.getElementById('inventoryGrid');
+      document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
+
+      let totalIncome = 0;
+      grid.innerHTML = ITEMS.map(item => {
+        const invItem = state.inventory.find(i => i.id === item.id);
+        const count = invItem ? invItem.count : 0;
+        const owned = count > 0;
+
+        if (owned) totalIncome += item.income * count;
+
+        return `
+          <div class="item-card ${owned ? '' : 'locked'}" style="${owned ? '' : 'opacity:0.35'}">
+            <img src="${item.img}" class="item-img">
+            <div style="font-size:10px; font-weight:700">${item.name} ${count > 1 ? `<span style="color:var(--accent-gold)">x${count}</span>` : ''}</div>
+            <div style="font-size:9px; color:#00ff66; margin-top:2px">+${item.income * (count || 1)}🪙/ч</div>
+            ${owned ? `<button class="btn-hack" style="padding:2px 0; font-size:9px; background:var(--accent-pink)" onclick="tradeItem(${item.id})">Продать 1шт</button>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
+    }
+
+    // МАРКЕТ
+    function tradeItem(itemId) {
+      const item = ITEMS.find(i => i.id === itemId);
+      const invIndex = state.inventory.findIndex(i => i.id === itemId);
+      if (invIndex === -1) return;
+
+      const priceStr = prompt(`Выставить 1 шт. "${item.name}" на Маркет.\nЦена в монетах:`, "500");
+      if (!priceStr) return;
+
+      const price = parseInt(priceStr);
+      if (isNaN(price) || price <= 0) {
+        alert("❌ Неверная цена!");
+        return;
+      }
+
+      if (state.inventory[invIndex].count > 1) {
+        state.inventory[invIndex].count -= 1;
+      } else {
+        state.inventory.splice(invIndex, 1);
+      }
+
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+      marketItems.push({
+        id: Date.now(),
+        itemId: item.id,
+        seller: document.getElementById('uName').innerText,
+        sellerTitle: state.selectedTitle,
+        price: price
+      });
+      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
+
+      saveState();
+      renderInventory();
+      alert(`✅ 1 шт. "${item.name}" выставлена на Маркет за ${price} 🪙!`);
+    }
+
+    function renderMarket() {
+      const list = document.getElementById('marketList');
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+
+      if (marketItems.length === 0) {
+        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">На рынке нет лотов.</p>`;
+        return;
+      }
+
+      list.innerHTML = marketItems.map(lot => {
+        const item = ITEMS.find(i => i.id === lot.itemId);
+        const isMyLot = lot.seller === document.getElementById('uName').innerText;
+
+        return `
+          <div class="leader-row">
+            <div style="display:flex; align-items:center; gap:10px">
+              <img src="${item.img}" style="width:35px; height:35px; object-fit:contain">
+              <div>
+                <div style="font-weight:800; font-size:13px">${item.name}</div>
+                <div style="font-size:10px; color:var(--accent-gold)">@${lot.seller} [${lot.sellerTitle || '🟢 Новичок'}]</div>
+              </div>
+            </div>
+            ${isMyLot 
+              ? `<span style="font-size:11px; color:var(--accent-gold)">Мой лот (${lot.price} 🪙)</span>`
+              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="buyMarketItem(${lot.id})">${lot.price} 🪙</button>`
+            }
+          </div>
+        `;
+      }).join('');
+    }
+
+    function buyMarketItem(lotId) {
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+      const lotIndex = marketItems.findIndex(l => l.id === lotId);
+      if (lotIndex === -1) return;
+
+      const lot = marketItems[lotIndex];
+      if (state.coins < lot.price) {
+        alert("❌ Недостаточно монет!");
+        return;
+      }
+
+      state.coins -= lot.price;
+      state.totalSpent += lot.price;
+
+      const invItem = state.inventory.find(i => i.id === lot.itemId);
+      if (invItem) {
+        invItem.count += 1;
+      } else {
+        state.inventory.push({ id: lot.itemId, count: 1 });
+      }
+
+      marketItems.splice(lotIndex, 1);
+      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
+
+      saveState();
+      renderMarket();
+      alert("🎉 Покупка совершена!");
+    }
+
+    // PVP ДУЭЛИ
+    function createPvpMatch() {
+      const code = prompt("Придумайте секретный код (3-5 цифр):", "1234");
+      if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
+        alert("❌ Код должен содержать от 3 до 5 цифр!");
+        return;
+      }
+
+      const mode = confirm("ОК — На Попытки | Отмена — На Время") ? "logic" : "time";
+      
+      let limit = 0;
+      if (mode === "logic") {
+        const limitStr = prompt("Укажите число попыток (от 3 до 15):", "5");
+        limit = parseInt(limitStr);
+        if (isNaN(limit) || limit < 3 || limit > 15) return;
+      } else {
+        const limitStr = prompt("Укажите время в секундах (от 10 до 120):", "30");
+        limit = parseInt(limitStr);
+        if (isNaN(limit) || limit < 10 || limit > 120) return;
+      }
+
+      const betStr = prompt("Укажите ставку в монетах (от 50 до 50,000):", "200");
+      const bet = parseInt(betStr);
+
+      if (isNaN(bet) || bet < 50 || bet > 50000 || bet > state.coins) {
+        alert("❌ Недостаточно монет или неверная ставка!");
+        return;
+      }
+
+      state.coins -= bet;
+      state.totalSpent += bet;
+      saveState();
+
+      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
+      pvpMatches.push({
+        id: Date.now(),
+        host: document.getElementById('uName').innerText,
+        hostTitle: state.selectedTitle,
+        code: code,
+        mode: mode,
+        limit: limit,
+        bet: bet
+      });
+      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
+
+      renderPvp();
+      alert("⚔️ Дуэль создана!");
+    }
+
+    function renderPvp() {
+      const list = document.getElementById('pvpList');
+      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
+      const myName = document.getElementById('uName').innerText;
+
+      if (pvpMatches.length === 0) {
+        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">Нет активных дуэлей.</p>`;
+        return;
+      }
+
+      list.innerHTML = pvpMatches.map(m => {
+        const isMyMatch = m.host === myName;
+        const winAmount = Math.floor(m.bet * 2 * 0.9);
+        return `
+          <div class="pvp-card">
+            <div class="pvp-header">
+              <div>
+                <div style="font-weight:800; font-size:14px">Дуэль от @${m.host}</div>
+                <div style="font-size:10px; color:var(--accent-gold)">[${m.hostTitle || '🟢 Новичок'}]</div>
+                <div style="font-size:11px; color:var(--accent-gold); margin-top:2px">Куш: ${winAmount} 🪙</div>
+              </div>
+              ${isMyMatch 
+                ? `<span style="font-size:11px; color:var(--accent-pink)">Ваш вызов</span>`
+                : `<button class="btn-hack" style="width:auto; padding:6px 12px" onclick="acceptPvp(${m.id})">Принять</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function acceptPvp(matchId) {
+      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
+      const match = pvpMatches.find(m => m.id === matchId);
+      if (!match) return;
+
+      if (state.coins < match.bet) {
+        alert("❌ Недостаточно монет!");
+        return;
+      }
+
+      state.coins -= match.bet;
+      state.totalSpent += match.bet;
+      saveState();
+
+      pvpMatches = pvpMatches.filter(m => m.id !== matchId);
+      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
+
+      isPvpGame = true;
+      pvpBet = match.bet;
+      targetCode = match.code;
+      currentInput = "";
+
+      activeBox = {
+        name: "⚔️ PVP Дуэль",
+        mode: match.mode,
+        len: match.code.length,
+        attempts: match.limit,
+        time: match.limit
+      };
+
+      document.getElementById('gSafeName').innerText = "⚔️ PVP Дуэль";
+      document.getElementById('gameHint').innerText = "";
+      document.getElementById('gameModal').classList.add('active');
+
+      if (match.mode === 'logic') {
+        attemptsLeft = match.limit;
+        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
+        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+      } else {
+        secondsLeft = match.limit;
+        document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft}с`;
+        gameTimer = setInterval(() => {
+          secondsLeft--;
+          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+          if (secondsLeft <= 0) {
+            clearInterval(gameTimer);
+            alert("⏰ Время вышло!");
+            closeGame();
+          }
+        }, 1000);
+      }
+      updateDigitsDisplay();
+    }
+
+    function claimMining() {
+      const now = Date.now();
+      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
+
+      let totalRate = 0;
+      state.inventory.forEach(inv => {
+        const it = ITEMS.find(i => i.id === inv.id);
+        if (it) totalRate += it.income * inv.count;
+      });
+
+      const earned = Math.floor(hoursPassed * totalRate);
+      if (earned > 0) {
+        state.coins += earned;
+        state.totalEarned += earned;
+        state.lastMiningTime = now;
+        saveState();
+        alert(`💰 Собрано: +${earned} 🪙`);
+      } else {
+        alert("⏱️ Награда пока накапливается!");
+      }
+    }
+
+    saveState();
+    renderSafes();
+  </script>
+</body>
+</html>
+
       

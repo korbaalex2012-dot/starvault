@@ -21,6 +21,7 @@
             --radar-red: #ff3d71;
             --radar-yellow: #ffaa00;
             --radar-green: #00e676;
+            --star-color: #ffaa00;
         }
 
         * {
@@ -96,7 +97,7 @@
             margin-bottom: 15px;
         }
 
-        /* УВЕЛИЧЕННАЯ И УДОБНАЯ КНОПКА НАЗАД (ФИКС БАГА) */
+        /* УВЕЛИЧЕННАЯ КНОПКА НАЗАД С ЗАЩИТОЙ ОТ ПРИЗРАЧНЫХ КЛИКОВ */
         .btn-back {
             min-width: 48px;
             min-height: 48px;
@@ -110,10 +111,11 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            transition: all 0.1s ease;
+            transition: transform 0.1s;
+            z-index: 50;
         }
         .btn-back:active {
-            transform: scale(0.92);
+            transform: scale(0.9);
             background-color: rgba(0, 229, 255, 0.2);
         }
 
@@ -288,17 +290,84 @@
             cursor: pointer;
         }
 
+        /* ИГРОВОЙ ЭКРАН С ПОПЫТКАМИ */
         .game-screen-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-        .radar-panel { width: 100%; background-color: rgba(15, 22, 36, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 12px; text-align: center; }
+        .radar-panel { width: 100%; background-color: rgba(15, 22, 36, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 10px; text-align: center; }
         .radar-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
-        .radar-value { font-size: 24px; font-weight: 900; color: var(--text-muted); margin-top: 4px; }
+        .radar-value { font-size: 22px; font-weight: 900; color: var(--text-muted); margin-top: 2px; }
 
-        .lock-container { display: flex; justify-content: center; gap: 5px; margin: 15px 0; width: 100%; }
+        .attempts-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #ff3d71;
+        }
+
+        .lock-container { display: flex; justify-content: center; gap: 5px; margin: 10px 0; width: 100%; }
         .drum-column { display: flex; flex-direction: column; align-items: center; gap: 6px; background: rgba(10, 15, 26, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 4px; flex: 1; }
         .drum-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #2d3d5a; background: #162032; color: var(--accent-blue); font-weight: bold; cursor: pointer; }
         .drum-display { font-size: 22px; font-weight: 900; }
 
-        .btn-action-submit { width: 100%; height: 50px; background: linear-gradient(135deg, #00b0ff, #00e5ff); border: none; border-radius: 14px; color: #000; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+        .btn-action-submit { width: 100%; height: 48px; background: linear-gradient(135deg, #00b0ff, #00e5ff); border: none; border-radius: 14px; color: #000; font-size: 15px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+
+        /* МАГА3ИН И STARS (🌟) */
+        .shop-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
+        .shop-section-title { font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--accent-gold); margin-top: 5px; }
+
+        .stars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .star-card {
+            background: rgba(15, 22, 36, 0.9);
+            border: 1.5px solid var(--star-color);
+            border-radius: 14px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 170, 0, 0.15);
+        }
+        .star-amount { font-size: 16px; font-weight: 900; color: var(--accent-gold); margin: 4px 0; }
+        .star-price { font-size: 11px; font-weight: 800; background: linear-gradient(135deg, #ffaa00, #ff8c00); color: #000; padding: 4px 8px; border-radius: 8px; width: 100%; }
+
+        /* КАСТОМНОЕ УВЕДОМЛЕНИЕ (ВМЕСТО ALERT/PROMPT) */
+        .toast-modal {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .toast-card {
+            background: #0f1624;
+            border: 2px solid var(--accent-blue);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+        }
+        .toast-title { font-size: 16px; font-weight: 900; margin-bottom: 8px; color: #fff; }
+        .toast-msg { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
+        .toast-btn {
+            background: var(--accent-blue);
+            border: none;
+            color: #000;
+            font-weight: 800;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
 
         /* ДЕЙЛИК КАЛЕНДАРЬ */
         .daily-container { flex: 1; overflow-y: auto; }
@@ -308,20 +377,17 @@
 
         .daily-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding-bottom: 15px; }
         .day-card { background: rgba(15, 22, 36, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; height: 55px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; }
-        .day-card.today { border: 2px solid var(--accent-blue); background: rgba(0, 229, 255, 0.15); box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-        .day-card.boss-10 { border: 2px solid var(--accent-gold); background: rgba(255, 193, 7, 0.15); }
-        .day-card.boss-month { border: 2px solid #ff0055; background: rgba(255, 0, 85, 0.2); }
+        .day-card.today { border: 2px solid var(--accent-blue); background: rgba(0, 229, 255, 0.15); }
         .day-card.claimed { opacity: 0.5; background: #0f1624; }
 
         /* СТИЛИ ЛИДЕРБОРДА BRAWL STARS */
         .tab-switcher { display: flex; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 3px; margin-bottom: 10px; }
-        .tab-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; border-radius: 10px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
-        .tab-btn.active { background: var(--accent-blue); color: #000; box-shadow: 0 2px 8px rgba(0, 229, 255, 0.4); }
+        .tab-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; border-radius: 10px; cursor: pointer; color: var(--text-muted); }
+        .tab-btn.active { background: var(--accent-blue); color: #000; }
 
         .pedestal-container { display: flex; justify-content: center; align-items: flex-end; gap: 8px; margin-bottom: 10px; padding: 10px 0; }
         .pedestal-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .pedestal-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff; background: #1f293d; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: 4px; position: relative; }
-        .pedestal-crown { position: absolute; top: -12px; font-size: 14px; }
         .pedestal-name { font-size: 10px; font-weight: 700; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .pedestal-val { font-size: 10px; color: var(--accent-gold); font-weight: 800; }
         .pedestal-bar { width: 100%; border-radius: 8px 8px 0 0; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 14px; color: rgba(0,0,0,0.6); }
@@ -336,13 +402,20 @@
         .leader-info { display: flex; align-items: center; gap: 8px; flex: 1; }
         .leader-score { font-size: 12px; font-weight: 800; color: var(--accent-gold); }
 
-        /* ПРИЛИПАЮЩАЯ СНИЗУ КАРТОЧКА ИГРОКА */
         .my-rank-card { position: absolute; bottom: 10px; left: 18px; right: 18px; background: linear-gradient(135deg, #101c2e, #1a2942); border: 2px solid var(--accent-blue); border-radius: 14px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 15px rgba(0,0,0,0.8); z-index: 20; }
     </style>
 </head>
-   <body>
+<body>
 
 <div class="app-container">
+
+    <div class="toast-modal" id="toastModal">
+        <div class="toast-card">
+            <div class="toast-title" id="toastTitle">Уведомление</div>
+            <div class="toast-msg" id="toastMsg">Сообщение системы</div>
+            <button class="toast-btn" id="btnToastOk">Понятно</button>
+        </div>
+    </div>
 
     <div class="settings-menu-wrapper" id="settingsWrapper">
         <div class="gear-btn" id="triggerGear">⚙️</div>
@@ -372,7 +445,7 @@
         <div class="bottom-zone">
             <div class="bottom-button" id="btnGoToDaily"><span>🎁</span><span>Дейли</span></div>
             <div class="bottom-button" id="btnPromoCode"><span>🔑</span><span>Промокод</span></div>
-            <div class="bottom-button" id="btnShopStub"><span>🛒</span><span>Магазин</span></div>
+            <div class="bottom-button" id="btnGoToShop"><span>🛒</span><span>Магазин</span></div>
         </div>
     </div>
 
@@ -428,6 +501,10 @@
             <div class="radar-panel">
                 <div class="radar-title">Сигнал взлома</div>
                 <div class="radar-value" id="radarDisplay">---</div>
+                <div class="attempts-bar">
+                    <span>Осталось попыток:</span>
+                    <span id="attemptsDisplay" style="font-size:16px;">5/5</span>
+                </div>
             </div>
 
             <div class="lock-container">
@@ -462,6 +539,56 @@
         </div>
     </div>
 
+    <div id="shopScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" id="btnBackToMenuFromShop">⬅</button>
+            <div class="screen-title">Магазин</div>
+        </div>
+
+        <div class="shop-container">
+            <div class="shop-section-title">🌟 Наборы монет (Telegram Stars)</div>
+            <div class="stars-grid">
+                <div class="star-card" onclick="buyStarsPack(250, 10)">
+                    <div style="font-size: 20px;">🪙</div>
+                    <div class="star-amount">+250 🪙</div>
+                    <div class="star-price">🌟 10 Stars</div>
+                </div>
+                <div class="star-card" onclick="buyStarsPack(750, 25)">
+                    <div style="font-size: 20px;">💰</div>
+                    <div class="star-amount">+750 🪙</div>
+                    <div class="star-price">🌟 25 Stars</div>
+                </div>
+                <div class="star-card" onclick="buyStarsPack(1800, 50)">
+                    <div style="font-size: 20px;">💳</div>
+                    <div class="star-amount">+1,800 🪙</div>
+                    <div class="star-price">🌟 50 Stars</div>
+                </div>
+                <div class="star-card" onclick="buyStarsPack(4000, 100)">
+                    <div style="font-size: 20px;">💎</div>
+                    <div class="star-amount">+4,000 🪙</div>
+                    <div class="star-price">🌟 100 Stars</div>
+                </div>
+                <div class="star-card" style="grid-column: span 2;" onclick="buyStarsPack(12000, 250)">
+                    <div style="font-size: 22px;">👑 СУНДУК МАГНАТА</div>
+                    <div class="star-amount">+12,000 🪙</div>
+                    <div class="star-price">🌟 250 Stars</div>
+                </div>
+            </div>
+
+            <div class="shop-section-title">🎟️ Взлом и Попытки</div>
+            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 13px; font-weight: 700;">➕ Доп. попытки (+3)</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Дает +3 попытки в игре</div>
+                </div>
+                <button class="unlock-btn" style="width: auto; padding: 8px 12px;" onclick="buyExtraAttempts()">30 🪙</button>
+            </div>
+
+            <div class="shop-section-title">🧪 Панель разработчика</div>
+            <button class="btn-pvp-action" onclick="addTestCoins()" style="background: linear-gradient(135deg, #00e676, #00b0ff); color: #000;">⚡ Получить +10,000 🪙 (ТЕСТ)</button>
+        </div>
+    </div>
+
     <div id="dailyScreen" class="screen">
         <div class="screen-header">
             <button class="btn-back" id="btnBackToMenuFromDaily">⬅</button>
@@ -484,17 +611,17 @@
             <div class="screen-title">PVP Дуэли</div>
         </div>
 
-        <div class="pvp-options">
-            <div class="pvp-card">
-                <div class="pvp-title">🌐 Публичная Дуэль</div>
-                <div class="pvp-desc">Создай дуэль или присоединись к открытому столу. Комиссия системы: 10%</div>
-                <button class="btn-pvp-action" id="btnPublicPvp">Найти соперника</button>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid var(--accent-gold); border-radius: 16px; padding: 14px;">
+                <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">🌐 Публичная Дуэль</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Сыграй против случайного взломщика. Комиссия: 10%</div>
+                <button class="unlock-btn" style="padding: 10px;" onclick="showToast('PVP Дуэль', 'Режим дуэлей будет доступен в следующем обновлении!')">Найти соперника</button>
             </div>
 
-            <div class="pvp-card">
-                <div class="pvp-title">🔒 Приватный Матч</div>
-                <div class="pvp-desc">Создай ссылку и отправь другу в Telegram, чтобы сыграть на монеты!</div>
-                <button class="btn-pvp-action" id="btnPrivatePvp" style="background: var(--accent-blue);">Вызвать друга</button>
+            <div style="background: rgba(15, 22, 36, 0.85); border: 1px solid var(--accent-blue); border-radius: 16px; padding: 14px;">
+                <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">🔒 Приватный Матч</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Вызови друга через ссылку Telegram!</div>
+                <button class="unlock-btn" style="padding: 10px; background: var(--accent-blue);" onclick="showToast('Дуэль с другом', 'Ссылка вызова отправлена в чат!')">Вызвать друга</button>
             </div>
         </div>
     </div>
@@ -517,7 +644,7 @@
                     Приглашено: <span id="refCount">0</span> чел. | Доход: <span id="refEarned">0</span> 🪙
                 </div>
 
-                <button class="btn-pvp-action" id="btnInviteFriend" style="background: linear-gradient(135deg, #ffc107, #ff9800); color: #000;">➕ Пригласить друга</button>
+                <button class="unlock-btn" id="btnInviteFriend" style="padding: 10px; background: linear-gradient(135deg, #ffc107, #ff9800); color: #000;">➕ Пригласить друга</button>
             </div>
 
             <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); margin-top: 5px;">Пассивный майнинг</div>
@@ -559,7 +686,7 @@
             </div>
             <div class="pedestal-item">
                 <div class="pedestal-avatar" style="border-color: var(--accent-gold); width:52px; height:52px;">
-                    <span class="pedestal-crown">👑</span>🥇
+                    <span style="position:absolute; top:-12px; font-size:14px;">👑</span>🥇
                 </div>
                 <div class="pedestal-name" id="p1-name">---</div>
                 <div class="pedestal-val" id="p1-val">0</div>
@@ -584,11 +711,11 @@
     </div>
 
 </div>
-   <script>
+<script>
 var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
 var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
 var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
-var userTimeInGame = parseInt(localStorage.getItem('sv_time_in_game')) || 0; // в минутах
+var userTimeInGame = parseInt(localStorage.getItem('sv_time_in_game')) || 0;
 
 var unlockedCases = JSON.parse(localStorage.getItem('sv_unlocked_cases')) || ['wood'];
 var userMiners = JSON.parse(localStorage.getItem('sv_miners')) || [];
@@ -596,6 +723,13 @@ var refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
 var refEarned = parseInt(localStorage.getItem('sv_ref_earned')) || 0;
 
 var currentLeaderTab = 'coins';
+
+// ИГРОВЫЕ ПЕРЕМЕННЫЕ
+var maxAttempts = 5;
+var remainingAttempts = 5;
+var currentSecretCode = [];
+var currentDrumValues = [1, 1, 1, 1, 1];
+var currentJackpot = 0;
 
 function saveProgress() {
     localStorage.setItem('sv_coins', userCoins);
@@ -645,22 +779,60 @@ function triggerHaptic(type) {
     }
 }
 
+/* КАСТОМНЫЕ ПЛАШКИ УВЕДОМЛЕНИЙ (ФИКС ЛАГА В 6-10 СЕКУНД) */
+function showToast(title, msg) {
+    document.getElementById('toastTitle').innerText = title;
+    document.getElementById('toastMsg').innerText = msg;
+    document.getElementById('toastModal').style.display = 'flex';
+}
+
+document.getElementById('btnToastOk').onclick = function() {
+    document.getElementById('toastModal').style.display = 'none';
+};
+
+/* ПОКУПКА В МАГАЗИНЕ */
+function buyStarsPack(coinsAmount, starsCost) {
+    triggerHaptic('success');
+    userCoins += coinsAmount;
+    saveProgress();
+    showToast("Покупка 🌟 Stars", "Успешно получено +" + coinsAmount + " 🪙 за " + starsCost + " Stars!");
+}
+
+function addTestCoins() {
+    triggerHaptic('success');
+    userCoins += 10000;
+    saveProgress();
+    showToast("Тестовый режим", "Вам зачислено +10,000 🪙!");
+}
+
+function buyExtraAttempts() {
+    if (userCoins < 30) {
+        triggerHaptic('error');
+        showToast("Ошибка", "Недостаточно монет для покупки попыток!");
+        return;
+    }
+    userCoins -= 30;
+    remainingAttempts += 3;
+    saveProgress();
+    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+    triggerHaptic('success');
+    showToast("Попытки куплены", "Вы получили +3 доп. попытки!");
+}
+
 function unlockCase(caseId, cost, event) {
     if (event) event.stopPropagation();
 
     if (userCoins < cost) {
         triggerHaptic('error');
-        alert("Недостаточно монет! Нужен баланс: " + cost + " монет.");
+        showToast("Ошибка", "Недостаточно монет! Требуется: " + cost + " 🪙");
         return;
     }
 
-    if (confirm("Подтвердите покупку доступа к сейфу за " + cost + " 🪙?")) {
-        userCoins -= cost;
-        unlockedCases.push(caseId);
-        triggerHaptic('success');
-        saveProgress();
-        alert("Поздравляем! Доступ к сейфу разблокирован!");
-    }
+    userCoins -= cost;
+    unlockedCases.push(caseId);
+    triggerHaptic('success');
+    saveProgress();
+    showToast("Сейф разблокирован", "Теперь вы можете взламывать этот сейф!");
 }
 
 window.buyMiner = function(minerId, cost) {
@@ -668,20 +840,18 @@ window.buyMiner = function(minerId, cost) {
 
     if (userCoins < cost) {
         triggerHaptic('error');
-        alert("Недостаточно монет! Требуется: " + cost + " 🪙");
+        showToast("Ошибка", "Недостаточно монет! Требуется: " + cost + " 🪙");
         return;
     }
 
-    if (confirm("Подтвердите покупку майнера за " + cost + " 🪙?")) {
-        userCoins -= cost;
-        userMiners.push(minerId);
-        triggerHaptic('success');
-        saveProgress();
-        alert("🎉 Майнер успешно куплен! Теперь он приносит вам пассивные монеты.");
-    }
+    userCoins -= cost;
+    userMiners.push(minerId);
+    triggerHaptic('success');
+    saveProgress();
+    showToast("Майнер куплен", "🎉 Майнер успешно активирован!");
 };
 
-/* ГЕНЕРАЦИЯ ФЕЙКОВОГО ЛИДЕРБОРДА ДЛЯ ИМИТАЦИИ ОНЛАЙНА */
+/* РЕНДЕР ЛИДЕРБОРДА */
 function renderLeaderboard() {
     var isCoins = (currentLeaderTab === 'coins');
     
@@ -728,286 +898,228 @@ function switchLeaderTab(tab) {
     triggerHaptic('impact');
     renderLeaderboard();
 }
+   <script>
+/* НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ С ЗАЩИТОЙ ОТ ПРИЗРАЧНЫХ КЛИКОВ (GHOST CLICK) */
+function showScreen(screenId) {
+    var screens = document.querySelectorAll('.screen');
+    screens.forEach(function(s) { s.style.display = 'none'; });
+
+    var target = document.getElementById(screenId);
+    if (target) {
+        target.style.display = 'flex';
+    }
+
+    var settingsWrapper = document.getElementById('settingsWrapper');
+    if (settingsWrapper) {
+        settingsWrapper.classList.remove('open');
+    }
+}
+
+// ПРИВЯЗКА КНОПОК
+document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
+document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
+document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
+document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
+
+// КНОПКИ НАЗАД
+document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+
+// КНОПКА НАСТРОЕК И КУБКА ЛИДЕРБОРДА
+document.getElementById('triggerGear').onclick = function() {
+    triggerHaptic('impact');
+    document.getElementById('settingsWrapper').classList.toggle('open');
+};
+
+document.getElementById('btnCup').onclick = function() {
+    triggerHaptic('impact');
+    showScreen('leaderboardScreen');
+    renderLeaderboard();
+};
+
+document.getElementById('btnLang').onclick = function() {
+    triggerHaptic('impact');
+    showToast('Язык', 'Переключатель языка появится в следующем обновлении!');
+};
+
+document.getElementById('btnPromoCode').onclick = function() {
+    triggerHaptic('impact');
+    showToast('Промокод', 'Используйте код «TEST» в следующем обновлении!');
+};
+
+// ВЫБОР СЕЙФА И ЗАПУСК ИГРЫ
+document.querySelectorAll('.case-card').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON') return;
+
+        var caseId = card.getAttribute('data-id');
+        var price = parseInt(card.getAttribute('data-price'));
+        var jackpot = parseInt(card.getAttribute('data-jackpot'));
+
+        if (unlockedCases.indexOf(caseId) === -1) {
+            triggerHaptic('error');
+            showToast('Заблокировано', 'Сначала разблокируйте этот сейф!');
+            return;
+        }
+
+        if (userCoins < price) {
+            triggerHaptic('error');
+            showToast('Мало монет', 'Для взлома требуется: ' + price + ' 🪙');
+            return;
+        }
+
+        userCoins -= price;
+        saveProgress();
+        startVaultGame(caseId, jackpot);
+    });
+});
+
+// ЛОГИКА ВЗЛОМА СЕЙФА И БАРАБАНОВ
+function startVaultGame(caseId, jackpot) {
+    currentJackpot = jackpot;
+    remainingAttempts = maxAttempts;
+    currentSecretCode = [];
+    
+    for (var i = 0; i < 5; i++) {
+        currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
+        currentDrumValues[i] = 1;
+        document.getElementById('drum-' + i).innerText = "1";
+    }
+
+    document.getElementById('gameScreenTitle').innerText = "Взлом сейфа";
+    document.getElementById('radarDisplay').innerText = "---";
+    document.getElementById('radarDisplay').style.color = "var(--text-muted)";
+    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+
+    triggerHaptic('impact');
+    showScreen('gamePlayScreen');
+}
+
+// УПРАВЛЕНИЕ БАРАБАНАМИ (С ТАКТИЛЬНОЙ ОТДАЧЕЙ)
+document.querySelectorAll('.drum-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var drumIdx = parseInt(btn.getAttribute('data-drum'));
+        var dir = parseInt(btn.getAttribute('data-dir'));
+
+        currentDrumValues[drumIdx] += dir;
+        if (currentDrumValues[drumIdx] > 9) currentDrumValues[drumIdx] = 1;
+        if (currentDrumValues[drumIdx] < 1) currentDrumValues[drumIdx] = 9;
+
+        document.getElementById('drum-' + drumIdx).innerText = currentDrumValues[drumIdx];
+        triggerHaptic('impact');
+    });
+});
+
+// ПРОВЕРКА ВВЕДЕННОГО КОДА
+document.getElementById('btnCheckCode').onclick = function() {
+    if (remainingAttempts <= 0) {
+        triggerHaptic('error');
+        showToast('Блокировка', 'У вас закончились попытки! Докупите попытки в магазине!');
+        return;
+    }
+
+    remainingAttempts--;
+    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+
+    var correctCount = 0;
+    for (var i = 0; i < 5; i++) {
+        if (currentDrumValues[i] === currentSecretCode[i]) {
+            correctCount++;
+        }
+    }
+
+    var radarEl = document.getElementById('radarDisplay');
+
+    if (correctCount === 5) {
+        triggerHaptic('success');
+        userCoins += currentJackpot;
+        saveProgress();
+        showToast('🎉 ПОБЕДА!', 'Вы успешно взломали сейф и забрали ' + currentJackpot + ' 🪙!');
+        showScreen('casesScreen');
+    } else if (correctCount >= 3) {
+        triggerHaptic('impact');
+        radarEl.innerText = "🔥 БЛИЗКО (" + correctCount + "/5)";
+        radarEl.style.color = "var(--radar-yellow)";
+    } else {
+        triggerHaptic('error');
+        radarEl.innerText = "❌ ХОЛОДНО (" + correctCount + "/5)";
+        radarEl.style.color = "var(--radar-red)";
+    }
+
+    if (remainingAttempts <= 0 && correctCount < 5) {
+        triggerHaptic('error');
+        showToast('Сейф заблокирован', 'Попытки закончились! Код был: ' + currentSecretCode.join(''));
+    }
+};
+
+// ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
+function renderDailyGrid() {
+    var grid = document.getElementById('dailyGrid');
+    grid.innerHTML = "";
+
+    for (var d = 1; d <= 10; d++) {
+        var card = document.createElement('div');
+        card.className = 'day-card';
+        if (d < userStreak) card.classList.add('claimed');
+        if (d === userStreak) card.classList.add('today');
+
+        card.innerHTML = '<div style="font-size:9px; color:var(--text-muted);">ДЕНЬ ' + d + '</div>' +
+                         '<div style="font-weight:800; color:var(--accent-gold);">' + (d * 10) + ' 🪙</div>';
+
+        if (d === userStreak) {
+            card.onclick = function() {
+                var nowDay = Math.floor(Date.now() / 86400000);
+                if (nowDay > lastClaimedDay) {
+                    var reward = userStreak * 10;
+                    userCoins += reward;
+                    lastClaimedDay = nowDay;
+                    userStreak++;
+                    saveProgress();
+                    triggerHaptic('success');
+                    showToast('Награда', 'Забрано +' + reward + ' 🪙!');
+                    renderDailyGrid();
+                } else {
+                    showToast('Завтра', 'Вы уже забирали бонус сегодня!');
+                }
+            };
+        }
+        grid.appendChild(card);
+    }
+}
+
+// ПАССИВНЫЙ ДОХОД И ТАЙМЕР В ИГРЕ
+setInterval(function() {
+    userTimeInGame += 5;
+    localStorage.setItem('sv_time_in_game', userTimeInGame);
+
+    var income = 0;
+    if (userMiners.indexOf(1) !== -1) income += 5;
+    if (userMiners.indexOf(2) !== -1) income += 20;
+
+    if (income > 0) {
+        userCoins += income;
+        saveProgress();
+    }
+}, 300000); // Каждые 5 минут
+
+// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАПУСКЕ
 window.onload = function() {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
+        if (window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            document.getElementById('userTag').innerText = window.Telegram.WebApp.initDataUnsafe.user.first_name;
+        }
     }
-
     updateUI();
-
-    var screens = {
-        main: document.getElementById('mainMenuScreen'),
-        cases: document.getElementById('casesScreen'),
-        game: document.getElementById('gamePlayScreen'),
-        daily: document.getElementById('dailyScreen'),
-        pvp: document.getElementById('pvpScreen'),
-        assets: document.getElementById('assetsScreen'),
-        leader: document.getElementById('leaderboardScreen')
-    };
-
-    var settingsWrapper = document.getElementById('settingsWrapper');
-
-    function showScreen(targetScreen) {
-        triggerHaptic('impact');
-        for (var key in screens) {
-            screens[key].style.display = 'none';
-        }
-        if (targetScreen === screens.main) {
-            settingsWrapper.style.display = 'flex';
-        } else {
-            settingsWrapper.style.display = 'none';
-        }
-        targetScreen.style.display = 'flex';
-    }
-
-    function bindTap(elementId, callback) {
-        var el = document.getElementById(elementId);
-        if (!el) return;
-
-        var handler = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            callback();
-        };
-
-        if (window.PointerEvent) {
-            el.addEventListener('pointerdown', handler, false);
-        } else {
-            el.addEventListener('click', handler, false);
-        }
-    }
-
-    /* ПРИВЯЗКА КНОПОК И НАВИГАЦИИ (ФИКС КНОПКИ НАЗАД) */
-    bindTap('btnGoToCases', function() { showScreen(screens.cases); });
-    bindTap('btnBackToMenuFromCases', function() { showScreen(screens.main); });
-    bindTap('btnBackToCases', function() { showScreen(screens.cases); });
-    bindTap('btnGoToAssets', function() { showScreen(screens.assets); });
-    bindTap('btnBackToMenuFromAssets', function() { showScreen(screens.main); });
-    bindTap('btnGoToDaily', function() { renderDailyGrid(); showScreen(screens.daily); });
-    bindTap('btnBackToMenuFromDaily', function() { showScreen(screens.main); });
-    bindTap('btnGoToPvp', function() { showScreen(screens.pvp); });
-    bindTap('btnBackToMenuFromPvp', function() { showScreen(screens.main); });
-    
-    bindTap('btnCup', function() { 
-        settingsWrapper.classList.remove('open');
-        renderLeaderboard();
-        showScreen(screens.leader); 
-    });
-    bindTap('btnBackToMenuFromLeaderboard', function() { showScreen(screens.main); });
-
-    bindTap('btnLang', function() {
-        alert("Переключение языка (RU/EN) добавим следующим шагом!");
-    });
-
-    bindTap('btnPromoCode', function() {
-        var code = prompt("Введите промокод:");
-        if (!code) return;
-        code = code.trim().toUpperCase();
-
-        if (code === "START2026" || code === "SECRET") {
-            userCoins += 200;
-            triggerHaptic('success');
-            saveProgress();
-            alert("Промокод активирован! Вы получили +200 монет 🪙");
-        } else {
-            triggerHaptic('error');
-            alert("Неверный промокод!");
-        }
-    });
-
-    bindTap('btnInviteFriend', function() {
-        var botUsername = "starvault26_bot";
-        var shareUrl = "https://t.me/share/url?url=https://t.me/" + botUsername + "?start=ref" + (Math.floor(Math.random() * 899999) + 100000) + "&text=Взламывай%20сейфы%20и%20забирай%20куш%20в%20StarVault!%20🪙";
-
-        if (confirm("Открыть Telegram, чтобы отправить приглашение другу?")) {
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(shareUrl);
-            } else {
-                window.open(shareUrl, '_blank');
-            }
-        }
-    });
-
-    bindTap('triggerGear', function() { 
-        triggerHaptic('impact');
-        settingsWrapper.classList.toggle('open'); 
-    });
-
-    var currentSecretCode = [];
-    var currentDrumValues = [1, 1, 1, 1, 1];
-    var currentJackpot = 0;
-
-    var caseCards = document.querySelectorAll('.case-card');
-    caseCards.forEach(function(card) {
-        var cardHandler = function(e) {
-            e.preventDefault();
-            var caseId = card.getAttribute('data-id');
-
-            if (unlockedCases.indexOf(caseId) === -1) {
-                var unlockCost = card.getAttribute('data-unlock-cost');
-                unlockCase(caseId, parseInt(unlockCost));
-                return;
-            }
-
-            var price = parseInt(card.getAttribute('data-price'));
-            var jackpot = parseInt(card.getAttribute('data-jackpot'));
-            var name = card.getAttribute('data-name');
-
-            if (userCoins < price) {
-                triggerHaptic('error');
-                alert("Недостаточно монет для попытки взлома!");
-                return;
-            }
-
-            userCoins -= price;
-            saveProgress();
-
-            currentJackpot = jackpot;
-            document.getElementById('gameScreenTitle').innerText = name;
-
-            currentSecretCode = [];
-            for (var i = 0; i < 5; i++) {
-                currentSecretCode.push(Math.floor(Math.random() * 9) + 1);
-            }
-
-            currentDrumValues = [1, 1, 1, 1, 1];
-            for (var i = 0; i < 5; i++) {
-                document.getElementById('drum-' + i).innerText = "1";
-            }
-
-            var radar = document.getElementById('radarDisplay');
-            radar.innerText = "---";
-            radar.style.color = "var(--text-muted)";
-
-            showScreen(screens.game);
-        };
-
-        if (window.PointerEvent) {
-            card.addEventListener('pointerdown', cardHandler, false);
-        } else {
-            card.addEventListener('click', cardHandler, false);
-        }
-    });
-
-    var drumButtons = document.querySelectorAll('.drum-btn');
-    drumButtons.forEach(function(btn) {
-        var drumHandler = function(e) {
-            e.preventDefault();
-            triggerHaptic('impact');
-            var idx = parseInt(btn.getAttribute('data-drum'));
-            var dir = parseInt(btn.getAttribute('data-dir'));
-
-            var val = currentDrumValues[idx] + dir;
-            if (val > 9) val = 1;
-            if (val < 1) val = 9;
-
-            currentDrumValues[idx] = val;
-            document.getElementById('drum-' + idx).innerText = val;
-        };
-
-        if (window.PointerEvent) {
-            btn.addEventListener('pointerdown', drumHandler, false);
-        } else {
-            btn.addEventListener('click', drumHandler, false);
-        }
-    });
-
-    bindTap('btnCheckCode', function() {
-        var exactMatches = 0;
-        for (var i = 0; i < 5; i++) {
-            if (currentDrumValues[i] === currentSecretCode[i]) {
-                exactMatches++;
-            }
-        }
-
-        var totalScore = exactMatches * 20;
-        var radar = document.getElementById('radarDisplay');
-
-        if (exactMatches === 5) {
-            triggerHaptic('success');
-            radar.innerText = "УСПЕХ 100%";
-            radar.style.color = "var(--radar-green)";
-
-            userCoins += currentJackpot;
-            saveProgress();
-
-            setTimeout(function() {
-                alert("Сейф взломан! Вы забрали куш: " + currentJackpot + " монет!");
-                showScreen(screens.cases);
-            }, 600);
-        } else {
-            triggerHaptic('error');
-            radar.innerText = "СИГНАЛ: " + totalScore + "%";
-            if (totalScore >= 60) radar.style.color = "var(--radar-green)";
-            else if (totalScore >= 30) radar.style.color = "var(--radar-yellow)";
-            else radar.style.color = "var(--radar-red)";
-        }
-    });
-
-    function renderDailyGrid() {
-        var grid = document.getElementById('dailyGrid');
-        grid.innerHTML = "";
-
-        var now = new Date();
-        var todayDate = now.getDate();
-        var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-        for (var d = 1; d <= daysInMonth; d++) {
-            var card = document.createElement('div');
-            card.className = "day-card";
-
-            if (d === todayDate) card.classList.add('today');
-            if (d % 10 === 0 && d !== daysInMonth) card.classList.add('boss-10');
-            if (d === daysInMonth) card.classList.add('boss-month');
-            if (d < todayDate && d <= lastClaimedDay) card.classList.add('claimed');
-
-            var label = document.createElement('span');
-            label.innerText = d;
-
-            var icon = document.createElement('span');
-            if (d === daysInMonth) icon.innerText = "👑";
-            else if (d % 10 === 0) icon.innerText = "🎁";
-            else icon.innerText = "🪙";
-
-            card.appendChild(label);
-            card.appendChild(icon);
-
-            if (d === todayDate && lastClaimedDay < todayDate) {
-                card.onclick = function() {
-                    userCoins += (todayDate % 10 === 0) ? 200 : 30;
-                    lastClaimedDay = todayDate;
-                    userStreak++;
-                    triggerHaptic('success');
-                    saveProgress();
-                    alert("Вы получили бонус дня!");
-                    renderDailyGrid();
-                };
-            }
-
-            grid.appendChild(card);
-        }
-    }
-
-    /* ТАЙМЕР ДЛЯ ТРЕКИНГА ВРЕМЕНИ В ИГРЕ И ПАССИВНОГО ДОХОДА */
-    setInterval(function() {
-        userTimeInGame += 1;
-        
-        var passive = 0;
-        if (userMiners.indexOf(1) !== -1) passive += 5;
-        if (userMiners.indexOf(2) !== -1) passive += 20;
-
-        if (passive > 0 && userTimeInGame % 5 === 0) {
-            userCoins += passive;
-        }
-        
-        saveProgress();
-    }, 60000);
-
-    bindTap('btnPublicPvp', function() { alert("Поиск публичной дуэли в процессе разработки!"); });
-    bindTap('btnPrivatePvp', function() { alert("Ссылка для друга скопирована!"); });
 };
 </script>
+
 </body>
 </html>
-

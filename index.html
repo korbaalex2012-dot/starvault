@@ -83,7 +83,6 @@
     .section-title { font-size: 18px; font-weight: 900; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
 
     .safes-grid, .items-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .items-grid { grid-template-columns: repeat(2, 1fr); }
 
     .safe-card, .item-card, .pvp-card, .setting-row, .daily-card {
       background: var(--card-bg); border: 1px solid var(--glass-border);
@@ -94,7 +93,6 @@
     .setting-row { flex-direction: row; justify-content: space-between; align-items: center; padding: 16px; margin-bottom: 10px; text-align: left; }
 
     .safe-img, .item-img { width: 75px; height: 75px; object-fit: contain; margin: 8px 0; }
-    .item-img { width: 55px; height: 55px; }
 
     .btn-hack {
       width: 100%; padding: 8px 0; border: none; border-radius: 10px;
@@ -156,7 +154,7 @@
   <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
-    <div class="user-badge" id="userBadgeBtn">
+    <div class="user-badge" onclick="openProfileModal()">
       <div class="avatar" id="uAvatar">U</div>
       <div>
         <div style="font-weight:700; font-size:14px" id="uName">Игрок</div>
@@ -191,7 +189,7 @@
   </main>
 
   <main class="tab-page" id="page-inventory">
-    <div class="section-title"><span>Инвентарь</span><span id="collCount" style="color:var(--accent-gold)">0/4</span></div>
+    <div class="section-title"><span>Инвентарь</span><span id="collCount" style="color:var(--accent-gold)">0/9</span></div>
     <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="font-size:11px; color:var(--text-sub)">Пассивный доход</div>
@@ -268,7 +266,7 @@
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
     <script>
-    // 1. БАЗА ДАННЫХ: ВСЕ 9 СЕЙФОВ С ТВОИМИ КАРТИНКАМИ
+    // 1. БАЗА ДАННЫХ: ТИТУЛЫ
     const ALL_TITLES = [
       { id: "newbie", name: "🟢 Новичок", desc: "Выдается при старте" },
       { id: "hacker", name: "💻 Взломщик", desc: "Успешно взломать 5 сейфов" },
@@ -277,26 +275,33 @@
       { id: "rich", name: "💎 Магнат", desc: "Накопить 10,000 монет" }
     ];
 
-    const VAULTS = [
-      { id: 1, name: "📦 Деревянный Сундук", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.5, img: "IMG_20260719_180634.png" },
-      { id: 2, name: "🗝️ Ржавый Сейф", len: 3, mode: "time", time: 35, cost: 100, reward: 300, dropId: 101, dropRate: 0.45, img: "IMG_20260719_181100.png" },
-      { id: 3, name: "🥉 Медный Сейф", len: 4, mode: "logic", attempts: 8, cost: 200, reward: 600, dropId: 102, dropRate: 0.4, img: "IMG_20260719_181706.png" },
-      { id: 4, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 350, reward: 1000, dropId: 102, dropRate: 0.35, img: "IMG_20260719_183142.png" },
-      { id: 5, name: "📜 Винтажный Сейф", len: 4, mode: "logic", attempts: 7, cost: 500, reward: 1500, dropId: 103, dropRate: 0.3, img: "IMG_20260719_183244.png" },
-      { id: 6, name: "🔐 Электронный Сейф", len: 4, mode: "time", time: 25, cost: 800, reward: 2400, dropId: 103, dropRate: 0.25, img: "IMG_20260719_183338.png" },
-      { id: 7, name: "👑 Золотой VIP", len: 5, mode: "logic", attempts: 6, cost: 1200, reward: 4000, dropId: 104, dropRate: 0.2, img: "IMG_20260719_183351.png" },
-      { id: 8, name: "🖐️ Биометрический", len: 5, mode: "time", time: 20, cost: 2000, reward: 7000, dropId: 104, dropRate: 0.15, img: "IMG_20260719_183406.png" },
-      { id: 9, name: "🌌 Кибер-Квазар", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 104, dropRate: 0.1, img: "IMG_20260719_183425.png" }
-    ];
-
+    // 2. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ (ИЗ СКРИНШОТА)
     const ITEMS = [
-      { id: 101, name: "🔑 Старый Ключ", income: 10, img: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Key_icon_1.png" },
-      { id: 102, name: "💾 Флешка с Данными", income: 30, img: "https://upload.wikimedia.org/wikipedia/commons/8/82/USB_flash_drive_icon.png" },
-      { id: 103, name: "💎 Черный Алмаз", income: 80, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Diamond_flat_icon.png" },
-      { id: 104, name: "👑 Золотая Корона", income: 200, img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Crown_flat_icon.png" }
+      { id: 101, name: "🎙️ Стимпанк Стетоскоп", income: 15, img: "IMG_20260720_115622.png" },
+      { id: 102, name: "🗝️ Механическая Отмычка", income: 35, img: "IMG_20260720_115636.png" },
+      { id: 103, name: "🔦 Лазерный Резак", income: 60, img: "IMG_20260720_115645.png" },
+      { id: 104, name: "🪙 Майнер-Слиток", income: 100, img: "IMG_20260720_115658.png" },
+      { id: 105, name: "👾 Чип 'Призрак'", income: 150, img: "IMG_20260720_115724.png" },
+      { id: 106, name: "🥊 Кибер-Перчатка", income: 220, img: "IMG_20260720_115747.png" },
+      { id: 107, name: "📱 Матричный Дек", income: 320, img: "IMG_20260720_115800.png" },
+      { id: 108, name: "🌀 Квантовый Настройщик", income: 500, img: "IMG_20260720_115813.png" },
+      { id: 109, name: "💳 Мастер-Карта", income: 850, img: "IMG_20260720_115823.png" }
     ];
 
-    // 2. СОХРАНЕНИЯ И ИНИЦИАЛИЗАЦИЯ
+    // 3. БАЗА ДАННЫХ: 9 СЕЙФОВ С ПРИВЯЗАННЫМИ ПРЕДМЕТАМИ
+    const VAULTS = [
+      { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.5, img: "IMG_20260719_180634.png" },
+      { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 8, cost: 100, reward: 300, dropId: 102, dropRate: 0.45, img: "IMG_20260719_181100.png" },
+      { id: 3, name: "⚙️ Стальной сейф", len: 4, mode: "time", time: 35, cost: 200, reward: 600, dropId: 103, dropRate: 0.4, img: "IMG_20260719_181706.png" },
+      { id: 4, name: "👑 Золотой Банк", len: 4, mode: "time", time: 30, cost: 350, reward: 1000, dropId: 104, dropRate: 0.35, img: "IMG_20260719_183142.png" },
+      { id: 5, name: "🌐 Кибер-Хранилище", len: 4, mode: "time", time: 25, cost: 500, reward: 1500, dropId: 105, dropRate: 0.3, img: "IMG_20260719_183244.png" },
+      { id: 6, name: "🛡️ Силовой Бункер", len: 4, mode: "logic", attempts: 7, cost: 800, reward: 2400, dropId: 106, dropRate: 0.25, img: "IMG_20260719_183338.png" },
+      { id: 7, name: "💾 Крипто-Сервер", len: 5, mode: "time", time: 20, cost: 1200, reward: 4000, dropId: 107, dropRate: 0.2, img: "IMG_20260719_183351.png" },
+      { id: 8, name: "⚛️ Квантовый Сейф", len: 5, mode: "time", time: 18, cost: 2000, reward: 7000, dropId: 108, dropRate: 0.15, img: "IMG_20260719_183406.png" },
+      { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.1, img: "IMG_20260719_183425.png" }
+    ];
+
+    // 4. СОХРАНЕНИЯ
     let tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
 
@@ -359,7 +364,7 @@
       if (enabled) { audio.play().catch(() => {}); } else { audio.pause(); }
     }
 
-    // 3. ОТКРЫТИЕ И ВЫБОР ТИТУЛОВ
+    // 5. ЛОГИКА ТИТУЛОВ И МОДАЛЬНОГО ОКНА
     function checkTitleAchievements() {
       const totalWins = state.logicWins + state.timeWins;
       if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) state.unlockedTitles.push("hacker");
@@ -404,15 +409,7 @@
       saveState();
       openProfileModal();
     }
-
-    // Принудительное подключение нажатия на шапку профиля
-    document.addEventListener('DOMContentLoaded', () => {
-      const userBadge = document.getElementById('userBadgeBtn');
-      if (userBadge) {
-        userBadge.addEventListener('click', openProfileModal);
-      }
-    });
-         // 4. ИГРОВОЙ ДВИЖОК СЕЙФОВ
+          // 6. ИГРОВОЙ ДВИЖОК ВЗЛОМА
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
@@ -568,7 +565,7 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // 5. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
+    // 7. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
     function renderBonusTab() {
       const now = new Date();
       const currentDay = now.getDate();
@@ -645,7 +642,7 @@
       alert(`🎉 Награда за ${currentDay}-й день получена: +${rewardCoins} 🪙!`);
     }
 
-    // 6. ИНВЕНТАРЬ
+    // 8. ИНВЕНТАРЬ
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
       if (!grid) return;
@@ -695,7 +692,7 @@
       }
     }
 
-    // 7. P2P МАРКЕТ
+    // 9. P2P МАРКЕТ
     function tradeItem(itemId) {
       const item = ITEMS.find(i => i.id === itemId);
       const invIndex = state.inventory.findIndex(i => i.id === itemId);
@@ -728,7 +725,7 @@
 
       saveState();
       renderInventory();
-      alert(`✅ Лотов выставлен за ${price} 🪙!`);
+      alert(`✅ Лот выставлен за ${price} 🪙!`);
     }
 
     function renderMarket() {
@@ -794,7 +791,7 @@
       alert("🎉 Покупка совершена!");
     }
 
-    // 8. PVP ДУЭЛИ
+    // 10. PVP ДУЭЛИ
     function createPvpMatch() {
       const code = prompt("Придумайте код (3-5 цифр):", "1234");
       if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
@@ -921,10 +918,9 @@
       updateDigitsDisplay();
     }
 
-    // СТАРТ РЕНДЕРА
+    // ИНИЦИАЛИЗАЦИЯ И СТАРТ
     saveState();
     renderSafes();
   </script>
 </body>
 </html>
-

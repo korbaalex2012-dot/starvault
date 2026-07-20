@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-  <title>StarVault - Full Edition</title>
+  <title>StarVault - Cyber Edition</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,8 +45,8 @@
       display: flex; justify-content: space-between; align-items: center;
     }
 
-    .user-badge { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px; border-radius: 8px; }
-    .user-badge:active { background: rgba(255,255,255,0.05); }
+    .user-badge { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px 8px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); }
+    .user-badge:active { background: rgba(0, 240, 255, 0.15); border-color: var(--accent-cyan); }
     
     .avatar {
       width: 42px; height: 42px; border-radius: 50%;
@@ -154,7 +154,7 @@
   <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
-    <div class="user-badge" onclick="openProfileModal()">
+    <div class="user-badge" id="userBadgeBtn" onclick="openProfileModal()">
       <div class="avatar" id="uAvatar">U</div>
       <div>
         <div style="font-weight:700; font-size:14px" id="uName">Игрок</div>
@@ -275,7 +275,7 @@
       { id: "rich", name: "💎 Магнат", desc: "Накопить 10,000 монет" }
     ];
 
-    // 2. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ (ИЗ СКРИНШОТА)
+    // 2. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ (ИЗ ТВОЕЙ КАРТИНКИ)
     const ITEMS = [
       { id: 101, name: "🎙️ Стимпанк Стетоскоп", income: 15, img: "IMG_20260720_115622.png" },
       { id: 102, name: "🗝️ Механическая Отмычка", income: 35, img: "IMG_20260720_115636.png" },
@@ -288,7 +288,7 @@
       { id: 109, name: "💳 Мастер-Карта", income: 850, img: "IMG_20260720_115823.png" }
     ];
 
-    // 3. БАЗА ДАННЫХ: 9 СЕЙФОВ С ПРИВЯЗАННЫМИ ПРЕДМЕТАМИ
+    // 3. БАЗА ДАННЫХ: 9 СЕЙФОВ С ПРИВЯЗАННЫМИ КАРТИНКАМИ И РЕЖИМАМИ
     const VAULTS = [
       { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.5, img: "IMG_20260719_180634.png" },
       { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 8, cost: 100, reward: 300, dropId: 102, dropRate: 0.45, img: "IMG_20260719_181100.png" },
@@ -301,7 +301,7 @@
       { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 5, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.1, img: "IMG_20260719_183425.png" }
     ];
 
-    // 4. СОХРАНЕНИЯ
+    // 4. СОХРАНЕНИЯ И Telegram WebApp
     let tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
 
@@ -364,7 +364,7 @@
       if (enabled) { audio.play().catch(() => {}); } else { audio.pause(); }
     }
 
-    // 5. ЛОГИКА ТИТУЛОВ И МОДАЛЬНОГО ОКНА
+    // 5. ЛОГИКА ТИТУЛОВ И МОДАЛЬНОГО ОКНА (ГАРАНТИРОВАННОЕ ОТКРЫТИЕ)
     function checkTitleAchievements() {
       const totalWins = state.logicWins + state.timeWins;
       if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) state.unlockedTitles.push("hacker");
@@ -376,8 +376,9 @@
 
     window.openProfileModal = function() {
       checkTitleAchievements();
+      const modal = document.getElementById('profileModal');
       const container = document.getElementById('unlockedTitlesList');
-      if (!container) return;
+      if (!container || !modal) return;
       
       const availableTitles = ALL_TITLES.filter(t => state.unlockedTitles.includes(t.id));
 
@@ -397,7 +398,7 @@
         `;
       }).join('');
 
-      document.getElementById('profileModal').classList.add('active');
+      modal.classList.add('active');
     };
 
     function closeProfileModal() {
@@ -409,7 +410,7 @@
       saveState();
       openProfileModal();
     }
-          // 6. ИГРОВОЙ ДВИЖОК ВЗЛОМА
+        // 6. ИГРОВОЙ ДВИЖОК ВЗЛОМА
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
@@ -867,6 +868,12 @@
       let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
       const match = pvpMatches.find(m => m.id === matchId);
       if (!match) return;
+
+      const myName = document.getElementById('uName').innerText;
+      if (match.host === myName) {
+        alert("❌ Вы не можете принять дуэль от самого себя!");
+        return;
+      }
 
       if (state.coins < match.bet) {
         alert("❌ Недостаточно монет!");

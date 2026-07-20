@@ -92,22 +92,29 @@
         .screen-header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 15px;
         }
 
+        /* УВЕЛИЧЕННАЯ И УДОБНАЯ КНОПКА НАЗАД (ФИКС БАГА) */
         .btn-back {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            background-color: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 14px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(0, 229, 255, 0.4);
             color: #fff;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.1s ease;
+        }
+        .btn-back:active {
+            transform: scale(0.92);
+            background-color: rgba(0, 229, 255, 0.2);
         }
 
         .screen-title {
@@ -129,15 +136,15 @@
         }
 
         .gear-btn {
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background-color: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
         }
 
@@ -146,7 +153,7 @@
             flex-direction: column;
             gap: 8px;
             margin-top: 8px;
-            width: 38px;
+            width: 42px;
         }
 
         .settings-menu-wrapper.open .settings-dropdown {
@@ -154,13 +161,13 @@
         }
 
         .sub-button {
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background-color: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: #fff;
-            font-size: 16px;
+            font-size: 18px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -293,6 +300,7 @@
 
         .btn-action-submit { width: 100%; height: 50px; background: linear-gradient(135deg, #00b0ff, #00e5ff); border: none; border-radius: 14px; color: #000; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
 
+        /* ДЕЙЛИК КАЛЕНДАРЬ */
         .daily-container { flex: 1; overflow-y: auto; }
         .streak-card { background: rgba(15, 22, 36, 0.9); border: 2px solid var(--accent-gold); border-radius: 14px; padding: 12px; text-align: center; margin-bottom: 12px; }
         .streak-title { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
@@ -305,14 +313,34 @@
         .day-card.boss-month { border: 2px solid #ff0055; background: rgba(255, 0, 85, 0.2); }
         .day-card.claimed { opacity: 0.5; background: #0f1624; }
 
-        .pvp-options { display: flex; flex-direction: column; gap: 12px; flex: 1; }
-        .pvp-card { background: rgba(15, 22, 36, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 15px; text-align: center; }
-        .pvp-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
-        .pvp-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-        .btn-pvp-action { width: 100%; padding: 10px; background: var(--accent-gold); border: none; border-radius: 10px; font-weight: 800; color: #000; cursor: pointer; text-transform: uppercase; }
+        /* СТИЛИ ЛИДЕРБОРДА BRAWL STARS */
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 3px; margin-bottom: 10px; }
+        .tab-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; border-radius: 10px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+        .tab-btn.active { background: var(--accent-blue); color: #000; box-shadow: 0 2px 8px rgba(0, 229, 255, 0.4); }
+
+        .pedestal-container { display: flex; justify-content: center; align-items: flex-end; gap: 8px; margin-bottom: 10px; padding: 10px 0; }
+        .pedestal-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .pedestal-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff; background: #1f293d; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: 4px; position: relative; }
+        .pedestal-crown { position: absolute; top: -12px; font-size: 14px; }
+        .pedestal-name { font-size: 10px; font-weight: 700; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .pedestal-val { font-size: 10px; color: var(--accent-gold); font-weight: 800; }
+        .pedestal-bar { width: 100%; border-radius: 8px 8px 0 0; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 14px; color: rgba(0,0,0,0.6); }
+
+        .p-1 { height: 60px; background: linear-gradient(to top, #ffc107, #ffe082); border: 1px solid var(--accent-gold); }
+        .p-2 { height: 45px; background: linear-gradient(to top, #b0bec5, #eceff1); border: 1px solid var(--silver); }
+        .p-3 { height: 35px; background: linear-gradient(to top, #a1887f, #d7ccc8); border: 1px solid var(--bronze); }
+
+        .leader-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-bottom: 50px; }
+        .leader-item { background: rgba(15, 22, 36, 0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+        .leader-rank { font-size: 12px; font-weight: 800; color: var(--text-muted); width: 30px; }
+        .leader-info { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .leader-score { font-size: 12px; font-weight: 800; color: var(--accent-gold); }
+
+        /* ПРИЛИПАЮЩАЯ СНИЗУ КАРТОЧКА ИГРОКА */
+        .my-rank-card { position: absolute; bottom: 10px; left: 18px; right: 18px; background: linear-gradient(135deg, #101c2e, #1a2942); border: 2px solid var(--accent-blue); border-radius: 14px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 15px rgba(0,0,0,0.8); z-index: 20; }
     </style>
 </head>
-<body>
+   <body>
 
 <div class="app-container">
 
@@ -512,16 +540,62 @@
         </div>
     </div>
 
+    <div id="leaderboardScreen" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" id="btnBackToMenuFromLeaderboard">⬅</button>
+            <div class="screen-title">Топ Взломщиков</div>
+        </div>
+
+        <div class="tab-switcher">
+            <div class="tab-btn active" id="tabCoins" onclick="switchLeaderTab('coins')">🪙 Богачи</div>
+            <div class="tab-btn" id="tabTime" onclick="switchLeaderTab('time')">⏱️ В игре</div>
+        </div>
+
+        <div class="pedestal-container">
+            <div class="pedestal-item">
+                <div class="pedestal-avatar">🥈<span id="p2-name" class="pedestal-name">---</span></div>
+                <div class="pedestal-val" id="p2-val">0</div>
+                <div class="pedestal-bar p-2">2</div>
+            </div>
+            <div class="pedestal-item">
+                <div class="pedestal-avatar" style="border-color: var(--accent-gold); width:52px; height:52px;">
+                    <span class="pedestal-crown">👑</span>🥇
+                </div>
+                <div class="pedestal-name" id="p1-name">---</div>
+                <div class="pedestal-val" id="p1-val">0</div>
+                <div class="pedestal-bar p-1">1</div>
+            </div>
+            <div class="pedestal-item">
+                <div class="pedestal-avatar">🥉<span id="p3-name" class="pedestal-name">---</span></div>
+                <div class="pedestal-val" id="p3-val">0</div>
+                <div class="pedestal-bar p-3">3</div>
+            </div>
+        </div>
+
+        <div class="leader-list" id="leaderList"></div>
+
+        <div class="my-rank-card" id="myRankCard">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <div style="font-weight:900; color:var(--accent-blue);" id="myRankPos">#100+</div>
+                <div style="font-weight:800; font-size:13px;">Ты (Вы)</div>
+            </div>
+            <div style="font-weight:900; color:var(--accent-gold);" id="myRankVal">100 🪙</div>
+        </div>
+    </div>
+
 </div>
-<script>
+   <script>
 var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
 var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
 var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
+var userTimeInGame = parseInt(localStorage.getItem('sv_time_in_game')) || 0; // в минутах
 
 var unlockedCases = JSON.parse(localStorage.getItem('sv_unlocked_cases')) || ['wood'];
 var userMiners = JSON.parse(localStorage.getItem('sv_miners')) || [];
 var refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
 var refEarned = parseInt(localStorage.getItem('sv_ref_earned')) || 0;
+
+var currentLeaderTab = 'coins';
 
 function saveProgress() {
     localStorage.setItem('sv_coins', userCoins);
@@ -531,6 +605,7 @@ function saveProgress() {
     localStorage.setItem('sv_miners', JSON.stringify(userMiners));
     localStorage.setItem('sv_ref_count', refCount);
     localStorage.setItem('sv_ref_earned', refEarned);
+    localStorage.setItem('sv_time_in_game', userTimeInGame);
     updateUI();
 }
 
@@ -562,10 +637,19 @@ function updateUI() {
     }
 }
 
+function triggerHaptic(type) {
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        if (type === 'impact') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+    }
+}
+
 function unlockCase(caseId, cost, event) {
     if (event) event.stopPropagation();
 
     if (userCoins < cost) {
+        triggerHaptic('error');
         alert("Недостаточно монет! Нужен баланс: " + cost + " монет.");
         return;
     }
@@ -573,6 +657,7 @@ function unlockCase(caseId, cost, event) {
     if (confirm("Подтвердите покупку доступа к сейфу за " + cost + " 🪙?")) {
         userCoins -= cost;
         unlockedCases.push(caseId);
+        triggerHaptic('success');
         saveProgress();
         alert("Поздравляем! Доступ к сейфу разблокирован!");
     }
@@ -582,6 +667,7 @@ window.buyMiner = function(minerId, cost) {
     if (userMiners.indexOf(minerId) !== -1) return;
 
     if (userCoins < cost) {
+        triggerHaptic('error');
         alert("Недостаточно монет! Требуется: " + cost + " 🪙");
         return;
     }
@@ -589,11 +675,59 @@ window.buyMiner = function(minerId, cost) {
     if (confirm("Подтвердите покупку майнера за " + cost + " 🪙?")) {
         userCoins -= cost;
         userMiners.push(minerId);
+        triggerHaptic('success');
         saveProgress();
         alert("🎉 Майнер успешно куплен! Теперь он приносит вам пассивные монеты.");
     }
 };
 
+/* ГЕНЕРАЦИЯ ФЕЙКОВОГО ЛИДЕРБОРДА ДЛЯ ИМИТАЦИИ ОНЛАЙНА */
+function renderLeaderboard() {
+    var isCoins = (currentLeaderTab === 'coins');
+    
+    var mockData = [
+        { name: "CyberGhost", val: isCoins ? 9500 : 180 },
+        { name: "Satoshi_N", val: isCoins ? 8200 : 155 },
+        { name: "VaultMaster", val: isCoins ? 6400 : 120 },
+        { name: "Alex_Vault", val: isCoins ? 5100 : 95 },
+        { name: "Hacker777", val: isCoins ? 4300 : 80 },
+        { name: "Shadow", val: isCoins ? 3800 : 65 },
+        { name: "Neo_Vault", val: isCoins ? 2900 : 50 }
+    ];
+
+    document.getElementById('p1-name').innerText = mockData[0].name;
+    document.getElementById('p1-val').innerText = mockData[0].val + (isCoins ? " 🪙" : " ч.");
+
+    document.getElementById('p2-name').innerText = mockData[1].name;
+    document.getElementById('p2-val').innerText = mockData[1].val + (isCoins ? " 🪙" : " ч.");
+
+    document.getElementById('p3-name').innerText = mockData[2].name;
+    document.getElementById('p3-val').innerText = mockData[2].val + (isCoins ? " 🪙" : " ч.");
+
+    var listEl = document.getElementById('leaderList');
+    listEl.innerHTML = "";
+
+    for (var i = 3; i < mockData.length; i++) {
+        var item = document.createElement('div');
+        item.className = 'leader-item';
+        item.innerHTML = 
+            '<div class="leader-rank">#' + (i + 1) + '</div>' +
+            '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
+            '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
+        listEl.appendChild(item);
+    }
+
+    document.getElementById('myRankPos').innerText = "#42";
+    document.getElementById('myRankVal').innerText = isCoins ? (userCoins + " 🪙") : (Math.floor(userTimeInGame / 60) + " ч.");
+}
+
+function switchLeaderTab(tab) {
+    currentLeaderTab = tab;
+    document.getElementById('tabCoins').classList.toggle('active', tab === 'coins');
+    document.getElementById('tabTime').classList.toggle('active', tab === 'time');
+    triggerHaptic('impact');
+    renderLeaderboard();
+}
 window.onload = function() {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
@@ -608,12 +742,14 @@ window.onload = function() {
         game: document.getElementById('gamePlayScreen'),
         daily: document.getElementById('dailyScreen'),
         pvp: document.getElementById('pvpScreen'),
-        assets: document.getElementById('assetsScreen')
+        assets: document.getElementById('assetsScreen'),
+        leader: document.getElementById('leaderboardScreen')
     };
 
     var settingsWrapper = document.getElementById('settingsWrapper');
 
     function showScreen(targetScreen) {
+        triggerHaptic('impact');
         for (var key in screens) {
             screens[key].style.display = 'none';
         }
@@ -642,6 +778,7 @@ window.onload = function() {
         }
     }
 
+    /* ПРИВЯЗКА КНОПОК И НАВИГАЦИИ (ФИКС КНОПКИ НАЗАД) */
     bindTap('btnGoToCases', function() { showScreen(screens.cases); });
     bindTap('btnBackToMenuFromCases', function() { showScreen(screens.main); });
     bindTap('btnBackToCases', function() { showScreen(screens.cases); });
@@ -651,6 +788,17 @@ window.onload = function() {
     bindTap('btnBackToMenuFromDaily', function() { showScreen(screens.main); });
     bindTap('btnGoToPvp', function() { showScreen(screens.pvp); });
     bindTap('btnBackToMenuFromPvp', function() { showScreen(screens.main); });
+    
+    bindTap('btnCup', function() { 
+        settingsWrapper.classList.remove('open');
+        renderLeaderboard();
+        showScreen(screens.leader); 
+    });
+    bindTap('btnBackToMenuFromLeaderboard', function() { showScreen(screens.main); });
+
+    bindTap('btnLang', function() {
+        alert("Переключение языка (RU/EN) добавим следующим шагом!");
+    });
 
     bindTap('btnPromoCode', function() {
         var code = prompt("Введите промокод:");
@@ -659,9 +807,11 @@ window.onload = function() {
 
         if (code === "START2026" || code === "SECRET") {
             userCoins += 200;
+            triggerHaptic('success');
             saveProgress();
             alert("Промокод активирован! Вы получили +200 монет 🪙");
         } else {
+            triggerHaptic('error');
             alert("Неверный промокод!");
         }
     });
@@ -679,7 +829,10 @@ window.onload = function() {
         }
     });
 
-    bindTap('triggerGear', function() { settingsWrapper.classList.toggle('open'); });
+    bindTap('triggerGear', function() { 
+        triggerHaptic('impact');
+        settingsWrapper.classList.toggle('open'); 
+    });
 
     var currentSecretCode = [];
     var currentDrumValues = [1, 1, 1, 1, 1];
@@ -702,6 +855,7 @@ window.onload = function() {
             var name = card.getAttribute('data-name');
 
             if (userCoins < price) {
+                triggerHaptic('error');
                 alert("Недостаточно монет для попытки взлома!");
                 return;
             }
@@ -740,6 +894,7 @@ window.onload = function() {
     drumButtons.forEach(function(btn) {
         var drumHandler = function(e) {
             e.preventDefault();
+            triggerHaptic('impact');
             var idx = parseInt(btn.getAttribute('data-drum'));
             var dir = parseInt(btn.getAttribute('data-dir'));
 
@@ -770,6 +925,7 @@ window.onload = function() {
         var radar = document.getElementById('radarDisplay');
 
         if (exactMatches === 5) {
+            triggerHaptic('success');
             radar.innerText = "УСПЕХ 100%";
             radar.style.color = "var(--radar-green)";
 
@@ -781,6 +937,7 @@ window.onload = function() {
                 showScreen(screens.cases);
             }, 600);
         } else {
+            triggerHaptic('error');
             radar.innerText = "СИГНАЛ: " + totalScore + "%";
             if (totalScore >= 60) radar.style.color = "var(--radar-green)";
             else if (totalScore >= 30) radar.style.color = "var(--radar-yellow)";
@@ -821,6 +978,7 @@ window.onload = function() {
                     userCoins += (todayDate % 10 === 0) ? 200 : 30;
                     lastClaimedDay = todayDate;
                     userStreak++;
+                    triggerHaptic('success');
                     saveProgress();
                     alert("Вы получили бонус дня!");
                     renderDailyGrid();
@@ -831,16 +989,20 @@ window.onload = function() {
         }
     }
 
+    /* ТАЙМЕР ДЛЯ ТРЕКИНГА ВРЕМЕНИ В ИГРЕ И ПАССИВНОГО ДОХОДА */
     setInterval(function() {
+        userTimeInGame += 1;
+        
         var passive = 0;
         if (userMiners.indexOf(1) !== -1) passive += 5;
         if (userMiners.indexOf(2) !== -1) passive += 20;
 
-        if (passive > 0) {
+        if (passive > 0 && userTimeInGame % 5 === 0) {
             userCoins += passive;
-            saveProgress();
         }
-    }, 300000);
+        
+        saveProgress();
+    }, 60000);
 
     bindTap('btnPublicPvp', function() { alert("Поиск публичной дуэли в процессе разработки!"); });
     bindTap('btnPrivatePvp', function() { alert("Ссылка для друга скопирована!"); });
@@ -848,3 +1010,4 @@ window.onload = function() {
 </script>
 </body>
 </html>
+

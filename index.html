@@ -150,6 +150,16 @@
       border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3);
       color: #fff; font-family: var(--font-mono); text-transform: uppercase; margin-bottom: 8px;
     }
+
+    .in-game-boosts {
+      display: flex; gap: 8px; justify-content: center; margin: 10px 0; overflow-x: auto; padding: 4px;
+    }
+    .in-game-boost-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px;
+      padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700;
+      color: var(--text-main); cursor: pointer;
+    }
+    .in-game-boost-btn img { width: 22px; height: 22px; object-fit: contain; }
   </style>
 </head>
 <body>
@@ -174,7 +184,7 @@
     <div class="shop-banner" onclick="openShopModal()">
       <div>
         <div style="font-weight:900; font-size:14px; color:var(--accent-cyan)">🛒 МАГАЗИН БУСТОВ</div>
-        <div style="font-size:10px; color:var(--text-sub)">Увеличь шансы на успешный взлом</div>
+        <div style="font-size:10px; color:var(--text-sub)">Покупай бусты для облегчения взлома</div>
       </div>
       <button class="btn-hack" style="width:auto; padding:6px 12px; font-size:11px">Открыть</button>
     </div>
@@ -240,11 +250,10 @@
       </label>
     </div>
   </main>
-
-  <div class="modal-overlay" id="shopModal">
+   <div class="modal-overlay" id="shopModal">
     <div style="text-align:center; margin-bottom:12px">
       <h3>🛒 Магазин Усилений</h3>
-      <p style="font-size:11px; color:var(--text-sub)">Покупай бусты и используй их при взломе</p>
+      <p style="font-size:11px; color:var(--text-sub)">Покупай бусты и используй их прямо во время взлома</p>
     </div>
     <div class="boosts-grid" id="shopBoostsGrid" style="flex:1; overflow-y:auto; padding:4px;"></div>
     <button class="btn-hack" style="background:rgba(255,255,255,0.1); margin-top:10px" onclick="closeShopModal()">Закрыть</button>
@@ -271,7 +280,10 @@
     <div>
       <div class="digits-container" id="digitsRow"></div>
       <p id="gameHint" style="text-align:center; font-size:12px; color:var(--accent-cyan); min-height:18px;"></p>
+      
+      <div class="in-game-boosts" id="gameBoostsPanel"></div>
     </div>
+
     <div class="numpad">
       <div class="num-btn" onclick="pressKey(1)">1</div><div class="num-btn" onclick="pressKey(2)">2</div><div class="num-btn" onclick="pressKey(3)">3</div>
       <div class="num-btn" onclick="pressKey(4)">4</div><div class="num-btn" onclick="pressKey(5)">5</div><div class="num-btn" onclick="pressKey(6)">6</div>
@@ -291,9 +303,10 @@
     <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Рынок</span></div>
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
-    <script>
-    // ==========================================
-    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ (Админ-Панель)
+
+  <script>
+       // ==========================================
+    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ
     // ==========================================
     const PROMO_CODES = {
       "STAR2026": { reward: 150, maxUses: 100 },
@@ -313,6 +326,16 @@
       { id: "dev", name: "👨‍💻 Разработчик", isDevOnly: true }
     ];
 
+    // ==========================================
+    // 🛒 БУСТЫ ДЛЯ ВЗЛОМА
+    // ==========================================
+    const SHOP_BOOSTS = [
+      { id: "b_att", name: "+2 Попытки", price: 150, desc: "+2 попытки в кейсах на логику", img: "IMG_20260720_153330.png", type: "attempts", val: 2 },
+      { id: "b_time", name: "+10 Сек", price: 200, desc: "+10 секунд в кейсах на время", img: "IMG_20260720_153341.png", type: "time", val: 10 },
+      { id: "b_reveal", name: "Дешифратор", price: 400, desc: "Открывает 1 точную цифру", img: "IMG_20260720_153349.png", type: "reveal", val: 1 },
+      { id: "b_shield", name: "Щит Взломщика", price: 750, desc: "+3 попытки или +30 секунд", img: "IMG_20260720_153359.png", type: "shield", val: 3 }
+    ];
+
     // 1. ИНИЦИАЛИЗАЦИЯ И СОСТОЯНИЕ
     let tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) { tg.ready(); tg.expand(); }
@@ -329,8 +352,9 @@
 
     let refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
     let usedPromos = JSON.parse(localStorage.getItem('sv_used_promos')) || [];
+    let userBoosts = JSON.parse(localStorage.getItem('sv_boosts')) || { b_att: 0, b_time: 0, b_reveal: 0, b_shield: 0 };
 
-    // 2. СЕЙФЫ И ПРЕДМЕТЫ (Обновлен баланс времени/попыток + картинки предметов)
+    // 2. СЕЙФЫ И ПРЕДМЕТЫ
     const VAULTS = [
       { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 12, cost: 50, reward: 150, dropId: 101, dropRate: 0.30, img: "IMG_20260719_180634.png" },
       { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 10, cost: 100, reward: 300, dropId: 102, dropRate: 0.22, img: "IMG_20260719_181100.png" },
@@ -344,15 +368,15 @@
     ];
 
     const COLLECTION_ITEMS = [
-      { id: 101, name: "Деревянный Жетон", rarity: "Обычный", income: 100, img: "IMG_20260720_115622.png" },
-      { id: 102, name: "Бронзовая Медаль", rarity: "Обычный", income: 180, img: "IMG_20260720_115636.png" },
-      { id: 103, name: "Стальной Шестереночник", rarity: "Редкий", income: 300, img: "IMG_20260720_115645.png" },
-      { id: 104, name: "Золотой Слиток Vault", rarity: "Редкий", income: 550, img: "IMG_20260720_115658.png" },
-      { id: 105, name: "Кибер-Флешка 2077", rarity: "Эпический", income: 900, img: "IMG_20260720_115724.png" },
-      { id: 106, name: "Силовой Ядро-Акум", rarity: "Эпический", income: 1500, img: "IMG_20260720_115747.png" },
-      { id: 107, name: "Крипто-Процессор", rarity: "Легендарный", income: 2600, img: "IMG_20260720_115800.png" },
-      { id: 108, name: "Квантовый Кубит", rarity: "Легендарный", income: 4500, img: "IMG_20260720_115813.png" },
-      { id: 109, name: "Черный ЧИП-Взломщик", rarity: "МИФИЧЕСКИЙ", income: 10000, img: "IMG_20260720_115823.png" }
+      { id: 101, name: "Стимпанк Стетоскоп", rarity: "Обычный", income: 100, img: "IMG_20260720_115622.png" },
+      { id: 102, name: "Латунная Отмычка", rarity: "Обычный", income: 180, img: "IMG_20260720_115636.png" },
+      { id: 103, name: "Лазерный Резак", rarity: "Редкий", income: 300, img: "IMG_20260720_115645.png" },
+      { id: 104, name: "Кибер-Агрегатор «Золото»", rarity: "Редкий", income: 550, img: "IMG_20260720_115658.png" },
+      { id: 105, name: "Вирусный Чип «Призрак»", rarity: "Эпический", income: 900, img: "IMG_20260720_115724.png" },
+      { id: 106, name: "Взломщицкая Перчатка", rarity: "Эпический", income: 1500, img: "IMG_20260720_115747.png" },
+      { id: 107, name: "Матричный Дешифратор", rarity: "Легендарный", income: 2600, img: "IMG_20260720_115800.png" },
+      { id: 108, name: "Квантовый Настройщик", rarity: "Легендарный", income: 4500, img: "IMG_20260720_115813.png" },
+      { id: 109, name: "Мастер-Карта Доступа", rarity: "МИФИЧЕСКИЙ", income: 10000, img: "IMG_20260720_115823.png" }
     ];
 
     let userInventory = JSON.parse(localStorage.getItem('sv_inventory')) || [];
@@ -362,12 +386,11 @@
     let pvpMatches = JSON.parse(localStorage.getItem('sv_pvp_matches')) || [];
     let marketOffers = JSON.parse(localStorage.getItem('sv_market_offers')) || [];
 
-    // 3. РЕФЕРАЛЫ И ПРОМОКОДЫ
+    // 3. МУЗЫКА И РЕФЕРАЛЫ
     function shareRefLink() {
       const botUsername = "StarVaultBot";
       const refLink = `https://t.me/${botUsername}?start=ref_${Date.now()}`;
-      const text = `🔒 Взламывай сейфы вместе со мной в StarVault!\nПереходи по ссылке и получи +100 🪙 стартового бонуса!`;
-      
+      const text = `🔒 Взламывай сейфы вместе со мной в StarVault!\nПереходи по ссылке и получи +100 🪙 старта!`;
       if (tg && tg.openTelegramLink) {
         tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(text)}`);
       } else {
@@ -380,15 +403,8 @@
       if (!input) return;
       const code = input.value.trim().toUpperCase();
 
-      if (!code) {
-        alert("Введи промокод!");
-        return;
-      }
-
-      if (usedPromos.includes(code)) {
-        alert("❌ Ты уже активировал этот промокод!");
-        return;
-      }
+      if (!code) { alert("Введи промокод!"); return; }
+      if (usedPromos.includes(code)) { alert("❌ Ты уже активировал этот промокод!"); return; }
 
       if (PROMO_CODES[code]) {
         const promo = PROMO_CODES[code];
@@ -399,11 +415,96 @@
         alert(`🎉 Промокод активирован! Получено +${promo.reward} 🪙`);
         input.value = "";
       } else {
-        alert("❌ Промокод не найден или устарел!");
+        alert("❌ Промокод не найден!");
       }
     }
 
-    // 4. ОФЛАЙН-МАЙНИНГ И ИНВЕНТАРЬ
+    // 4. МАГАЗИН БУСТОВ
+    function renderShopBoosts() {
+      const grid = document.getElementById('shopBoostsGrid');
+      if (!grid) return;
+      grid.innerHTML = "";
+      SHOP_BOOSTS.forEach(b => {
+        const count = userBoosts[b.id] || 0;
+        grid.innerHTML += `
+          <div class="boost-card">
+            <img src="${b.img}" class="boost-img" onerror="this.src='https://via.placeholder.com/70'">
+            <div style="font-weight:800; font-size:12px;">${b.name}</div>
+            <div style="font-size:10px; color:var(--text-sub); margin:2px 0;">${b.desc}</div>
+            <div style="font-size:11px; color:var(--accent-gold); font-weight:700;">У тебя: ${count} шт</div>
+            <button class="btn-hack" style="margin-top:6px;" onclick="buyBoost('${b.id}')">Купить (${b.price} 🪙)</button>
+          </div>
+        `;
+      });
+    }
+
+    function buyBoost(boostId) {
+      const boost = SHOP_BOOSTS.find(b => b.id === boostId);
+      if (!boost) return;
+      if (userBalance < boost.price) {
+        alert("❌ Недостаточно монет!");
+        return;
+      }
+      userBalance -= boost.price;
+      userBoosts[boostId] = (userBoosts[boostId] || 0) + 1;
+      saveData();
+      updateUI();
+      renderShopBoosts();
+      alert(`🎉 Приобретен буст: ${boost.name}!`);
+    }
+
+    function useBoostInGame(boostId) {
+      if (!userBoosts[boostId] || userBoosts[boostId] <= 0) return;
+
+      if (boostId === 'b_att') {
+        if (activeBox.mode !== 'logic') { alert("❌ Этот буст только для сейфов с попытками!"); return; }
+        attemptsLeft += 2;
+        document.getElementById('gSafeMode').innerText = `Попыток осталось: ${attemptsLeft}`;
+      } else if (boostId === 'b_time') {
+        if (activeBox.mode !== 'time') { alert("❌ Этот буст только для сейфов на время!"); return; }
+        secondsLeft += 10;
+        document.getElementById('gTimer').innerText = `${secondsLeft}s`;
+      } else if (boostId === 'b_reveal') {
+        let unrevealedIndices = [];
+        for (let i = 0; i < activeBox.len; i++) {
+          if (!currentInput[i]) unrevealedIndices.push(i);
+        }
+        if (unrevealedIndices.length === 0) { alert("❌ Код уже полностью введен!"); return; }
+        let idx = unrevealedIndices[0];
+        currentInput = currentInput.substring(0, idx) + targetCode[idx] + currentInput.substring(idx + 1);
+        renderDigits();
+      } else if (boostId === 'b_shield') {
+        if (activeBox.mode === 'logic') {
+          attemptsLeft += 3;
+          document.getElementById('gSafeMode').innerText = `Попыток осталось: ${attemptsLeft}`;
+        } else {
+          secondsLeft += 30;
+          document.getElementById('gTimer').innerText = `${secondsLeft}s`;
+        }
+      }
+
+      userBoosts[boostId]--;
+      saveData();
+      renderInGameBoosts();
+    }
+
+    function renderInGameBoosts() {
+      const panel = document.getElementById('gameBoostsPanel');
+      if (!panel) return;
+      panel.innerHTML = "";
+      SHOP_BOOSTS.forEach(b => {
+        const count = userBoosts[b.id] || 0;
+        if (count > 0) {
+          panel.innerHTML += `
+            <div class="in-game-boost-btn" onclick="useBoostInGame('${b.id}')">
+              <img src="${b.img}">
+              <span>${b.name} (${count})</span>
+            </div>
+          `;
+        }
+      });
+    }
+        // 5. ОФЛАЙН-МАЙНИНГ И ИНВЕНТАРЬ
     function getMiningRatePerHour() {
       return miningRig.reduce((sum, item) => sum + (item.income || 100), 0);
     }
@@ -501,7 +602,7 @@
       });
     }
 
-    // 5. РЫНОК P2P
+    // 6. РЫНОК P2P
     function sellToMarketPrompt(instanceId) {
       const item = userInventory.find(i => i.instanceId === instanceId);
       if (!item) return;
@@ -578,7 +679,7 @@
       alert(`🎉 Успешная покупка: ${offer.item.name}!`);
     }
 
-    // 6. ОТРИСОВКА СЕЙФОВ И ЛОГИКА ВЗЛОМА (Улучшен алгоритм подсказок)
+    // 7. ОТРИСОВКА СЕЙФОВ И ИГРОВАЯ ЛОГИКА
     function renderSafes() {
       const container = document.getElementById('safesContainer');
       if (!container) return;
@@ -619,6 +720,7 @@
       document.getElementById('gSafeName').innerText = activeBox.name;
       document.getElementById('gameHint').innerText = "";
       renderDigits();
+      renderInGameBoosts();
 
       if (activeBox.mode === 'logic') {
         attemptsLeft = activeBox.attempts;
@@ -673,7 +775,6 @@
 
         userBalance += activeBox.reward;
 
-        // Шанс лута
         const roll = Math.random();
         let itemMessage = "";
 
@@ -689,16 +790,14 @@
         updateUI();
         closeGame();
       } else {
-        // 💡 Логика «Быки и коровы» для более легкой игры
-        let exactMatches = 0; // Точно на месте
-        let wrongPlaceMatches = 0; // Найдено в коде, но не на своем месте
+        let exactMatches = 0;
+        let wrongPlaceMatches = 0;
 
         let targetArr = targetCode.split('');
         let inputArr = currentInput.split('');
         let targetUsed = new Array(activeBox.len).fill(false);
         let inputUsed = new Array(activeBox.len).fill(false);
 
-        // 1. Считаем точные совпадения
         for (let i = 0; i < activeBox.len; i++) {
           if (inputArr[i] === targetArr[i]) {
             exactMatches++;
@@ -707,7 +806,6 @@
           }
         }
 
-        // 2. Считаем цифры, присутствующие в коде
         for (let i = 0; i < activeBox.len; i++) {
           if (!inputUsed[i]) {
             for (let j = 0; j < activeBox.len; j++) {
@@ -745,14 +843,12 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // 7. МОДАЛЬНОЕ ОКНО ПРОФИЛЯ И ТИТУЛЫ
+    // 8. МОДАЛЬНОЕ ОКНО ПРОФИЛЯ И ТИТУЛЫ
     function openProfileModal() {
       const container = document.getElementById('unlockedTitlesList');
       if (!container) return;
 
       container.innerHTML = "";
-
-      // Получаем Telegram юзернейм
       const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.username : "";
 
       ALL_TITLES.forEach(t => {
@@ -793,11 +889,14 @@
       openProfileModal();
     }
 
-        function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
-    function openShopModal() { document.getElementById('shopModal').classList.add('active'); }
+    function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
+    function openShopModal() { 
+      renderShopBoosts();
+      document.getElementById('shopModal').classList.add('active'); 
+    }
     function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
 
-    // 8. СОХРАНЕНИЕ И ОБНОВЛЕНИЕ UI
+    // 9. СОХРАНЕНИЕ И ОБНОВЛЕНИЕ UI
     function saveData() {
       localStorage.setItem('sv_balance', userBalance);
       localStorage.setItem('sv_title', currentTitle);
@@ -807,6 +906,7 @@
       localStorage.setItem('sv_market_offers', JSON.stringify(marketOffers));
       localStorage.setItem('sv_ref_count', refCount);
       localStorage.setItem('sv_used_promos', JSON.stringify(usedPromos));
+      localStorage.setItem('sv_boosts', JSON.stringify(userBoosts));
     }
 
     function updateUI() {

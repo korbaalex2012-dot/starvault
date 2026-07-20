@@ -26,10 +26,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
     body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(112, 0, 255, 0.15), transparent 70%),
-        radial-gradient(circle at 0% 100%, rgba(0, 240, 255, 0.1), transparent 50%);
+      background: linear-gradient(rgba(9, 10, 15, 0.75), rgba(9, 10, 15, 0.85)), 
+                  url("IMG_20260719_173450.png") center/cover no-repeat fixed !important;
       color: var(--text-main);
       font-family: var(--font-main);
       min-height: 100vh;
@@ -116,6 +114,8 @@
       flex-direction: column; justify-content: space-between; padding: 20px 16px;
     }
     .game-overlay.active, .modal-overlay.active { display: flex; }
+
+    #profileModal { z-index: 99999 !important; }
 
     .in-game-boosts {
       display: flex; justify-content: center; gap: 10px; margin: 8px 0;
@@ -302,15 +302,7 @@
     <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Рынок</span></div>
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
-    <style>
-    /* Установка фонового изображения */
-    body {
-      background: linear-gradient(rgba(9, 10, 15, 0.75), rgba(9, 10, 15, 0.85)), 
-                  url("IMG_20260719_173450.png") center/cover no-repeat fixed !important;
-    }
-  </style>
-
-  <script>
+    <script>
     // 1. БАЗА ДАННЫХ: ТИТУЛЫ
     const ALL_TITLES = [
       { id: "newbie", name: "🟢 Новичок", desc: "Выдается при старте" },
@@ -320,7 +312,7 @@
       { id: "rich", name: "💎 Магнат", desc: "Накопить 10,000 монет" }
     ];
 
-    // 2. БАЗА ДАННЫХ: БУСТЫ (4 УСИЛЕНИЯ С ТВОИМИ КАРТИНКАМИ)
+    // 2. БАЗА ДАННЫХ: БУСТЫ (С ТВОИМИ ИКОНКАМИ)
     const BOOSTS = [
       { id: "attempts", name: "🧠 +2 Попытки", cost: 150, img: "IMG_20260720_153330.png", desc: "Только для логических сейфов" },
       { id: "time", name: "⏱️ +10 Секунд", cost: 150, img: "IMG_20260720_153341.png", desc: "Только для сейфов на время" },
@@ -328,7 +320,7 @@
       { id: "shield", name: "🛡️ Силовой Щит", cost: 500, img: "IMG_20260720_153359.png", desc: "Спасает при поражении" }
     ];
 
-    // 3. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ (ИЗ ТВОЕЙ КАРТИНКИ)
+    // 3. БАЗА ДАННЫХ: 9 ПРЕДМЕТОВ
     const ITEMS = [
       { id: 101, name: "🎙️ Стимпанк Стетоскоп", income: 15, img: "IMG_20260720_115622.png" },
       { id: 102, name: "🗝️ Механическая Отмычка", income: 35, img: "IMG_20260720_115636.png" },
@@ -419,7 +411,7 @@
       if (enabled) { audio.play().catch(() => {}); } else { audio.pause(); }
     }
 
-    // 6. ТИТУЛЫ И МОДАЛЬНЫЕ ОКНА
+    // 6. ПРАВИЛЬНАЯ ЛОГИКА ТИТУЛОВ (ГАРАНТИРОВАННО РАБОТАЕТ)
     function checkTitleAchievements() {
       const totalWins = state.logicWins + state.timeWins;
       if (totalWins >= 5 && !state.unlockedTitles.includes("hacker")) state.unlockedTitles.push("hacker");
@@ -431,10 +423,11 @@
 
     window.openProfileModal = function() {
       checkTitleAchievements();
+      
       const modal = document.getElementById('profileModal');
       const container = document.getElementById('unlockedTitlesList');
-      if (!container || !modal) return;
-      
+      if (!modal || !container) return;
+
       const availableTitles = ALL_TITLES.filter(t => state.unlockedTitles.includes(t.id));
 
       container.innerHTML = availableTitles.map(t => {
@@ -447,25 +440,30 @@
             </div>
             ${isSelected 
               ? `<span style="font-size:11px; color:var(--accent-cyan); font-weight:800">Надет</span>`
-              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="selectTitle('${t.name}')">Выбрать</button>`
+              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="selectTitle('${t.name}')">Надеть</button>`
             }
           </div>
         `;
       }).join('');
 
+      modal.style.display = 'flex';
       modal.classList.add('active');
     };
 
-    function closeProfileModal() {
-      document.getElementById('profileModal').classList.remove('active');
-    }
+    window.closeProfileModal = function() {
+      const modal = document.getElementById('profileModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+      }
+    };
 
-    function selectTitle(titleName) {
+    window.selectTitle = function(titleName) {
       state.selectedTitle = titleName;
       saveState();
-      closeProfileModal();
+      window.closeProfileModal();
       alert(`✅ Титул "${titleName}" успешно надет!`);
-    }
+    };
 
     // 7. ЛОГИКА МАГАЗИНА БУСТОВ
     function openShopModal() {
@@ -482,10 +480,12 @@
         </div>
       `).join('');
 
+      document.getElementById('shopModal').style.display = 'flex';
       document.getElementById('shopModal').classList.add('active');
     }
 
     function closeShopModal() {
+      document.getElementById('shopModal').style.display = 'none';
       document.getElementById('shopModal').classList.remove('active');
     }
 
@@ -505,7 +505,7 @@
       saveState();
       openShopModal();
     }
-       // 8. ИГРОВОЙ ДВИЖОК ВЗЛОМА С БУСТАМИ
+         // 8. ИГРОВОЙ ДВИЖОК ВЗЛОМА
     let activeBox = null;
     let targetCode = "";
     let currentInput = "";
@@ -617,7 +617,10 @@
       document.getElementById('gSafeName').innerText = activeBox.name;
       document.getElementById('gameHint').innerText = "";
       renderInGameBoosts();
-      document.getElementById('gameModal').classList.add('active');
+      
+      const gModal = document.getElementById('gameModal');
+      gModal.style.display = 'flex';
+      gModal.classList.add('active');
 
       if (activeBox.mode === 'logic') {
         attemptsLeft = activeBox.attempts;
@@ -741,7 +744,9 @@
 
     function closeGame() {
       if (gameTimer) clearInterval(gameTimer);
-      document.getElementById('gameModal').classList.remove('active');
+      const gModal = document.getElementById('gameModal');
+      gModal.style.display = 'none';
+      gModal.classList.remove('active');
     }
 
     // 9. ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
@@ -1081,7 +1086,10 @@
       document.getElementById('gSafeName').innerText = "⚔️ PVP Дуэль";
       document.getElementById('gameHint').innerText = "";
       renderInGameBoosts();
-      document.getElementById('gameModal').classList.add('active');
+
+      const gModal = document.getElementById('gameModal');
+      gModal.style.display = 'flex';
+      gModal.classList.add('active');
 
       if (match.mode === 'logic') {
         attemptsLeft = match.limit;
@@ -1103,10 +1111,3 @@
       }
       updateDigitsDisplay();
     }
-
-    // ИНИЦИАЛИЗАЦИЯ И СТАРТ
-    saveState();
-    renderSafes();
-  </script>
-</body>
-</html>

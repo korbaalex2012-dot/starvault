@@ -270,7 +270,7 @@
 
     <div>
       <div class="digits-container" id="digitsRow"></div>
-      <p id="gameHint" style="text-align:center; font-size:12px; color:var(--accent-cyan); min-height:18px; line-height:1.4;"></p>
+      <p id="gameHint" style="text-align:center; font-size:12px; color:var(--accent-cyan); min-height:18px;"></p>
     </div>
     <div class="numpad">
       <div class="num-btn" onclick="pressKey(1)">1</div><div class="num-btn" onclick="pressKey(2)">2</div><div class="num-btn" onclick="pressKey(3)">3</div>
@@ -293,7 +293,7 @@
   </nav>
     <script>
     // ==========================================
-    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ
+    // 🎟️ БЫСТРЫЕ ПРОМОКОДЫ (Админ-Панель)
     // ==========================================
     const PROMO_CODES = {
       "STAR2026": { reward: 150, maxUses: 100 },
@@ -330,29 +330,29 @@
     let refCount = parseInt(localStorage.getItem('sv_ref_count')) || 0;
     let usedPromos = JSON.parse(localStorage.getItem('sv_used_promos')) || [];
 
-    // 2. СЕЙФЫ И НОВЫЕ ПРЕДМЕТЫ КОЛЛЕКЦИИ (По порядку слева направо, сверху вниз)
+    // 2. СЕЙФЫ И ПРЕДМЕТЫ (Обновлен баланс времени/попыток + картинки предметов)
     const VAULTS = [
-      { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 15, cost: 50, reward: 150, dropId: 101, dropRate: 0.30, img: "IMG_20260720_115622.png" },
-      { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 12, cost: 100, reward: 300, dropId: 102, dropRate: 0.22, img: "IMG_20260720_115636.png" },
-      { id: 3, name: "⚙️ Стальной сейф", len: 4, mode: "time", time: 60, cost: 200, reward: 600, dropId: 103, dropRate: 0.18, img: "IMG_20260720_115645.png" },
-      { id: 4, name: "👑 Золотой Банк", len: 4, mode: "time", time: 55, cost: 350, reward: 1000, dropId: 104, dropRate: 0.14, img: "IMG_20260720_115658.png" },
-      { id: 5, name: "🌐 Кибер-Хранилище", len: 4, mode: "time", time: 50, cost: 500, reward: 1500, dropId: 105, dropRate: 0.10, img: "IMG_20260720_115724.png" },
-      { id: 6, name: "🛡️ Силовой Бункер", len: 4, mode: "logic", attempts: 10, cost: 800, reward: 2400, dropId: 106, dropRate: 0.07, img: "IMG_20260720_115747.png" },
-      { id: 7, name: "💾 Крипто-Сервер", len: 5, mode: "time", time: 45, cost: 1200, reward: 4000, dropId: 107, dropRate: 0.05, img: "IMG_20260720_115800.png" },
-      { id: 8, name: "⚛️ Квантовый Сейф", len: 5, mode: "time", time: 40, cost: 2000, reward: 7000, dropId: 108, dropRate: 0.03, img: "IMG_20260720_115813.png" },
-      { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 8, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.015, img: "IMG_20260720_115823.png" }
+      { id: 1, name: "🪵 Деревянный сейф", len: 3, mode: "logic", attempts: 12, cost: 50, reward: 150, dropId: 101, dropRate: 0.30, img: "IMG_20260719_180634.png" },
+      { id: 2, name: "🥉 Бронзовый сейф", len: 3, mode: "logic", attempts: 10, cost: 100, reward: 300, dropId: 102, dropRate: 0.22, img: "IMG_20260719_181100.png" },
+      { id: 3, name: "⚙️ Стальной сейф", len: 4, mode: "time", time: 45, cost: 200, reward: 600, dropId: 103, dropRate: 0.18, img: "IMG_20260719_181706.png" },
+      { id: 4, name: "👑 Золотой Банк", len: 4, mode: "time", time: 40, cost: 350, reward: 1000, dropId: 104, dropRate: 0.14, img: "IMG_20260719_183142.png" },
+      { id: 5, name: "🌐 Кибер-Хранилище", len: 4, mode: "time", time: 35, cost: 500, reward: 1500, dropId: 105, dropRate: 0.10, img: "IMG_20260719_183244.png" },
+      { id: 6, name: "🛡️ Силовой Бункер", len: 4, mode: "logic", attempts: 9, cost: 800, reward: 2400, dropId: 106, dropRate: 0.07, img: "IMG_20260719_183338.png" },
+      { id: 7, name: "💾 Крипто-Сервер", len: 5, mode: "time", time: 30, cost: 1200, reward: 4000, dropId: 107, dropRate: 0.05, img: "IMG_20260719_183351.png" },
+      { id: 8, name: "⚛️ Квантовый Сейф", len: 5, mode: "time", time: 25, cost: 2000, reward: 7000, dropId: 108, dropRate: 0.03, img: "IMG_20260719_183406.png" },
+      { id: 9, name: "🕶️ Черный Взломщик", len: 5, mode: "logic", attempts: 8, cost: 5000, reward: 20000, dropId: 109, dropRate: 0.015, img: "IMG_20260719_183425.png" }
     ];
 
     const COLLECTION_ITEMS = [
-      { id: 101, name: "Винтажный Стетоскоп", rarity: "Обычный", income: 100, img: "IMG_20260720_115622.png" },
-      { id: 102, name: "Латунная Мастер-Отмычка", rarity: "Обычный", income: 180, img: "IMG_20260720_115636.png" },
-      { id: 103, name: "Лазерный Резак", rarity: "Редкий", income: 300, img: "IMG_20260720_115645.png" },
-      { id: 104, name: "Золотой Кибер-Агрегатор", rarity: "Редкий", income: 550, img: "IMG_20260720_115658.png" },
-      { id: 105, name: "Вирусный ЧИП «Призрак»", rarity: "Эпический", income: 900, img: "IMG_20260720_115724.png" },
-      { id: 106, name: "Перчатка Взломщика", rarity: "Эпический", income: 1500, img: "IMG_20260720_115747.png" },
-      { id: 107, name: "Матричный Дешифратор", rarity: "Легендарный", income: 2600, img: "IMG_20260720_115800.png" },
-      { id: 108, name: "Квантовый Настройщик", rarity: "Легендарный", income: 4500, img: "IMG_20260720_115813.png" },
-      { id: 109, name: "Мастер Ключ-Карта", rarity: "МИФИЧЕСКИЙ", income: 10000, img: "IMG_20260720_115823.png" }
+      { id: 101, name: "Деревянный Жетон", rarity: "Обычный", income: 100, img: "IMG_20260720_115622.png" },
+      { id: 102, name: "Бронзовая Медаль", rarity: "Обычный", income: 180, img: "IMG_20260720_115636.png" },
+      { id: 103, name: "Стальной Шестереночник", rarity: "Редкий", income: 300, img: "IMG_20260720_115645.png" },
+      { id: 104, name: "Золотой Слиток Vault", rarity: "Редкий", income: 550, img: "IMG_20260720_115658.png" },
+      { id: 105, name: "Кибер-Флешка 2077", rarity: "Эпический", income: 900, img: "IMG_20260720_115724.png" },
+      { id: 106, name: "Силовой Ядро-Акум", rarity: "Эпический", income: 1500, img: "IMG_20260720_115747.png" },
+      { id: 107, name: "Крипто-Процессор", rarity: "Легендарный", income: 2600, img: "IMG_20260720_115800.png" },
+      { id: 108, name: "Квантовый Кубит", rarity: "Легендарный", income: 4500, img: "IMG_20260720_115813.png" },
+      { id: 109, name: "Черный ЧИП-Взломщик", rarity: "МИФИЧЕСКИЙ", income: 10000, img: "IMG_20260720_115823.png" }
     ];
 
     let userInventory = JSON.parse(localStorage.getItem('sv_inventory')) || [];
@@ -578,7 +578,7 @@
       alert(`🎉 Успешная покупка: ${offer.item.name}!`);
     }
 
-    // 6. ОТРИСОВКА СЕЙФОВ И ЛОГИКА ВЗЛОМА
+    // 6. ОТРИСОВКА СЕЙФОВ И ЛОГИКА ВЗЛОМА (Улучшен алгоритм подсказок)
     function renderSafes() {
       const container = document.getElementById('safesContainer');
       if (!container) return;
@@ -617,7 +617,7 @@
 
       currentInput = "";
       document.getElementById('gSafeName').innerText = activeBox.name;
-      document.getElementById('gameHint').innerText = "Введите код для взлома";
+      document.getElementById('gameHint').innerText = "";
       renderDigits();
 
       if (activeBox.mode === 'logic') {
@@ -665,7 +665,6 @@
       renderDigits();
     }
 
-    // ПОДСКАЗКИ ПРИ ВЗЛОМЕ («БЫКИ И КОРОВЫ»)
     function submitCode() {
       if (currentInput.length !== activeBox.len) return;
 
@@ -674,6 +673,7 @@
 
         userBalance += activeBox.reward;
 
+        // Шанс лута
         const roll = Math.random();
         let itemMessage = "";
 
@@ -689,15 +689,16 @@
         updateUI();
         closeGame();
       } else {
-        let exactMatches = 0;
-        let misplacedMatches = 0;
+        // 💡 Логика «Быки и коровы» для более легкой игры
+        let exactMatches = 0; // Точно на месте
+        let wrongPlaceMatches = 0; // Найдено в коде, но не на своем месте
 
         let targetArr = targetCode.split('');
         let inputArr = currentInput.split('');
-        
         let targetUsed = new Array(activeBox.len).fill(false);
         let inputUsed = new Array(activeBox.len).fill(false);
 
+        // 1. Считаем точные совпадения
         for (let i = 0; i < activeBox.len; i++) {
           if (inputArr[i] === targetArr[i]) {
             exactMatches++;
@@ -706,11 +707,12 @@
           }
         }
 
+        // 2. Считаем цифры, присутствующие в коде
         for (let i = 0; i < activeBox.len; i++) {
           if (!inputUsed[i]) {
             for (let j = 0; j < activeBox.len; j++) {
               if (!targetUsed[j] && inputArr[i] === targetArr[j]) {
-                misplacedMatches++;
+                wrongPlaceMatches++;
                 targetUsed[j] = true;
                 break;
               }
@@ -721,7 +723,7 @@
         currentInput = "";
         renderDigits();
 
-        const hintText = `🎯 Точно на месте: ${exactMatches} | 🟡 Есть в коде: ${misplacedMatches}`;
+        const hintText = `🎯 На месте: ${exactMatches} | 🔍 В коде: ${wrongPlaceMatches}`;
 
         if (activeBox.mode === 'logic') {
           attemptsLeft--;
@@ -750,6 +752,7 @@
 
       container.innerHTML = "";
 
+      // Получаем Telegram юзернейм
       const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.username : "";
 
       ALL_TITLES.forEach(t => {
@@ -790,7 +793,7 @@
       openProfileModal();
     }
 
-    function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
+        function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
     function openShopModal() { document.getElementById('shopModal').classList.add('active'); }
     function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-  <title>StarVault - Multiplier Boost</title>
+  <title>StarVault - Titles & Daily Rewards</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,12 +45,16 @@
       display: flex; justify-content: space-between; align-items: center;
     }
 
-    .user-badge { display: flex; align-items: center; gap: 10px; }
+    .user-badge { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .avatar {
-      width: 40px; height: 40px; border-radius: 50%;
+      width: 42px; height: 42px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 18px;
+      font-weight: 800; font-size: 18px; border: 2px solid var(--accent-cyan);
+    }
+
+    .user-title-tag {
+      font-size: 10px; color: var(--accent-gold); font-weight: 700;
     }
 
     .balance-pill {
@@ -68,7 +72,7 @@
 
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--text-sub); font-size: 10px; font-weight: 600; cursor: pointer; width: 20%;
+      color: var(--text-sub); font-size: 10px; font-weight: 600; cursor: pointer; width: 16%;
     }
 
     .nav-item.active { color: var(--accent-cyan); }
@@ -81,7 +85,7 @@
     .safes-grid, .items-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .items-grid { grid-template-columns: repeat(3, 1fr); }
 
-    .safe-card, .item-card, .pvp-card, .setting-row {
+    .safe-card, .item-card, .pvp-card, .setting-row, .daily-card {
       background: var(--card-bg); border: 1px solid var(--glass-border);
       border-radius: 16px; padding: 12px; display: flex; flex-direction: column;
       align-items: center; text-align: center; position: relative;
@@ -104,12 +108,13 @@
     .pvp-card { margin-bottom: 12px; align-items: stretch; text-align: left; }
     .pvp-header { display: flex; justify-content: space-between; align-items: center; }
 
-    .game-overlay {
+    /* MODAL OVERLAYS */
+    .game-overlay, .modal-overlay {
       position: fixed; inset: 0; background: rgba(6, 8, 12, 0.95);
       backdrop-filter: blur(20px); z-index: 2000; display: none;
       flex-direction: column; justify-content: space-between; padding: 20px 16px;
     }
-    .game-overlay.active { display: flex; }
+    .game-overlay.active, .modal-overlay.active { display: flex; }
 
     .digits-container { display: flex; justify-content: center; gap: 8px; margin: 20px 0; }
     .digit-box {
@@ -127,6 +132,14 @@
       border-radius: 14px; padding: 12px; margin-bottom: 8px; display: flex;
       align-items: center; justify-content: space-between;
     }
+
+    /* PROFILE & TITLES STYLE */
+    .title-item {
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+      border-radius: 12px; padding: 10px 14px; margin-bottom: 8px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .title-item.active { border-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.1); }
 
     .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -148,16 +161,16 @@
   <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
-    <div class="user-badge">
+    <div class="user-badge" onclick="openProfileModal()">
       <div class="avatar" id="uAvatar">U</div>
       <div>
         <div style="font-weight:700; font-size:14px" id="uName">Игрок</div>
-        <div style="font-size:10px; color:var(--accent-cyan)" id="uPlaytime">В игре: 0 мин</div>
+        <div class="user-title-tag" id="uTitle">🟢 Новичок</div>
       </div>
     </div>
     <div class="balance-pill">
       <span>🪙</span>
-      <span id="uBalance">2,000</span>
+      <span id="uBalance">500</span>
     </div>
   </header>
 
@@ -169,6 +182,18 @@
   <main class="tab-page" id="page-pvp">
     <div class="section-title"><span>PVP Дуэли</span> <button class="btn-hack" style="width:auto; padding:4px 12px" onclick="createPvpMatch()">+ Создать</button></div>
     <div id="pvpList"></div>
+  </main>
+
+  <main class="tab-page" id="page-bonus">
+    <div class="section-title"><span>🎁 Ежедневные Награды</span></div>
+    <div class="daily-card" style="margin-bottom:16px;">
+      <div style="font-size:12px; color:var(--text-sub)">Дней в ударе (Streak):</div>
+      <div style="font-size:32px; font-weight:900; color:var(--accent-gold); margin:4px 0" id="streakDays">0 ДНЕЙ</div>
+      <button class="btn-hack" id="claimBonusBtn" onclick="claimDailyBonus()">Забрать Награду</button>
+      <button class="btn-hack" id="restoreStreakBtn" style="display:none; background:var(--accent-pink); margin-top:8px" onclick="restoreStreak()">Восстановить серия (500 🪙)</button>
+    </div>
+    <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--text-sub)">Шкала наград:</div>
+    <div id="streakRewardsList"></div>
   </main>
 
   <main class="tab-page" id="page-inventory">
@@ -210,6 +235,15 @@
     </div>
   </main>
 
+  <div class="modal-overlay" id="profileModal">
+    <div style="text-align:center; margin-bottom:16px">
+      <h3>Мой Профиль</h3>
+      <p style="font-size:12px; color:var(--text-sub)">Выбери титул, который видят другие</p>
+    </div>
+    <div style="flex:1; overflow-y:auto; margin-bottom:12px;" id="unlockedTitlesList"></div>
+    <button class="btn-hack" style="background:rgba(255,255,255,0.1)" onclick="closeProfileModal()">Закрыть</button>
+  </div>
+
   <div class="game-overlay" id="gameModal">
     <div style="display:flex; justify-content:space-between;">
       <div>
@@ -239,6 +273,7 @@
   <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('safes', this)"><span>🔒</span><span>Сейфы</span></div>
     <div class="nav-item" onclick="switchTab('pvp', this)"><span>⚔️</span><span>PVP</span></div>
+    <div class="nav-item" onclick="switchTab('bonus', this)"><span>🎁</span><span>Бонус</span></div>
     <div class="nav-item" onclick="switchTab('inventory', this)"><span>🎒</span><span>Багаж</span></div>
     <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Рынок</span></div>
     <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
@@ -246,13 +281,28 @@
     <script>
     // TELEGRAM INIT
     const tg = window.Telegram ? window.Telegram.WebApp : null;
+    let tgUsername = "";
+
     if (tg) {
       tg.expand();
       if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        document.getElementById('uName').innerText = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name;
+        tgUsername = tg.initDataUnsafe.user.username || "";
+        document.getElementById('uName').innerText = tgUsername ? `@${tgUsername}` : (tg.initDataUnsafe.user.first_name || 'Игрок');
         document.getElementById('uAvatar').innerText = (tg.initDataUnsafe.user.first_name || 'U')[0].toUpperCase();
       }
     }
+
+    // СПИСОК ТИТУЛОВ
+    const ALL_TITLES = [
+      { id: 'dev', name: '👑 Разработчик', desc: 'Эксклюзивно для создателя', req: 'is_dev' },
+      { id: 'novice', name: '🟢 Новичок', desc: 'Стартовый титул', req: 'default' },
+      { id: 'logic1', name: '🧠 Тактик', desc: 'Взломай 10 сейфов', req: 'hacks_10' },
+      { id: 'logic2', name: '🗝️ Медвежатник', desc: 'Взломай 50 сейфов', req: 'hacks_50' },
+      { id: 'spent10k', name: '🪙 Транжира', desc: 'Потрать 10 000 🪙', req: 'spent_10k' },
+      { id: 'earn10k', name: '💰 Магнат', desc: 'Заработай 10 000 🪙', req: 'earn_10k' },
+      { id: 'pvp_win', name: '⚔️ Гладиатор', desc: 'Выиграй 5 PVP-дуэлей', req: 'pvp_5' },
+      { id: 'streak7', name: '🔥 В ударе', desc: 'Серия заходов 7 дней подряд', req: 'streak_7' }
+    ];
 
     // СПИСОК СЕЙФОВ
     const VAULTS = [
@@ -267,516 +317,5 @@
       { id: 9, name: "💎 Куб", img: "IMG_20260719_183425.png", mode: "time", cost: 1200, len: 5, time: 25, reward: 3500, dropId: 9, dropRate: 0.05 }
     ];
 
-    // УВЕЛИЧЕННЫЙ ПАССИВНЫЙ ДОХОД ПРЕДМЕТОВ
-    const ITEMS = [
-      { id: 1, name: "Стетоскоп", img: "IMG_20260720_115622.png", income: 100 },
-      { id: 2, name: "Отмычка", img: "IMG_20260720_115636.png", income: 250 },
-      { id: 3, name: "Резак", img: "IMG_20260720_115645.png", income: 500 },
-      { id: 4, name: "Майнер-Слиток", img: "IMG_20260720_115658.png", income: 1000 },
-      { id: 5, name: "Чип 'Призрак'", img: "IMG_20260720_115724.png", income: 2000 },
-      { id: 6, name: "Перчатка", img: "IMG_20260720_115747.png", income: 4000 },
-      { id: 7, name: "Дешифратор", img: "IMG_20260720_115800.png", income: 7500 },
-      { id: 8, name: "Тюнер", img: "IMG_20260720_115813.png", income: 12000 },
-      { id: 9, name: "Мастер-Карта", img: "IMG_20260720_115823.png", income: 25000 }
-    ];
-
-    // СОСТОЯНИЕ ИГРОКА (БАЛАНС = 500 🪙)
-    let state = JSON.parse(localStorage.getItem('starvault_state')) || {
-      coins: 500,
-      inventory: [],
-      playTimeSeconds: 0,
-      lastMiningTime: Date.now(),
-      musicOn: false
-    };
-
-    function saveState() {
-      localStorage.setItem('starvault_state', JSON.stringify(state));
-      document.getElementById('uBalance').innerText = state.coins.toLocaleString();
-    }
-
-    // ФОНОВАЯ МУЗЫКА
-    function toggleMusic(enabled) {
-      const audio = document.getElementById('bgMusic');
-      state.musicOn = enabled;
-      saveState();
-      if (enabled) {
-        audio.play().catch(() => {});
-      } else {
-        audio.pause();
-      }
-    }
-
-    if (state.musicOn) {
-      document.getElementById('musicToggle').checked = true;
-    }
-
-    // ТАЙМЕР ВРЕМЕНИ В ИГРЕ
-    setInterval(() => {
-      state.playTimeSeconds = (state.playTimeSeconds || 0) + 1;
-      const mins = Math.floor(state.playTimeSeconds / 60);
-      const hours = Math.floor(mins / 60);
-      let timeStr = `${mins} мин`;
-      if (hours > 0) timeStr = `${hours} ч ${mins % 60} мин`;
-      document.getElementById('uPlaytime').innerText = `В игре: ${timeStr}`;
+    //
       
-      const settingsTimer = document.getElementById('settingsPlaytime');
-      if (settingsTimer) settingsTimer.innerText = `Зафиксировано: ${timeStr}`;
-
-      if (state.playTimeSeconds % 10 === 0) saveState();
-    }, 1000);
-
-    // СМЕНА ВКЛАДОК
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById(`page-${tabId}`).classList.add('active');
-      el.classList.add('active');
-
-      if (tabId === 'inventory') renderInventory();
-      if (tabId === 'market') renderMarket();
-      if (tabId === 'pvp') renderPvp();
-    }
-
-    // ИГРОВЫЕ ПЕРЕМЕННЫЕ
-    let activeBox = null;
-    let targetCode = "";
-    let currentInput = "";
-    let gameTimer = null;
-    let secondsLeft = 0;
-    let attemptsLeft = 0;
-    let isPvpGame = false;
-    let pvpBet = 0;
-
-    // РЕНДЕР СЕЙФОВ
-    function renderSafes() {
-      const container = document.getElementById('safesContainer');
-      container.innerHTML = VAULTS.map(s => `
-        <div class="safe-card">
-          <div style="font-weight:800; font-size:13px">${s.name}</div>
-          <img src="${s.img}" class="safe-img" alt="${s.name}">
-          <div style="font-size:11px; color:var(--text-sub)">Вход: ${s.cost} 🪙</div>
-          <div style="font-size:11px; color:var(--accent-gold); font-weight:700">Приз: +${s.reward} 🪙</div>
-          <button class="btn-hack" onclick="startBoxGame(${s.id})">ОТКРЫТЬ</button>
-        </div>
-      `).join('');
-    }
-
-    // ЗАПУСК ИГРЫ СЕЙФА
-    function startBoxGame(boxId) {
-      isPvpGame = false;
-      activeBox = VAULTS.find(s => s.id === boxId);
-
-      if (state.coins < activeBox.cost) {
-        alert(`❌ Нужно ${activeBox.cost} 🪙 для входа!`);
-        return;
-      }
-
-      state.coins -= activeBox.cost;
-      saveState();
-
-      targetCode = "";
-      for (let i = 0; i < activeBox.len; i++) {
-        targetCode += Math.floor(Math.random() * 10).toString();
-      }
-      currentInput = "";
-
-      document.getElementById('gSafeName').innerText = activeBox.name;
-      document.getElementById('gameHint').innerText = "";
-      document.getElementById('gameModal').classList.add('active');
-
-      if (activeBox.mode === 'logic') {
-        attemptsLeft = activeBox.attempts;
-        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-      } else {
-        secondsLeft = activeBox.time;
-        document.getElementById('gSafeMode').innerText = `Время: ${activeBox.time} с`;
-        document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
-
-        gameTimer = setInterval(() => {
-          secondsLeft--;
-          document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
-          if (secondsLeft <= 0) {
-            clearInterval(gameTimer);
-            alert("⏰ Время вышло!");
-            closeGame();
-          }
-        }, 1000);
-      }
-
-      updateDigitsDisplay();
-    }
-
-    function pressKey(num) {
-      if (currentInput.length < activeBox.len) {
-        currentInput += num.toString();
-        updateDigitsDisplay();
-      }
-    }
-
-    function clearKey() {
-      currentInput = "";
-      updateDigitsDisplay();
-    }
-
-    function updateDigitsDisplay() {
-      const container = document.getElementById('digitsRow');
-      container.innerHTML = "";
-      for (let i = 0; i < activeBox.len; i++) {
-        const char = currentInput[i] || "_";
-        container.innerHTML += `<div class="digit-box">${char}</div>`;
-      }
-    }
-
-    function submitCode() {
-      if (currentInput.length < activeBox.len) return;
-
-      if (currentInput === targetCode) {
-        if (gameTimer) clearInterval(gameTimer);
-
-        if (isPvpGame) {
-          const winAmount = Math.floor(pvpBet * 2 * 0.9);
-          state.coins += winAmount;
-          saveState();
-          alert(`⚔️ ПОБЕДА В ДУЭЛИ!\nЗаработано с учётом 10% комиссии: +${winAmount} 🪙`);
-        } else {
-          state.coins += activeBox.reward;
-
-          let droppedMsg = "";
-          if (Math.random() <= activeBox.dropRate) {
-            const invItem = state.inventory.find(i => i.id === activeBox.dropId);
-            if (invItem) {
-              invItem.count += 1;
-            } else {
-              state.inventory.push({ id: activeBox.dropId, count: 1 });
-            }
-            const droppedItem = ITEMS.find(i => i.id === activeBox.dropId);
-            droppedMsg = `\n\n🎁 Находка: ${droppedItem.name}!`;
-          }
-
-          saveState();
-          alert(`🎉 УСПЕХ!\nНаграда: +${activeBox.reward} 🪙${droppedMsg}`);
-        }
-        closeGame();
-      } else {
-        let correctDigits = 0;
-        for (let i = 0; i < activeBox.len; i++) {
-          if (currentInput[i] === targetCode[i]) correctDigits++;
-        }
-
-        if (activeBox.mode === 'logic') {
-          attemptsLeft--;
-          document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-          document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-
-          if (attemptsLeft <= 0) {
-            alert("❌ Попытки закончились!");
-            closeGame();
-            return;
-          }
-        }
-
-        document.getElementById('gameHint').innerText = `❌ Совпадений мест: ${correctDigits}`;
-      }
-    }
-
-    function closeGame() {
-      if (gameTimer) clearInterval(gameTimer);
-      document.getElementById('gameModal').classList.remove('active');
-    }
-
-    // ИНВЕНТАРЬ
-    function renderInventory() {
-      const grid = document.getElementById('inventoryGrid');
-      document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
-
-      let totalIncome = 0;
-      grid.innerHTML = ITEMS.map(item => {
-        const invItem = state.inventory.find(i => i.id === item.id);
-        const count = invItem ? invItem.count : 0;
-        const owned = count > 0;
-
-        if (owned) totalIncome += item.income * count;
-
-        return `
-          <div class="item-card ${owned ? '' : 'locked'}" style="${owned ? '' : 'opacity:0.35'}">
-            <img src="${item.img}" class="item-img">
-            <div style="font-size:10px; font-weight:700">${item.name} ${count > 1 ? `<span style="color:var(--accent-gold)">x${count}</span>` : ''}</div>
-            <div style="font-size:9px; color:#00ff66; margin-top:2px">+${item.income * (count || 1)}🪙/ч</div>
-            ${owned ? `<button class="btn-hack" style="padding:2px 0; font-size:9px; background:var(--accent-pink)" onclick="tradeItem(${item.id})">Продать 1шт</button>` : ''}
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
-    }
-
-    // МАРКЕТ
-    function tradeItem(itemId) {
-      const item = ITEMS.find(i => i.id === itemId);
-      const invIndex = state.inventory.findIndex(i => i.id === itemId);
-      if (invIndex === -1) return;
-
-      const priceStr = prompt(`Выставить 1 шт. "${item.name}" на Маркет.\nЦена в монетах:`, "500");
-      if (!priceStr) return;
-
-      const price = parseInt(priceStr);
-      if (isNaN(price) || price <= 0) {
-        alert("❌ Неверная цена!");
-        return;
-      }
-
-      if (state.inventory[invIndex].count > 1) {
-        state.inventory[invIndex].count -= 1;
-      } else {
-        state.inventory.splice(invIndex, 1);
-      }
-
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-      marketItems.push({
-        id: Date.now(),
-        itemId: item.id,
-        seller: document.getElementById('uName').innerText,
-        price: price
-      });
-      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
-
-      saveState();
-      renderInventory();
-      alert(`✅ 1 шт. "${item.name}" выставлена на Маркет за ${price} 🪙!`);
-    }
-
-    function renderMarket() {
-      const list = document.getElementById('marketList');
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-
-      if (marketItems.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">На рынке нет лотов.</p>`;
-        return;
-      }
-
-      list.innerHTML = marketItems.map(lot => {
-        const item = ITEMS.find(i => i.id === lot.itemId);
-        const isMyLot = lot.seller === document.getElementById('uName').innerText;
-
-        return `
-          <div class="leader-row">
-            <div style="display:flex; align-items:center; gap:10px">
-              <img src="${item.img}" style="width:35px; height:35px; object-fit:contain">
-              <div>
-                <div style="font-weight:800; font-size:13px">${item.name}</div>
-                <div style="font-size:10px; color:var(--text-sub)">@${lot.seller}</div>
-              </div>
-            </div>
-            ${isMyLot 
-              ? `<span style="font-size:11px; color:var(--accent-gold)">Мой лот (${lot.price} 🪙)</span>`
-              : `<button class="btn-hack" style="width:auto; padding:4px 10px" onclick="buyMarketItem(${lot.id})">${lot.price} 🪙</button>`
-            }
-          </div>
-        `;
-      }).join('');
-    }
-
-    function buyMarketItem(lotId) {
-      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
-      const lotIndex = marketItems.findIndex(l => l.id === lotId);
-      if (lotIndex === -1) return;
-
-      const lot = marketItems[lotIndex];
-      if (state.coins < lot.price) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      state.coins -= lot.price;
-      const invItem = state.inventory.find(i => i.id === lot.itemId);
-      if (invItem) {
-        invItem.count += 1;
-      } else {
-        state.inventory.push({ id: lot.itemId, count: 1 });
-      }
-
-      marketItems.splice(lotIndex, 1);
-      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
-
-      saveState();
-      renderMarket();
-      alert("🎉 Покупка совершена!");
-    }
-
-    // PVP ДУЭЛИ
-    function createPvpMatch() {
-      const code = prompt("Придумайте секретный код (3-5 цифр):", "1234");
-      if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
-        alert("❌ Код должен содержать от 3 до 5 цифр!");
-        return;
-      }
-
-      const mode = confirm("ОК — На Попытки | Отмена — На Время") ? "logic" : "time";
-      
-      let limit = 0;
-      if (mode === "logic") {
-        const limitStr = prompt("Укажите число попыток (от 3 до 15):", "5");
-        limit = parseInt(limitStr);
-        if (isNaN(limit) || limit < 3 || limit > 15) {
-          alert("❌ Попытки должны быть в пределе от 3 до 15!");
-          return;
-        }
-      } else {
-        const limitStr = prompt("Укажите время в секундах (от 10 до 120):", "30");
-        limit = parseInt(limitStr);
-        if (isNaN(limit) || limit < 10 || limit > 120) {
-          alert("❌ Время должно быть в пределе от 10 до 120 секунд!");
-          return;
-        }
-      }
-
-      const betStr = prompt("Укажите ставку в монетах (от 50 до 50,000):", "200");
-      const bet = parseInt(betStr);
-
-      if (isNaN(bet) || bet < 50 || bet > 50000) {
-        alert("❌ Ставка должна быть от 50 до 50,000 монет!");
-        return;
-      }
-
-      if (bet > state.coins) {
-        alert("❌ У вас недостаточно монет для такой ставки!");
-        return;
-      }
-
-      state.coins -= bet;
-      saveState();
-
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      pvpMatches.push({
-        id: Date.now(),
-        host: document.getElementById('uName').innerText,
-        code: code,
-        mode: mode,
-        limit: limit,
-        bet: bet
-      });
-      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
-
-      renderPvp();
-      alert("⚔️ Дуэль создана!");
-    }
-
-    function renderPvp() {
-      const list = document.getElementById('pvpList');
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      const myName = document.getElementById('uName').innerText;
-
-      if (pvpMatches.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px">Нет активных дуэлей.</p>`;
-        return;
-      }
-
-      list.innerHTML = pvpMatches.map(m => {
-        const isMyMatch = m.host === myName;
-        const winAmount = Math.floor(m.bet * 2 * 0.9);
-        return `
-          <div class="pvp-card">
-            <div class="pvp-header">
-              <div>
-                <div style="font-weight:800; font-size:14px">Дуэль от @${m.host}</div>
-                <div style="font-size:11px; color:var(--accent-gold)">Куш: ${winAmount} 🪙 (Ставка: ${m.bet})</div>
-                <div style="font-size:10px; color:var(--text-sub)">Режим: ${m.mode === 'logic' ? `${m.limit} попыток` : `${m.limit} сек`}</div>
-              </div>
-              ${isMyMatch 
-                ? `<span style="font-size:11px; color:var(--accent-pink)">Ваш вызов</span>`
-                : `<button class="btn-hack" style="width:auto; padding:6px 12px" onclick="acceptPvp(${m.id})">Принять</button>`
-              }
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function acceptPvp(matchId) {
-      let pvpMatches = JSON.parse(localStorage.getItem('starvault_pvp')) || [];
-      const match = pvpMatches.find(m => m.id === matchId);
-      if (!match) return;
-
-      if (state.coins < match.bet) {
-        alert("❌ Недостаточно монет!");
-        return;
-      }
-
-      const playAsHacker = confirm("Нажмите 'ОК', чтобы отгадывать самому.\nНажмите 'Отмена', чтобы быть наблюдателем.");
-
-      state.coins -= match.bet;
-      saveState();
-
-      pvpMatches = pvpMatches.filter(m => m.id !== matchId);
-      localStorage.setItem('starvault_pvp', JSON.stringify(pvpMatches));
-
-      if (playAsHacker) {
-        isPvpGame = true;
-        pvpBet = match.bet;
-        targetCode = match.code;
-        currentInput = "";
-
-        activeBox = {
-          name: "⚔️ PVP Дуэль",
-          mode: match.mode,
-          len: match.code.length,
-          attempts: match.limit,
-          time: match.limit
-        };
-
-        document.getElementById('gSafeName').innerText = "⚔️ PVP Дуэль";
-        document.getElementById('gameHint').innerText = "";
-        document.getElementById('gameModal').classList.add('active');
-
-        if (match.mode === 'logic') {
-          attemptsLeft = match.limit;
-          document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
-          document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
-        } else {
-          secondsLeft = match.limit;
-          document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft}с`;
-          gameTimer = setInterval(() => {
-            secondsLeft--;
-            document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
-            if (secondsLeft <= 0) {
-              clearInterval(gameTimer);
-              alert("⏰ Время вышло!");
-              closeGame();
-            }
-          }, 1000);
-        }
-        updateDigitsDisplay();
-      } else {
-        alert(`👁️ Вы наблюдатель. Код дуэли был: ${match.code}`);
-        renderPvp();
-      }
-    }
-
-    function claimMining() {
-      const now = Date.now();
-      const hoursPassed = (now - state.lastMiningTime) / (1000 * 60 * 60);
-
-      let totalRate = 0;
-      state.inventory.forEach(inv => {
-        const it = ITEMS.find(i => i.id === inv.id);
-        if (it) totalRate += it.income * inv.count;
-      });
-
-      const earned = Math.floor(hoursPassed * totalRate);
-      if (earned > 0) {
-        state.coins += earned;
-        state.lastMiningTime = now;
-        saveState();
-        alert(`💰 Собрано: +${earned} 🪙`);
-      } else {
-        alert("⏱️ Награда пока накапливается!");
-      }
-    }
-
-    saveState();
-    renderSafes();
-  </script>
-</body>
-</html>
-

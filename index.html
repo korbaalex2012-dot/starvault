@@ -3,103 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>StarVault: Взлом Сейфов 🔓</title>
+  <title>StarVault VIP Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d0f17;
-      --panel: #161925;
-      --accent: #00f0ff;
+      --bg-gradient: radial-gradient(circle at center, #1a1f36 0%, #0a0c16 100%);
+      --panel-bg: rgba(22, 27, 46, 0.75);
+      --panel-border: rgba(0, 240, 255, 0.2);
+      --accent-cyan: #00f0ff;
       --accent-gold: #ffd700;
-      --text: #ffffff;
-      --text-dim: #8b92b2;
-      --danger: #ff0055;
-      --success: #00ff88;
+      --accent-purple: #9d4edd;
+      --accent-pink: #ff007f;
+      --text-main: #ffffff;
+      --text-muted: #8a94b8;
+      --danger: #ff2a6d;
+      --success: #05ffa1;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 70px; overflow-x: hidden; }
-    
-    header { background: var(--panel); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #282d42; }
-    .user-info { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #282d42; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid var(--accent); }
-    .balance { background: #0004; padding: 6px 12px; border-radius: 20px; border: 1px solid #282d42; font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 5px; }
 
-    .nav-tabs { display: flex; background: var(--panel); position: fixed; bottom: 0; left: 0; right: 0; height: 60px; border-top: 1px solid #282d42; z-index: 100; }
-    .tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-dim); font-size: 11px; gap: 4px; cursor: pointer; }
-    .tab-btn.active { color: var(--accent); }
-    .tab-btn span { font-size: 18px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: 'Montserrat', sans-serif; }
+    body { background: #0a0c16; background-image: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding-bottom: 80px; overflow-x: hidden; }
 
-    .page { display: none; padding: 15px; }
-    .page.active { display: block; }
+    /* HEADER */
+    header { background: var(--panel-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--panel-border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; sticky; top: 0; z-index: 50; }
+    .user-profile { display: flex; align-items: center; gap: 12px; }
+    .avatar-wrap { position: relative; width: 44px; height: 44px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); }
+    .avatar { width: 100%; height: 100%; border-radius: 50%; background: #121629; display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .user-info .name { font-weight: 800; font-size: 14px; letter-spacing: 0.5px; }
+    .user-info .title { font-size: 10px; color: var(--accent-cyan); font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; }
+    .balances { display: flex; gap: 8px; }
+    .badge { background: rgba(0, 0, 0, 0.4); border: 1px solid var(--panel-border); padding: 6px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .badge.coins { color: var(--accent-gold); border-color: rgba(255, 215, 0, 0.3); }
+    .badge.keys { color: var(--accent-cyan); border-color: rgba(0, 240, 255, 0.3); }
+
+    /* NAVIGATION */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(10, 12, 22, 0.9); backdrop-filter: blur(16px); border-top: 1px solid var(--panel-border); display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+    .nav-item { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; flex: 1; }
+    .nav-item.active { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+    .nav-item .icon { font-size: 20px; }
+
+    /* PAGES */
+    .page { display: none; padding: 16px; opacity: 0; transition: opacity 0.3s ease; }
+    .page.active { display: block; opacity: 1; }
 
     /* GRID СЕЙФОВ */
-    .safes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-    .safe-card { background: var(--panel); border: 1px solid #282d42; border-radius: 12px; padding: 10px; text-align: center; position: relative; cursor: pointer; transition: 0.2s; }
-    .safe-card:active { transform: scale(0.95); }
-    .safe-icon { font-size: 32px; margin-bottom: 5px; }
-    .safe-title { font-size: 12px; font-weight: bold; }
-    .safe-reward { font-size: 10px; color: var(--accent-gold); margin-top: 4px; }
+    .section-title { font-family: 'Orbitron', sans-serif; font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .safes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .safe-card { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 16px; padding: 14px; text-align: center; position: relative; overflow: hidden; transition: 0.2s; cursor: pointer; backdrop-filter: blur(8px); }
+    .safe-card:active { transform: scale(0.96); }
+    .safe-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent); }
+    .safe-img { width: 80px; height: 80px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 0 8px rgba(0,240,255,0.3)); }
+    .safe-img img { width: 100%; height: 100%; object-fit: contain; }
+    .safe-title { font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+    .safe-desc { font-size: 10px; color: var(--text-muted); margin-bottom: 8px; }
+    .safe-reward { background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.2); color: var(--accent-gold); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 8px; display: inline-block; }
+       /* ИНВЕНТАРЬ И МАРКЕТ */
+    .inventory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .item-card { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 12px; padding: 12px; text-align: center; position: relative; }
+    .item-icon { width: 50px; height: 50px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; }
+    .item-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .item-name { font-weight: 700; font-size: 12px; margin-bottom: 2px; }
+    .item-rarity { font-size: 9px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+    .rarity-common { color: #8a94b8; }
+    .rarity-rare { color: var(--accent-cyan); }
+    .rarity-legendary { color: var(--accent-gold); }
 
-    /* МОДАЛКА */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
-    .modal.active { display: flex; }
-    .modal-content { background: var(--panel); border: 1px solid var(--accent); border-radius: 16px; width: 100%; max-width: 360px; padding: 20px; text-align: center; position: relative; }
-    .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; }
+    /* МОДАЛЬНОЕ ОКНО ИГРЫ */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(5, 7, 15, 0.9); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+    .game-box { background: #121629; border: 1px solid var(--accent-cyan); border-radius: 20px; width: 100%; max-width: 380px; padding: 20px; text-align: center; box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); position: relative; }
+    .close-modal { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+    
+    .safe-display { background: #070913; border: 1px solid #282d42; border-radius: 12px; padding: 12px; margin: 16px 0; font-family: 'Orbitron', monospace; font-size: 28px; letter-spacing: 8px; color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); min-height: 55px; display: flex; align-items: center; justify-content: center; }
+    
+    .keypad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .key-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; padding: 14px; border-radius: 12px; cursor: pointer; transition: 0.1s; }
+    .key-btn:active { background: var(--accent-cyan); color: #000; box-shadow: 0 0 15px var(--accent-cyan); }
+    
+    .btn-action { background: linear-gradient(135deg, var(--accent-cyan), #0088ff); color: #000; font-family: 'Orbitron', sans-serif; font-weight: 900; border: none; padding: 14px; border-radius: 12px; width: 100%; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 12px; }
+    .btn-action:active { transform: scale(0.98); }
 
-    /* КЛАВИАТУРА СЕЙФА */
-    .digits-display { background: #000; color: var(--accent); font-size: 24px; font-family: monospace; letter-spacing: 5px; padding: 10px; border-radius: 8px; margin: 15px 0; border: 1px solid #282d42; height: 50px; display: flex; align-items: center; justify-content: center; }
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .key-btn { background: #222738; border: 1px solid #282d42; color: #fff; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; }
-    .key-btn:active { background: var(--accent); color: #000; }
-
-    .btn { background: var(--accent); color: #000; border: none; padding: 12px 20px; font-weight: bold; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; }
-    .btn-danger { background: var(--danger); color: #fff; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="user-info">
-      <div class="avatar" id="uAvatar">😎</div>
-      <div>
-        <div id="uName" style="font-weight: bold; font-size: 14px;">Игрок</div>
-        <div id="uTitle" style="font-size: 10px; color: var(--accent);">[Новичок]</div>
+    <div class="user-profile">
+      <div class="avatar-wrap">
+        <div class="avatar" id="uAvatar">😎</div>
+      </div>
+      <div class="user-info">
+        <div class="name" id="uName">Игрок</div>
+        <div class="title" id="uTitle">ВЗЛОМЩИК</div>
       </div>
     </div>
-    <div class="balance">🪙 <span id="uCoins">100</span></div>
+    <div class="balances">
+      <div class="badge coins">🪙 <span id="uCoins">100</span></div>
+      <div class="badge keys">🔑 <span id="uKeys">5</span></div>
+    </div>
   </header>
-
-  <div id="page-safes" class="page active">
-    <h3>🔓 Выберите сейф для взлома</h3>
+    <div id="page-safes" class="page active">
+    <div class="section-title">🔓 Выберите сейф</div>
     <div class="safes-grid" id="safesGrid"></div>
   </div>
 
   <div id="page-inventory" class="page">
-    <h3>🎒 Ваш Инвентарь</h3>
-    <div id="inventoryList" style="margin-top: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
+    <div class="section-title">🎒 Ваш Инвентарь</div>
+    <div class="inventory-grid" id="inventoryList"></div>
   </div>
 
   <div id="page-pvp" class="page">
-    <h3>⚔️ PVP Дуэль & Маркет</h3>
-    <p style="color: var(--text-dim); font-size: 12px; margin-top: 5px;">Бросьте вызов другим взломщикам!</p>
-    <button class="btn" style="margin-top: 15px;" onclick="startPvpMatch()">Искать соперника (50 🪙)</button>
+    <div class="section-title">⚔️ PVP & Магазин</div>
+    <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 16px; border-radius: 16px; text-align: center; margin-bottom: 14px;">
+      <h4 style="font-family: 'Orbitron'; color: var(--accent-cyan); margin-bottom: 6px;">Дуэль взломщиков</h4>
+      <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Кто быстрее подберет код — забирает весь банк!</p>
+      <button class="btn-action" onclick="startPvpMatch()">Искать соперника (50 🪙)</button>
+    </div>
   </div>
 
-  <nav class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('safes', this)"><span>🔓</span>Сейфы</button>
-    <button class="tab-btn" onclick="switchTab('inventory', this)"><span>🎒</span>Предметы</button>
-    <button class="tab-btn" onclick="switchTab('pvp', this)"><span>⚔️</span>PVP</button>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('safes', this)">
+      <span class="icon">🔓</span>
+      <span>СЕЙФЫ</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('inventory', this)">
+      <span class="icon">🎒</span>
+      <span>ИНВЕНТАРЬ</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('pvp', this)">
+      <span class="icon">⚔️</span>
+      <span>PVP</span>
+    </button>
   </nav>
 
-  <div class="modal" id="gameModal">
-    <div class="modal-content">
-      <button class="close-btn" onclick="closeGame()">✕</button>
-      <h3 id="gSafeName">Сейф</h3>
-      <div id="gSafeMode" style="font-size: 12px; color: var(--text-dim); margin-top: 4px;">Попыток: 5</div>
-      <div class="digits-display" id="gDisplay">____</div>
-      <div id="gameHint" style="font-size: 11px; color: var(--accent-gold); height: 18px; margin-bottom: 5px;"></div>
+  <div class="modal-overlay" id="gameModal">
+    <div class="game-box">
+      <button class="close-modal" onclick="closeGame()">✕</button>
+      <h3 id="gSafeName" style="font-family: 'Orbitron'; font-size: 16px; color: #fff;">Сейф</h3>
+      <div id="gSafeMode" style="font-size: 11px; color: var(--accent-cyan); margin-top: 4px;">Попыток: 5</div>
       
-      <div class="keypad">
+      <div class="safe-display" id="gDisplay">____</div>
+      <div id="gameHint" style="font-size: 11px; color: var(--accent-gold); height: 16px; margin-bottom: 10px;"></div>
+
+      <div class="keypad-grid">
         <button class="key-btn" onclick="pressNum('1')">1</button>
         <button class="key-btn" onclick="pressNum('2')">2</button>
         <button class="key-btn" onclick="pressNum('3')">3</button>
@@ -115,61 +163,70 @@
       </div>
     </div>
   </div>
-   <script>
-    // 1. ИНИЦИАЛИЗАЦИЯ И ДАННЫЕ
+
+  <script>
+    // ИНИЦИАЛИЗАЦИЯ TELEGRAM
     let tg = window.Telegram ? window.Telegram.WebApp : null;
     try {
       if (tg) {
         tg.ready();
         tg.expand();
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+          document.getElementById('uName').innerText = tg.initDataUnsafe.user.first_name;
+        }
       }
     } catch(e) {
-      console.log("Запуск вне Telegram");
+      console.log("Запуск в обычном браузере");
     }
 
     let userCoins = 100;
+    let userKeys = 5;
     let inventory = [];
 
+    // БАЗА ДАННЫХ СЕЙФОВ (С картинками!)
     const SAFES_DATA = [
-      { id: 1, name: "Деревянный сейф", icon: "📦", len: 3, limit: 5, mode: "logic", baseReward: 50 },
-      { id: 2, name: "Железный сейф", icon: "⚙️", len: 4, limit: 5, mode: "logic", baseReward: 150 },
-      { id: 3, name: "Стальной сейф", icon: "🛡️", len: 4, limit: 30, mode: "time", baseReward: 300 },
-      { id: 4, name: "Золотой сейф", icon: "🏆", len: 4, limit: 4, mode: "logic", baseReward: 600 },
-      { id: 5, name: "Алмазный сейф", icon: "💎", len: 5, limit: 40, mode: "time", baseReward: 1200 },
-      { id: 6, name: "Хакерский сейф", icon: "💻", len: 5, limit: 3, mode: "logic", baseReward: 2500 }
+      { id: 1, name: "Деревянный сейф", img: "IMG_20260719_173450.png", fallback: "📦", desc: "Простой код из 3 цифр", len: 3, limit: 5, mode: "logic", baseReward: 50 },
+      { id: 2, name: "Железный сейф", img: "IMG_20260719_173510.png", fallback: "⚙️", desc: "Сложность: Средняя", len: 4, limit: 5, mode: "logic", baseReward: 150 },
+      { id: 3, name: "Стальной сейф", img: "IMG_20260719_173525.png", fallback: "🛡️", desc: "Взлом на время (30 сек)", len: 4, limit: 30, mode: "time", baseReward: 300 },
+      { id: 4, name: "Золотой сейф", img: "IMG_20260719_173540.png", fallback: "🏆", desc: "Высокая награда!", len: 4, limit: 4, mode: "logic", baseReward: 600 },
+      { id: 5, name: "Алмазный сейф", img: "IMG_20260719_173555.png", fallback: "💎", desc: "Взлом на время (40 сек)", len: 5, limit: 40, mode: "time", baseReward: 1200 },
+      { id: 6, name: "Хакерский сейф", img: "IMG_20260719_173610.png", fallback: "💻", desc: "Элитный уровень", len: 5, limit: 3, mode: "logic", baseReward: 2500 }
     ];
 
+    // ПУЛ ПРЕДМЕТОВ ДЛЯ РЕДКОГО ВЫПАДЕНИЯ
     const ITEMS_POOL = [
-      { name: "⚡ Отмычка", rarity: "Обычный", desc: "Дает +1 попытку" },
-      { name: "🔍 Сканер кода", rarity: "Редкий", desc: "Подсказывает цифру" },
-      { name: "👑 Золотая отмычка", rarity: "Легендарный", desc: "Увеличивает награду х2" }
+      { id: 'lockpick', name: "Отмычка", img: "IMG_20260719_173625.png", fallback: "⚡", rarity: "rare", rarityName: "Редкий" },
+      { id: 'scanner', name: "Сканер", img: "IMG_20260719_173640.png", fallback: "🔍", rarity: "rare", rarityName: "Редкий" },
+      { id: 'gold_key', name: "Золотой ключ", img: "IMG_20260719_173655.png", fallback: "👑", rarity: "legendary", rarityName: "Легендарный" }
     ];
-
-    let activeSafe = null;
+        let activeSafe = null;
     let secretCode = "";
     let currentInput = "";
     let attemptsLeft = 0;
     let secondsLeft = 0;
     let gameTimer = null;
 
-    // 2. ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     function switchTab(tabName, btn) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
       
       document.getElementById(`page-${tabName}`).classList.add('active');
       btn.classList.add('active');
     }
 
-    // 3. ОТРИСОВКА СЕЙФОВ
+    // ОТРИСОВКА СЕЙФОВ
     function renderSafes() {
       const grid = document.getElementById('safesGrid');
       grid.innerHTML = "";
       SAFES_DATA.forEach(s => {
         grid.innerHTML += `
           <div class="safe-card" onclick="openGame(${s.id})">
-            <div class="safe-icon">${s.icon}</div>
+            <div class="safe-img">
+              <img src="${s.img}" onerror="this.outerHTML='<span style=\'font-size:40px;\'>${s.fallback}</span>'">
+            </div>
             <div class="safe-title">${s.name}</div>
+            <div class="safe-desc">${s.desc}</div>
             <div class="safe-reward">+${s.baseReward} 🪙</div>
           </div>
         `;
@@ -179,27 +236,31 @@
 
     function updateUI() {
       document.getElementById('uCoins').innerText = userCoins;
+      document.getElementById('uKeys').innerText = userKeys;
       renderInventory();
     }
 
     function renderInventory() {
       const list = document.getElementById('inventoryList');
       if (inventory.length === 0) {
-        list.innerHTML = `<div style="grid-column: span 2; color: var(--text-dim); text-align: center; font-size: 12px; margin-top: 20px;">Инвентарь пуст. Взламывайте сейфы, чтобы выбить предметы!</div>`;
+        list.innerHTML = `<div style="grid-column: span 2; color: var(--text-muted); text-align: center; font-size: 12px; padding: 20px 0;">Инвентарь пуст. Взламывайте сейфы, чтобы получить редкий лут!</div>`;
         return;
       }
       list.innerHTML = "";
       inventory.forEach(item => {
         list.innerHTML += `
-          <div style="background: var(--panel); border: 1px solid #282d42; padding: 10px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 20px;">${item.name.split(' ')[0]}</div>
-            <div style="font-weight: bold; font-size: 12px; margin-top: 4px;">${item.name}</div>
-            <div style="font-size: 10px; color: var(--accent); margin-top: 2px;">${item.rarity}</div>
+          <div class="item-card">
+            <div class="item-icon">
+              <img src="${item.img}" onerror="this.outerHTML='<span style=\'font-size:30px;\'>${item.fallback}</span>'">
+            </div>
+            <div class="item-name">${item.name}</div>
+            <div class="item-rarity rarity-${item.rarity}">${item.rarityName}</div>
           </div>
         `;
       });
     }
-         // 4. ИГРОВАЯ ЛОГИКА И НАСТРОЙКА РЕДКОГО ВЫПАДЕНИЯ
+
+    // ОТКРЫТИЕ ИГРЫ
     function openGame(safeId) {
       activeSafe = SAFES_DATA.find(s => s.id === safeId);
       if (!activeSafe) return;
@@ -210,20 +271,20 @@
       }
 
       currentInput = "";
-      document.getElementById('gSafeName').innerText = `${activeSafe.icon} ${activeSafe.name}`;
+      document.getElementById('gSafeName').innerText = activeSafe.name;
       document.getElementById('gameHint').innerText = "";
       updateDisplay();
 
       if (activeSafe.mode === 'logic') {
         attemptsLeft = activeSafe.limit;
-        document.getElementById('gSafeMode').innerText = `Попыток оставлось: ${attemptsLeft}`;
+        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
       } else {
         secondsLeft = activeSafe.limit;
-        document.getElementById('gSafeMode').innerText = `Осталось времени: ${secondsLeft}с`;
+        document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft} сек`;
         if (gameTimer) clearInterval(gameTimer);
         gameTimer = setInterval(() => {
           secondsLeft--;
-          document.getElementById('gSafeMode').innerText = `Осталось времени: ${secondsLeft}с`;
+          document.getElementById('gSafeMode').innerText = `Время: ${secondsLeft} сек`;
           if (secondsLeft <= 0) {
             clearInterval(gameTimer);
             alert("⏰ Время вышло! Сейф заблокирован.");
@@ -259,20 +320,19 @@
       if (currentInput === secretCode) {
         if (gameTimer) clearInterval(gameTimer);
 
-        // Награда монетами
         userCoins += activeSafe.baseReward;
 
-        // ЛОГИКА РЕДКОГО ВЫПАДЕНИЯ ПРЕДМЕТА (25% шанс)
+        // ВЫПАДЕНИЕ ПРЕДМЕТА: ШАНС 25% (РЕДКО)
         const dropChance = Math.random() * 100;
-        let droppedItemMsg = "";
+        let itemMsg = "";
 
-        if (dropChance <= 25) { // 25% УДАЧИ
+        if (dropChance <= 25) {
           const randomItem = ITEMS_POOL[Math.floor(Math.random() * ITEMS_POOL.length)];
           inventory.push(randomItem);
-          droppedItemMsg = `\n🎁 ВАУ! Тебе выпал редкий предмет: ${randomItem.name}!`;
+          itemMsg = `\n🔥 РЕДКИЙ ЛУТ! ВЫ ПОЛУЧИЛИ: ${randomItem.name}!`;
         }
 
-        alert(`🎉 ВЗЛОМ УСПЕШЕН!\nВы получили +${activeSafe.baseReward} 🪙${droppedItemMsg}`);
+        alert(`🎉 СЕЙФ ВЗЛОМАН!\nНаграда: +${activeSafe.baseReward} 🪙${itemMsg}`);
         closeGame();
         updateUI();
       } else {
@@ -281,20 +341,15 @@
 
         if (activeSafe.mode === 'logic') {
           attemptsLeft--;
-          document.getElementById('gSafeMode').innerText = `Попыток осталось: ${attemptsLeft}`;
-          
-          let correctPos = 0;
-          for (let i = 0; i < activeSafe.len; i++) {
-            if (currentInput[i] === secretCode[i]) correctPos++;
-          }
-          document.getElementById('gameHint').innerText = "Неверный код! Попробуй еще.";
+          document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
+          document.getElementById('gameHint').innerText = "Неверный комбинация!";
 
           if (attemptsLeft <= 0) {
-            alert("❌ Попытки закончились! Сейф заблокирован.");
+            alert("❌ Попытки исчерпаны! Сейф заблокирован.");
             closeGame();
           }
         } else {
-          document.getElementById('gameHint').innerText = "Неверный код!";
+          document.getElementById('gameHint').innerText = "Неверно!";
         }
       }
     }
@@ -306,15 +361,15 @@
 
     function startPvpMatch() {
       if (userCoins < 50) {
-        alert("Недостаточно монет для взноса!");
+        alert("Недостаточно монет!");
         return;
       }
       userCoins -= 50;
       updateUI();
-      alert("⚔️ Поиск соперника... Попробуйте чуть позже!");
+      alert("⚔️ Поиск соперника... Соперник не найден.");
     }
 
-    // СТАРТ ИГРЫ
+    // СТАРТ
     renderSafes();
   </script>
 </body>

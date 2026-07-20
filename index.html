@@ -20,31 +20,43 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         .app-container { width: 100%; max-width: 420px; height: 100vh; max-height: 880px; background: radial-gradient(circle at top, #162238 0%, #0B0F19 100%); display: flex; flex-direction: column; position: relative; overflow: hidden; }
-        .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .toast-card { background: #141d2f; border: 1px solid var(--accent-gold); border-radius: 16px; padding: 20px; width: 80%; max-width: 300px; text-align: center; }
+        
+        .toast-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .toast-card { background: #141d2f; border: 1px solid var(--accent-gold); border-radius: 16px; padding: 20px; width: 85%; max-width: 320px; text-align: center; }
         .toast-title { font-weight: 800; font-size: 16px; color: var(--accent-gold); margin-bottom: 8px; }
-        .toast-msg { font-size: 13px; color: var(--text-main); margin-bottom: 16px; }
-        .toast-btn { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        .toast-msg { font-size: 13px; color: var(--text-main); margin-bottom: 14px; }
+        .toast-input { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #FFF; font-size: 14px; text-align: center; margin-bottom: 12px; outline: none; text-transform: uppercase; }
+        .toast-btn { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 10px 18px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
+
         .settings-menu-wrapper { position: absolute; top: 15px; left: 15px; z-index: 100; }
-        .gear-btn { font-size: 20px; cursor: pointer; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .gear-btn { font-size: 18px; cursor: pointer; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); }
         .settings-dropdown { display: none; position: absolute; top: 45px; left: 0; flex-direction: column; gap: 8px; }
         .settings-menu-wrapper.open .settings-dropdown { display: flex; }
         .sub-button { background: rgba(20,29,47,0.95); border: 1px solid rgba(255,255,255,0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+
         .top-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px; gap: 10px; z-index: 10; }
         .coin-counter { background: rgba(255,215,0,0.1); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: var(--accent-gold); display: flex; align-items: center; gap: 6px; }
         .screen { display: none; flex-direction: column; flex: 1; padding: 15px; overflow-y: auto; position: relative; }
-        .main-action-zone { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .main-button { width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, #ffea75 0%, #ff9800 100%); border: 4px solid #FFF; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .main-button .title { color: #000; font-weight: 900; font-size: 18px; text-transform: uppercase; text-align: center; }
+
+        /* ПРЯМОУГОЛЬНАЯ ГЛАВНАЯ КНОПКА C КРАСИВЫМ ФОНОМ */
+        .main-action-zone { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px 0; }
+        .main-button { width: 100%; height: 140px; border-radius: 20px; background: linear-gradient(135deg, #1e2d4a 0%, #111a2e 100%); border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15); position: relative; overflow: hidden; }
+        .main-button::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%); pointer-events: none; }
+        .main-button .icon { font-size: 38px; }
+        .main-button .title { color: var(--accent-gold); font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .main-button .subtitle { color: var(--text-muted); font-size: 12px; font-weight: 600; }
+
         .middle-zone { display: flex; gap: 10px; margin-bottom: 12px; }
         .mid-button { flex: 1; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 13px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         .btn-assets { background: linear-gradient(135deg, #2b3a55, #162238); }
         .btn-pvp { background: linear-gradient(135deg, #d32f2f, #880e4f); }
         .bottom-zone { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .bottom-button { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
+
         .screen-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .btn-back { background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
         .screen-title { font-size: 18px; font-weight: 800; }
+
         .cases-grid-wrapper { flex: 1; overflow-y: auto; }
         .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .case-card { background: var(--card-bg); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; }
@@ -54,6 +66,7 @@
         .case-price { font-size: 11px; color: var(--accent-gold); margin-bottom: 6px; }
         .case-jackpot { font-size: 10px; color: var(--text-muted); }
         .unlock-btn { margin-top: 8px; width: 100%; background: var(--accent-gold); color: #000; border: none; padding: 6px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
+
         .game-screen-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; }
         .radar-panel { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 15px; border-radius: 16px; text-align: center; }
         .radar-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
@@ -64,12 +77,14 @@
         .drum-display { width: 48px; height: 60px; background: #000; border: 2px solid var(--accent-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #FFF; }
         .drum-btn { background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 48px; height: 30px; border-radius: 6px; font-size: 12px; cursor: pointer; }
         .btn-action-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, #00e676, #00b0ff); border: none; border-radius: 14px; color: #000; font-weight: 900; font-size: 16px; cursor: pointer; }
+
         .shop-container { display: flex; flex-direction: column; gap: 12px; }
         .shop-section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
         .stars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .star-card { background: rgba(15, 22, 36, 0.85); border: 1px solid rgba(255,215,0,0.3); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
         .star-amount { font-weight: 900; font-size: 14px; color: var(--accent-gold); }
         .star-price { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 10px; }
+
         .daily-container { display: flex; flex-direction: column; gap: 12px; }
         .streak-card { background: linear-gradient(135deg, #ff9800, #f57c00); border-radius: 16px; padding: 16px; color: #000; text-align: center; }
         .streak-title { font-size: 12px; font-weight: 800; text-transform: uppercase; }
@@ -78,6 +93,7 @@
         .day-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; }
         .day-card.claimed { opacity: 0.4; border-color: transparent; }
         .day-card.today { border-color: var(--accent-gold); background: rgba(255,215,0,0.15); }
+
         .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 2px; margin-bottom: 12px; }
         .tab-btn { flex: 1; text-align: center; padding: 8px; font-size: 11px; font-weight: 800; border-radius: 8px; cursor: pointer; color: var(--text-muted); }
         .tab-btn.active { background: var(--accent-blue); color: #000; }
@@ -98,7 +114,7 @@
         .my-rank-card { background: rgba(0, 191, 255, 0.15); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
-<body>
+  <body>
 
 <div class="app-container">
 
@@ -106,6 +122,7 @@
         <div class="toast-card">
             <div class="toast-title" id="toastTitle">Уведомление</div>
             <div class="toast-msg" id="toastMsg">Сообщение системы</div>
+            <input type="text" class="toast-input" id="toastInput" placeholder="ВВЕДИТЕ ПРОМОКОД" style="display:none;">
             <button class="toast-btn" id="btnToastOk">Понятно</button>
         </div>
     </div>
@@ -113,8 +130,8 @@
     <div class="settings-menu-wrapper" id="settingsWrapper">
         <div class="gear-btn" id="triggerGear">⚙️</div>
         <div class="settings-dropdown">
-            <div class="sub-button" id="btnCup">🏆</div>
-            <div class="sub-button" id="btnLang">🌐</div>
+            <div class="sub-button" id="btnCup" title="Лидерборд">🏆</div>
+            <div class="sub-button" id="btnLang" title="Язык">🌐</div>
         </div>
     </div>
 
@@ -126,7 +143,9 @@
     <div id="mainMenuScreen" class="screen" style="display: flex;">
         <div class="main-action-zone">
             <div class="main-button" id="btnGoToCases">
-                <span class="title">Открыть сейф</span>
+                <div class="icon">🔓</div>
+                <div class="title">Открыть сейф</div>
+                <div class="subtitle">Взламывай замки и забирай куш</div>
             </div>
         </div>
 
@@ -276,9 +295,6 @@
                 </div>
                 <button class="unlock-btn" style="width: auto; padding: 8px 12px;" onclick="buyExtraAttempts()">30 🪙</button>
             </div>
-
-            <div class="shop-section-title">🧪 Панель разработчика</div>
-            <button class="btn-action-submit" onclick="addTestCoins()" style="background: linear-gradient(135deg, #00e676, #00b0ff); color: #000; padding: 12px;">⚡ Получить +10,000 🪙 (ТЕСТ)</button>
         </div>
     </div>
 
@@ -396,20 +412,47 @@
 
         <div class="my-rank-card" id="myRankCard">
             <div style="display:flex; align-items:center; gap:8px;">
-                <div style="font-weight:900; color:var(--accent-blue);" id="myRankPos">#100+</div>
-                <div style="font-weight:800; font-size:13px;">Ты (Вы)</div>
+                <div style="font-weight:900; color:var(--accent-blue);" id="myRankPos">#1</div>
+                <div style="font-weight:800; font-size:13px;" id="myRankName">Ты (Вы)</div>
             </div>
             <div style="font-weight:900; color:var(--accent-gold);" id="myRankVal">100 🪙</div>
         </div>
     </div>
 
 </div>
+  <div class="toast-modal" id="settingsModal">
+    <div class="toast-card" style="text-align: left;">
+        <div class="toast-title" style="text-align: center; margin-bottom: 15px;">⚙️ Настройки</div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 13px; font-weight: 700;">🔊 Звук</span>
+            <input type="checkbox" id="toggleSound" checked style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 13px; font-weight: 700;">📳 Виброотклик</span>
+            <input type="checkbox" id="toggleHaptic" checked style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <span style="font-size: 13px; font-weight: 700;">🌐 Язык</span>
+            <span style="font-size: 12px; color: var(--accent-gold); font-weight: 800;">Русский</span>
+        </div>
+
+        <button class="toast-btn" id="btnCloseSettings">Сохранить</button>
+    </div>
+</div>
+
 <script>
 // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
 var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
 var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
 var userTimeInGame = parseInt(localStorage.getItem('sv_time_in_game')) || 0;
+var usedPromos = JSON.parse(localStorage.getItem('sv_used_promos')) || [];
+
+var soundEnabled = localStorage.getItem('sv_sound') !== 'false';
+var hapticEnabled = localStorage.getItem('sv_haptic') !== 'false';
 
 var unlockedCases = JSON.parse(localStorage.getItem('sv_unlocked_cases')) || ['wood'];
 var userMiners = JSON.parse(localStorage.getItem('sv_miners')) || [];
@@ -418,7 +461,7 @@ var refEarned = parseInt(localStorage.getItem('sv_ref_earned')) || 0;
 
 var currentLeaderTab = 'coins';
 
-// ИГРОВЫЕ ПЕРЕМЕННЫЕ ВЗЛОМА
+// ИГРОВЫЕ ПЕРЕМЕННЫЕ
 var maxAttempts = 5;
 var remainingAttempts = 5;
 var currentSecretCode = [];
@@ -434,6 +477,9 @@ function saveProgress() {
     localStorage.setItem('sv_ref_count', refCount);
     localStorage.setItem('sv_ref_earned', refEarned);
     localStorage.setItem('sv_time_in_game', userTimeInGame);
+    localStorage.setItem('sv_used_promos', JSON.stringify(usedPromos));
+    localStorage.setItem('sv_sound', soundEnabled);
+    localStorage.setItem('sv_haptic', hapticEnabled);
     updateUI();
 }
 
@@ -469,6 +515,7 @@ function updateUI() {
 }
 
 function triggerHaptic(type) {
+    if (!hapticEnabled) return;
     if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
         if (type === 'impact') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
         if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
@@ -477,8 +524,18 @@ function triggerHaptic(type) {
 }
 
 function showToast(title, msg) {
+    document.getElementById('toastInput').style.display = 'none';
     document.getElementById('toastTitle').innerText = title;
     document.getElementById('toastMsg').innerText = msg;
+    document.getElementById('toastModal').style.display = 'flex';
+}
+
+function showPromoModal() {
+    document.getElementById('toastTitle').innerText = "Ключ-код";
+    document.getElementById('toastMsg').innerText = "Введите секретный промокод:";
+    var input = document.getElementById('toastInput');
+    input.value = "";
+    input.style.display = 'block';
     document.getElementById('toastModal').style.display = 'flex';
 }
 
@@ -493,25 +550,17 @@ function showScreen(screenId) {
     if (settingsWrapper) settingsWrapper.classList.remove('open');
 }
 
-/* ФУНКЦИИ МАГАЗИНА И ПОКУПОК */
 function buyStarsPack(coinsAmount, starsCost) {
     triggerHaptic('success');
     userCoins += coinsAmount;
     saveProgress();
-    showToast("Покупка 🌟 Stars", "Успешно получено +" + coinsAmount + " 🪙 за " + starsCost + " Stars!");
-}
-
-function addTestCoins() {
-    triggerHaptic('success');
-    userCoins += 10000;
-    saveProgress();
-    showToast("Тестовый режим", "Вам зачислено +10,000 🪙!");
+    showToast("Покупка 🌟 Stars", "Успешно получено +" + coinsAmount + " 🪙!");
 }
 
 function buyExtraAttempts() {
     if (userCoins < 30) {
         triggerHaptic('error');
-        showToast("Ошибка", "Недостаточно монет для покупки попыток!");
+        showToast("Ошибка", "Недостаточно монет!");
         return;
     }
     userCoins -= 30;
@@ -519,7 +568,7 @@ function buyExtraAttempts() {
     saveProgress();
     document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
     triggerHaptic('success');
-    showToast("Попытки куплены", "Вы получили +3 доп. попытки!");
+    showToast("Попытки куплены", "+3 доп. попытки добавлено!");
 }
 
 function unlockCase(caseId, cost, event) {
@@ -611,38 +660,48 @@ function renderDailyGrid() {
 
 function renderLeaderboard() {
     var isCoins = (currentLeaderTab === 'coins');
+    var userName = document.getElementById('userTag').innerText || "Игрок";
+
     var mockData = [
         { name: "CyberGhost", val: isCoins ? 9500 : 180 },
         { name: "Satoshi_N", val: isCoins ? 8200 : 155 },
         { name: "VaultMaster", val: isCoins ? 6400 : 120 },
-        { name: "Alex_Vault", val: isCoins ? 5100 : 95 },
         { name: "Hacker777", val: isCoins ? 4300 : 80 }
     ];
 
-    if (document.getElementById('p1-name')) {
-        document.getElementById('p1-name').innerText = mockData[0].name;
-        document.getElementById('p1-val').innerText = mockData[0].val + (isCoins ? " 🪙" : " ч.");
-        document.getElementById('p2-name').innerText = mockData[1].name;
-        document.getElementById('p2-val').innerText = mockData[1].val + (isCoins ? " 🪙" : " ч.");
-        document.getElementById('p3-name').innerText = mockData[2].name;
-        document.getElementById('p3-val').innerText = mockData[2].val + (isCoins ? " 🪙" : " ч.");
-    }
+    var myVal = isCoins ? userCoins : Math.floor(userTimeInGame / 60);
+    mockData.push({ name: userName + " (Ты)", val: myVal, isMe: true });
+
+    mockData.sort(function(a, b) { return b.val - a.val; });
+
+    document.getElementById('p1-name').innerText = mockData[0] ? mockData[0].name : "---";
+    document.getElementById('p1-val').innerText = mockData[0] ? (mockData[0].val + (isCoins ? " 🪙" : " ч.")) : "0";
+    document.getElementById('p2-name').innerText = mockData[1] ? mockData[1].name : "---";
+    document.getElementById('p2-val').innerText = mockData[1] ? (mockData[1].val + (isCoins ? " 🪙" : " ч.")) : "0";
+    document.getElementById('p3-name').innerText = mockData[2] ? mockData[2].name : "---";
+    document.getElementById('p3-val').innerText = mockData[2] ? (mockData[2].val + (isCoins ? " 🪙" : " ч.")) : "0";
 
     var listEl = document.getElementById('leaderList');
     if (!listEl) return;
     listEl.innerHTML = "";
 
-    for (var i = 3; i < mockData.length; i++) {
-        var item = document.createElement('div');
-        item.className = 'leader-item';
-        item.innerHTML = 
-            '<div class="leader-rank">#' + (i + 1) + '</div>' +
-            '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
-            '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
-        listEl.appendChild(item);
+    var myPos = 1;
+    for (var i = 0; i < mockData.length; i++) {
+        if (mockData[i].isMe) myPos = i + 1;
+        if (i >= 3) {
+            var item = document.createElement('div');
+            item.className = 'leader-item';
+            if (mockData[i].isMe) item.style.border = "1px solid var(--accent-blue)";
+            item.innerHTML = 
+                '<div class="leader-rank">#' + (i + 1) + '</div>' +
+                '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
+                '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
+            listEl.appendChild(item);
+        }
     }
 
-    document.getElementById('myRankPos').innerText = "#42";
+    document.getElementById('myRankPos').innerText = "#" + myPos;
+    document.getElementById('myRankName').innerText = userName + " (Ты)";
     document.getElementById('myRankVal').innerText = isCoins ? (userCoins + " 🪙") : (Math.floor(userTimeInGame / 60) + " ч.");
 }
 
@@ -654,7 +713,7 @@ function switchLeaderTab(tab) {
     renderLeaderboard();
 }
 
-/* ЗАПУСК ПОСЛЕ ПОЛНОЙ ЗАГРУЗКИ DOM */
+/* ЗАПУСК И ОБРАБОТЧИКИ */
 document.addEventListener("DOMContentLoaded", function() {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
@@ -664,29 +723,23 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    document.getElementById('toggleSound').checked = soundEnabled;
+    document.getElementById('toggleHaptic').checked = hapticEnabled;
+
     updateUI();
 
-    // НАВИГАЦИЯ
-    document.getElementById('btnToastOk').onclick = function() { document.getElementById('toastModal').style.display = 'none'; };
-    document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-    document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
-    document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
-    document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
-    document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
-
-    // НАЗАД
-    document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-    document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-    document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-
-    // ШЕСТЕРЕНКА И КУБОК
+    // ШЕСТЕРЕНКА И КУБОК ПОД НЕЙ
     document.getElementById('triggerGear').onclick = function() {
         triggerHaptic('impact');
-        document.getElementById('settingsWrapper').classList.toggle('open');
+        document.getElementById('settingsModal').style.display = 'flex';
+    };
+
+    document.getElementById('btnCloseSettings').onclick = function() {
+        soundEnabled = document.getElementById('toggleSound').checked;
+        hapticEnabled = document.getElementById('toggleHaptic').checked;
+        saveProgress();
+        document.getElementById('settingsModal').style.display = 'none';
+        triggerHaptic('success');
     };
 
     document.getElementById('btnCup').onclick = function() {
@@ -695,17 +748,60 @@ document.addEventListener("DOMContentLoaded", function() {
         renderLeaderboard();
     };
 
-    document.getElementById('btnLang').onclick = function() {
-        triggerHaptic('impact');
-        showToast('Язык', 'Переключатель языка появится в следующем обновлении!');
-    };
-
+    // ОБРАБОТКА ВВОДА ПРОМОКОДА
     document.getElementById('btnPromoCode').onclick = function() {
         triggerHaptic('impact');
-        showToast('Промокод', 'Используйте промокоды из нашего канала!');
+        showPromoModal();
     };
 
-    // ВЫБОР КЕЙСА
+    document.getElementById('btnToastOk').onclick = function() {
+        var input = document.getElementById('toastInput');
+        if (input.style.display !== 'none') {
+            var code = input.value.trim().toUpperCase();
+            if (code === "") {
+                document.getElementById('toastModal').style.display = 'none';
+                return;
+            }
+
+            if (usedPromos.indexOf(code) !== -1) {
+                triggerHaptic('error');
+                showToast("Ошибка", "Вы уже активировали этот промокод!");
+                return;
+            }
+
+            if (code === "START") {
+                userCoins += 1000;
+                remainingAttempts += 2;
+                usedPromos.push("START");
+                saveProgress();
+                triggerHaptic('success');
+                showToast("Промокод активирован! 🎉", "Вы получили +1,000 🪙 и +2 доп. попытки!");
+            } else {
+                triggerHaptic('error');
+                showToast("Ошибка", "Неверный промокод!");
+            }
+        } else {
+            document.getElementById('toastModal').style.display = 'none';
+        }
+    };
+
+    // НАВИГАЦИЯ
+    document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+    document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
+    document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
+    document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
+    document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
+
+    // КНОПКИ НАЗАД
+    document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+    document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+
+    // СЕЙФЫ
     document.querySelectorAll('.case-card').forEach(function(card) {
         card.addEventListener('click', function(e) {
             if (e.target.tagName === 'BUTTON') return;
@@ -792,3 +888,4 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 </body>
 </html>
+

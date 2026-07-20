@@ -91,8 +91,8 @@
 
     .setting-row { flex-direction: row; justify-content: space-between; align-items: center; padding: 16px; margin-bottom: 10px; text-align: left; }
 
-    .safe-img, .item-img { width: 80px; height: 80px; object-fit: contain; margin: 8px 0; }
-    .item-img { width: 55px; height: 55px; }
+    .safe-img, .item-img { width: 70px; height: 70px; object-fit: contain; margin: 8px 0; }
+    .item-img { width: 50px; height: 50px; }
 
     .btn-hack {
       width: 100%; padding: 8px 0; border: none; border-radius: 10px;
@@ -189,7 +189,7 @@
   </main>
 
   <main class="tab-page" id="page-inventory">
-    <div class="section-title"><span>Инвентарь</span><span id="collCount" style="color:var(--accent-gold)">0/9</span></div>
+    <div class="section-title"><span>Инвентарь</span><span id="collCount" style="color:var(--accent-gold)">0/4</span></div>
     <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="font-size:11px; color:var(--text-sub)">Пассивный доход</div>
@@ -210,7 +210,7 @@
     <div class="setting-row">
       <div>
         <div style="font-weight:700; font-size:14px">🎵 Фоновая музыка</div>
-        <div style="font-size:10px; color:var(--text-sub)">Атмосферный киберпанк саундтрек</div>
+        <div style="font-size:10px; color:var(--text-sub)">Атмосферный саундтрек</div>
       </div>
       <label class="switch">
         <input type="checkbox" id="musicToggle" onchange="toggleMusic(this.checked)">
@@ -276,20 +276,20 @@
     ];
 
     const VAULTS = [
-      { id: 1, name: "📦 Деревянный Сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.4, img: "https://cdn-icons-png.flaticon.com/512/3064/3064155.png" },
-      { id: 2, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 150, reward: 450, dropId: 102, dropRate: 0.35, img: "https://cdn-icons-png.flaticon.com/512/2092/2092663.png" },
-      { id: 3, name: "🔐 Электронный Сейф", len: 4, mode: "logic", attempts: 6, cost: 300, reward: 900, dropId: 103, dropRate: 0.3, img: "https://cdn-icons-png.flaticon.com/512/2592/2592317.png" },
-      { id: 4, name: "💎 Бриллиантовый Сейф", len: 5, mode: "time", time: 20, cost: 800, reward: 2500, dropId: 104, dropRate: 0.25, img: "https://cdn-icons-png.flaticon.com/512/2885/2885440.png" }
+      { id: 1, name: "📦 Деревянный Сейф", len: 3, mode: "logic", attempts: 10, cost: 50, reward: 150, dropId: 101, dropRate: 0.4, img: "https://upload.wikimedia.org/wikipedia/commons/2/22/3D_Wooden_Box.png" },
+      { id: 2, name: "⚙️ Стальной Сейф", len: 4, mode: "time", time: 30, cost: 150, reward: 450, dropId: 102, dropRate: 0.35, img: "https://upload.wikimedia.org/wikipedia/commons/4/41/Icon_Safe.png" },
+      { id: 3, name: "🔐 Электронный Сейф", len: 4, mode: "logic", attempts: 6, cost: 300, reward: 900, dropId: 103, dropRate: 0.3, img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Padlock-icon.png" },
+      { id: 4, name: "💎 Бриллиантовый Сейф", len: 5, mode: "time", time: 20, cost: 800, reward: 2500, dropId: 104, dropRate: 0.25, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Diamond_flat_icon.png" }
     ];
 
     const ITEMS = [
-      { id: 101, name: "🔑 Старый Ключ", income: 10, img: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png" },
-      { id: 102, name: "💾 Флешка с Данными", income: 30, img: "https://cdn-icons-png.flaticon.com/512/2885/2885449.png" },
-      { id: 103, name: "💎 Черный Алмаз", income: 80, img: "https://cdn-icons-png.flaticon.com/512/616/616490.png" },
-      { id: 104, name: "👑 Золотая Корона", income: 200, img: "https://cdn-icons-png.flaticon.com/512/2645/2645897.png" }
+      { id: 101, name: "🔑 Старый Ключ", income: 10, img: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Key_icon_1.png" },
+      { id: 102, name: "💾 Флешка с Данными", income: 30, img: "https://upload.wikimedia.org/wikipedia/commons/8/82/USB_flash_drive_icon.png" },
+      { id: 103, name: "💎 Черный Алмаз", income: 80, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Diamond_flat_icon.png" },
+      { id: 104, name: "👑 Золотая Корона", income: 200, img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Crown_flat_icon.png" }
     ];
 
-    // 2. ИНИЦИАЛИЗАЦИЯ И СОХРАНЕНИЕ СОСТОЯНИЯ
+    // 2. ИНИЦИАЛИЗАЦИЯ И СОХРАНЕНИЕ
     let tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
 
@@ -359,7 +359,7 @@
       }
     }
 
-    // ПРОВЕРКА ДОСТИЖЕНИЙ И ТИТУЛОВ
+    // ПРОВЕРКА ТИТУЛОВ И ОТКРЫТИЕ МОДАЛКИ
     function checkTitleAchievements() {
       const totalWins = state.logicWins + state.timeWins;
       
@@ -378,8 +378,7 @@
       saveState();
     }
 
-    // ОКНО ПРОФИЛЯ
-    function openProfileModal() {
+    window.openProfileModal = function() {
       checkTitleAchievements();
       const container = document.getElementById('unlockedTitlesList');
       if (!container) return;
@@ -403,7 +402,7 @@
       }).join('');
 
       document.getElementById('profileModal').classList.add('active');
-    }
+    };
 
     function closeProfileModal() {
       document.getElementById('profileModal').classList.remove('active');
@@ -630,7 +629,7 @@
       const lastClaim = new Date(state.lastBonusTime || 0);
 
       if (lastClaim.toDateString() === now.toDateString()) {
-        alert("⏱️ Вы уже забирали бонус сегодня! Приходите завтра.");
+        alert("⏱️ Вы уже забирали бонус сегодня!");
         return;
       }
 
@@ -647,7 +646,7 @@
       alert(`🎉 Награда за ${currentDay}-й день получена: +${rewardCoins} 🪙!`);
     }
 
-    // 5. ИНВЕНТАРЬ И ПАССИВНЫЙ ДОХОД
+    // 5. ИНВЕНТАРЬ
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
       if (!grid) return;
@@ -664,7 +663,7 @@
 
         return `
           <div class="item-card ${owned ? '' : 'locked'}" style="${owned ? '' : 'opacity:0.35'}">
-            <img src="${item.img}" class="item-img">
+            <img src="${item.img}" class="item-img" alt="${item.name}">
             <div style="font-size:10px; font-weight:700">${item.name} ${count > 1 ? `<span style="color:var(--accent-gold)">x${count}</span>` : ''}</div>
             <div style="font-size:9px; color:#00ff66; margin-top:2px">+${item.income * (count || 1)}🪙/ч</div>
             ${owned ? `<button class="btn-hack" style="padding:2px 0; font-size:9px; background:var(--accent-pink)" onclick="tradeItem(${item.id})">Продать 1шт</button>` : ''}
@@ -730,7 +729,7 @@
 
       saveState();
       renderInventory();
-      alert(`✅ 1 шт. "${item.name}" выставлена на Маркет за ${price} 🪙!`);
+      alert(`✅ Лотов выставлен за ${price} 🪙!`);
     }
 
     function renderMarket() {
@@ -798,30 +797,20 @@
 
     // 7. PVP ДУЭЛИ
     function createPvpMatch() {
-      const code = prompt("Придумыйте секретный код (3-5 цифр):", "1234");
+      const code = prompt("Придумайте код (3-5 цифр):", "1234");
       if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
-        alert("❌ Код должен содержать от 3 до 5 цифр!");
+        alert("❌ Код от 3 до 5 цифр!");
         return;
       }
 
-      const mode = confirm("ОК — На Попытки | Отмена — На Время") ? "logic" : "time";
-      
-      let limit = 0;
-      if (mode === "logic") {
-        const limitStr = prompt("Укажите число попыток (от 3 до 15):", "5");
-        limit = parseInt(limitStr);
-        if (isNaN(limit) || limit < 3 || limit > 15) return;
-      } else {
-        const limitStr = prompt("Укажите время в секундах (от 10 до 120):", "30");
-        limit = parseInt(limitStr);
-        if (isNaN(limit) || limit < 10 || limit > 120) return;
-      }
+      const mode = confirm("ОК — Попытки | Отмена — Время") ? "logic" : "time";
+      let limit = mode === "logic" ? 5 : 30;
 
-      const betStr = prompt("Укажите ставку в монетах (от 50 до 50,000):", "200");
+      const betStr = prompt("Ставка (от 50 до 50,000):", "200");
       const bet = parseInt(betStr);
 
-      if (isNaN(bet) || bet < 50 || bet > 50000 || bet > state.coins) {
-        alert("❌ Недостаточно монет или неверная ставка!");
+      if (isNaN(bet) || bet < 50 || bet > state.coins) {
+        alert("❌ Недостаточно монет!");
         return;
       }
 

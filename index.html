@@ -44,7 +44,7 @@
       padding-bottom: 80px;
     }
 
-    /* Top Navigation Header */
+    /* Header */
     header {
       position: sticky;
       top: 0;
@@ -104,7 +104,7 @@
       box-shadow: 0 0 12px rgba(255, 183, 0, 0.15);
     }
 
-    /* Navigation Tabs Bar */
+    /* Bottom Nav */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -147,7 +147,7 @@
       text-shadow: 0 0 10px var(--accent-cyan);
     }
 
-    /* Tab Content Wrappers */
+    /* Page Wrappers */
     .tab-page {
       display: none;
       padding: 16px;
@@ -165,7 +165,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Section Titles */
     .section-title {
       font-size: 20px;
       font-weight: 900;
@@ -241,7 +240,14 @@
     .safe-name {
       font-weight: 800;
       font-size: 14px;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+    }
+
+    .safe-cost {
+      font-size: 11px;
+      color: var(--accent-pink);
+      font-weight: 700;
+      margin-bottom: 2px;
     }
 
     .safe-reward {
@@ -290,7 +296,7 @@
 
     .game-timer-box {
       font-family: var(--font-mono);
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
       color: var(--accent-pink);
       text-shadow: 0 0 10px var(--accent-pink);
@@ -300,7 +306,7 @@
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin: 30px 0;
+      margin: 25px 0 15px 0;
     }
 
     .digit-box {
@@ -546,20 +552,20 @@
       }
     }
 
-    // 9 СЕЙФОВ С ПРИВЯЗАННЫМИ ФАЙЛАМИ
+    // 9 СЕЙФОВ (СТОИМОСТЬ, ВЫИГРЫШ И РЕЖИМЫ)
     const SAFES = [
-      { id: 1, name: "🪵 Сундук", img: "IMG_20260719_180634.png", mode: "logic", len: 3, reward: 150, dropId: 1, dropRate: 0.30 },
-      { id: 2, name: "🟤 Чугунный", img: "IMG_20260719_181100.png", mode: "logic", len: 3, reward: 300, dropId: 2, dropRate: 0.25 },
-      { id: 3, name: "🥉 Медный", img: "IMG_20260719_181706.png", mode: "time", len: 4, time: 30, reward: 500, dropId: 3, dropRate: 0.20 },
-      { id: 4, name: "⚙️ Штурвал", img: "IMG_20260719_183142.png", mode: "logic", len: 4, reward: 800, dropId: 4, dropRate: 0.15 },
-      { id: 5, name: "🗝️ Темный Сейф", img: "IMG_20260719_183244.png", mode: "time", len: 4, time: 25, reward: 1200, dropId: 5, dropRate: 0.12 },
-      { id: 6, name: "🥈 Серебряный", img: "IMG_20260719_183338.png", mode: "logic", len: 5, reward: 2000, dropId: 6, dropRate: 0.10 },
-      { id: 7, name: "🥇 Золотой Банк", img: "IMG_20260719_183351.png", mode: "time", len: 5, time: 20, reward: 3500, dropId: 7, dropRate: 0.08 },
-      { id: 8, name: "🔘 Сканер Пальца", img: "IMG_20260719_183406.png", mode: "time", len: 5, time: 18, reward: 5000, dropId: 8, dropRate: 0.05 },
-      { id: 9, name: "💎 Кибер-Куб", img: "IMG_20260719_183425.png", mode: "time", len: 5, time: 15, reward: 10000, dropId: 9, dropRate: 0.03 }
+      { id: 1, name: "🪵 Сундук", img: "IMG_20260719_180634.png", mode: "logic", cost: 50, len: 3, attempts: 5, reward: 150, dropId: 1, dropRate: 0.30 },
+      { id: 2, name: "🟤 Чугунный", img: "IMG_20260719_181100.png", mode: "logic", cost: 100, len: 3, attempts: 5, reward: 300, dropId: 2, dropRate: 0.25 },
+      { id: 3, name: "🥉 Медный", img: "IMG_20260719_181706.png", mode: "time", cost: 150, len: 4, time: 30, reward: 500, dropId: 3, dropRate: 0.20 },
+      { id: 4, name: "⚙️ Штурвал", img: "IMG_20260719_183142.png", mode: "logic", cost: 250, len: 4, attempts: 5, reward: 800, dropId: 4, dropRate: 0.15 },
+      { id: 5, name: "🗝️ Темный Сейф", img: "IMG_20260719_183244.png", mode: "time", cost: 400, len: 4, time: 25, reward: 1200, dropId: 5, dropRate: 0.12 },
+      { id: 6, name: "🥈 Серебряный", img: "IMG_20260719_183338.png", mode: "logic", cost: 600, len: 5, attempts: 6, reward: 2000, dropId: 6, dropRate: 0.10 },
+      { id: 7, name: "🥇 Золотой Банк", img: "IMG_20260719_183351.png", mode: "time", cost: 1000, len: 5, time: 20, reward: 3500, dropId: 7, dropRate: 0.08 },
+      { id: 8, name: "🔘 Сканер Пальца", img: "IMG_20260719_183406.png", mode: "time", cost: 1500, len: 5, time: 18, reward: 5000, dropId: 8, dropRate: 0.05 },
+      { id: 9, name: "💎 Кибер-Куб", img: "IMG_20260719_183425.png", mode: "time", cost: 2500, len: 5, time: 15, reward: 10000, dropId: 9, dropRate: 0.03 }
     ];
 
-    // 9 УНИКАЛЬНЫХ ПРЕДМЕТОВ С ИХ КАРТИНКАМИ
+    // 9 ПРЕДМЕТОВ КОЛЛЕКЦИИ
     const ITEMS = [
       { id: 1, name: "Стетоскоп", img: "IMG_20260720_115622.png", income: 2 },
       { id: 2, name: "Отмычка", img: "IMG_20260720_115636.png", income: 5 },
@@ -572,10 +578,10 @@
       { id: 9, name: "Мастер-Карта", img: "IMG_20260720_115823.png", income: 500 }
     ];
 
-    // СОСТОЯНИЕ ИГРОКА (СОХРАНЯЕТСЯ В LOCALSTORAGE)
+    // СОСТОЯНИЕ ИГРОКА
     let state = JSON.parse(localStorage.getItem('starvault_state')) || {
       coins: 1250,
-      inventory: [1], // Стартовый первый предмет
+      inventory: [1],
       lastMiningTime: Date.now()
     };
 
@@ -584,14 +590,7 @@
       document.getElementById('uBalance').innerText = state.coins.toLocaleString();
     }
 
-    // ТЕКУЩАЯ СЕССИЯ ВЗЛОМА
-    let activeSafe = null;
-    let targetCode = "";
-    let currentInput = "";
-    let gameTimer = null;
-    let secondsLeft = 0;
-
-    // РЕНДЕР СЕЙФОВ
+    // ОТОБРАЖЕНИЕ СЕЙФОВ (С ЦЕНОЙ ОТКРЫТИЯ)
     function renderSafes() {
       const container = document.getElementById('safesContainer');
       container.innerHTML = SAFES.map(s => `
@@ -599,13 +598,14 @@
           <span class="safe-mode-badge ${s.mode}">${s.mode === 'logic' ? '🧠 Логика' : '⚡ Время'}</span>
           <img src="${s.img}" class="safe-img" alt="${s.name}">
           <div class="safe-name">${s.name}</div>
-          <div class="safe-reward">+${s.reward.toLocaleString()} 🪙</div>
-          <button class="btn-hack" onclick="startHack(${s.id})">ВЗЛОМ</button>
+          <div class="safe-cost">Цена: ${s.cost} 🪙</div>
+          <div class="safe-reward">Приз: +${s.reward.toLocaleString()} 🪙</div>
+          <button class="btn-hack" onclick="startSafeGame(${s.id})">ОТКРЫТЬ</button>
         </div>
       `).join('');
     }
 
-    // РЕНДЕР ИНВЕНТАРЯ И КОЛЛЕКЦИИ
+    // ИНВЕНТАРЬ С КНОПКОЙ ВЫСТАВЛЕНИЯ НА МАРКЕТ
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
       document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
@@ -620,14 +620,22 @@
             <img src="${item.img}" class="item-img">
             <div class="item-title">${item.name}</div>
             <div style="font-size:9px; color:#00ff66; margin-top:2px;">+${item.income}🪙/ч</div>
+            ${owned ? `<button class="btn-hack" style="margin-top:6px; padding:3px 0; font-size:10px; background:var(--accent-pink)" onclick="tradeItem(${item.id})">Продать</button>` : ''}
           </div>
         `;
       }).join('');
 
       document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
     }
+         // ТЕКУЩАЯ ИГРОВАЯ СЕССИЯ
+    let activeSafe = null;
+    let targetCode = "";
+    let currentInput = "";
+    let gameTimer = null;
+    let secondsLeft = 0;
+    let attemptsLeft = 0;
 
-    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    // СМЕНА ВКЛАДОК
     function switchTab(tabId, el) {
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -639,9 +647,21 @@
       if (tabId === 'leaders') renderLeaders();
     }
 
-    // ЗАПУСК ИГРЫ
-    function startHack(safeId) {
+    // ЗАПУСК ВЗЛОМА (С ПРОВЕРКОЙ БАЛАНСА И СИСЧИСЛЕНИЕМ МОНЕТ)
+    function startSafeGame(safeId) {
       activeSafe = SAFES.find(s => s.id === safeId);
+
+      // Проверка монеток
+      if (state.coins < activeSafe.cost) {
+        alert(`❌ Недостаточно монет! Нужен входной взнос: ${activeSafe.cost} 🪙`);
+        return;
+      }
+
+      // Списываем стоимость входа
+      state.coins -= activeSafe.cost;
+      saveState();
+
+      // Генерируем секретный код
       targetCode = "";
       for (let i = 0; i < activeSafe.len; i++) {
         targetCode += Math.floor(Math.random() * 10).toString();
@@ -649,27 +669,30 @@
       currentInput = "";
 
       document.getElementById('gSafeName').innerText = activeSafe.name;
-      document.getElementById('gSafeMode').innerText = activeSafe.mode === 'logic' ? 'Режим: Логический подбор' : `Таймер: ${activeSafe.time} сек`;
       document.getElementById('gameHint').innerText = "";
       document.getElementById('gameModal').classList.add('active');
-      
-      updateDigitsDisplay();
 
-      if (activeSafe.mode === 'time') {
+      if (activeSafe.mode === 'logic') {
+        attemptsLeft = activeSafe.attempts;
+        document.getElementById('gSafeMode').innerText = `Попыток: ${attemptsLeft}`;
+        document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+      } else {
         secondsLeft = activeSafe.time;
+        document.getElementById('gSafeMode').innerText = `Таймер: ${activeSafe.time} сек`;
         document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
+
         gameTimer = setInterval(() => {
           secondsLeft--;
           document.getElementById('gTimer').innerText = `00:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`;
           if (secondsLeft <= 0) {
             clearInterval(gameTimer);
-            alert("⏰ Время вышло! Сейф заблокирован!");
+            alert("⏰ Время вышло! Сейф заблокирован.");
             closeGame();
           }
         }, 1000);
-      } else {
-        document.getElementById('gTimer').innerText = "🧠 ∞";
       }
+
+      updateDigitsDisplay();
     }
 
     function pressKey(num) {
@@ -693,6 +716,7 @@
       }
     }
 
+    // ВВОД КОДА И ПРОВЕРКА
     function submitCode() {
       if (currentInput.length < activeSafe.len) return;
 
@@ -711,13 +735,26 @@
 
         saveState();
         if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        alert(`🎉 УСПЕШНЫЙ ВЗЛОМ!\nПолучено: +${activeSafe.reward} 🪙${droppedMsg}`);
+        alert(`🎉 СЕЙФ ВЗЛОМАН!\nНаграда: +${activeSafe.reward} 🪙${droppedMsg}`);
         closeGame();
       } else {
         let correctDigits = 0;
         for (let i = 0; i < activeSafe.len; i++) {
           if (currentInput[i] === targetCode[i]) correctDigits++;
         }
+
+        if (activeSafe.mode === 'logic') {
+          attemptsLeft--;
+          document.getElementById('gSafeMode').innerText = `Попыток осталось: ${attemptsLeft}`;
+          document.getElementById('gTimer').innerText = `🧠 x${attemptsLeft}`;
+
+          if (attemptsLeft <= 0) {
+            alert("❌ Попытки закончились! Сейф заблокирован.");
+            closeGame();
+            return;
+          }
+        }
+
         document.getElementById('gameHint').innerText = `❌ Неверно! Совпадений позиций: ${correctDigits}`;
         if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
       }
@@ -728,40 +765,113 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // МАРКЕТ И ЛИДЕРБОРД
-    function renderMarket() {
-      const list = document.getElementById('marketList');
-      list.innerHTML = `
-        <div class="leader-row">
-          <div class="leader-left">
-            <img src="IMG_20260720_115724.png" style="width:40px; height:40px;">
-            <div>
-              <div style="font-weight:800; font-size:14px;">Чип 'Призрак'</div>
-              <div style="font-size:11px; color:var(--text-sub)">Продавец: @cyber_king</div>
-            </div>
-          </div>
-          <button class="btn-hack" style="width:auto; padding:6px 12px;">5,000 🪙</button>
-        </div>
-      `;
+    // ТОРГОВЛЯ И МАРКЕТ
+    function tradeItem(itemId) {
+      const item = ITEMS.find(i => i.id === itemId);
+      const priceStr = prompt(`Выставить "${item.name}" на Маркет.\nУкажите цену в монетах:`, "1000");
+      if (!priceStr) return;
+
+      const price = parseInt(priceStr);
+      if (isNaN(price) || price <= 0) {
+        alert("❌ Указана неверная цена!");
+        return;
+      }
+
+      state.inventory = state.inventory.filter(id => id !== itemId);
+      
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+      marketItems.push({
+        id: Date.now(),
+        itemId: item.id,
+        seller: document.getElementById('uName').innerText,
+        price: price
+      });
+      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
+
+      saveState();
+      renderInventory();
+      alert(`✅ Предмет "${item.name}" выставлен за ${price} 🪙!`);
     }
 
+    function renderMarket() {
+      const list = document.getElementById('marketList');
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+
+      if (marketItems.length === 0) {
+        list.innerHTML = `<p style="text-align:center; color:var(--text-sub); margin-top:20px;">На рынке пока нет лотов. Будь первым!</p>`;
+        return;
+      }
+
+      list.innerHTML = marketItems.map(lot => {
+        const item = ITEMS.find(i => i.id === lot.itemId);
+        const isMyLot = lot.seller === document.getElementById('uName').innerText;
+
+        return `
+          <div class="leader-row">
+            <div class="leader-left">
+              <img src="${item.img}" style="width:40px; height:40px; object-fit:contain;">
+              <div>
+                <div style="font-weight:800; font-size:14px;">${item.name}</div>
+                <div style="font-size:11px; color:var(--text-sub)">Продавец: @${lot.seller}</div>
+              </div>
+            </div>
+            ${isMyLot 
+              ? `<span style="font-size:12px; color:var(--accent-gold); font-weight:700;">Ваш лот (${lot.price} 🪙)</span>`
+              : `<button class="btn-hack" style="width:auto; padding:6px 12px;" onclick="buyMarketItem(${lot.id})">${lot.price.toLocaleString()} 🪙</button>`
+            }
+          </div>
+        `;
+      }).join('');
+    }
+
+    function buyMarketItem(lotId) {
+      let marketItems = JSON.parse(localStorage.getItem('starvault_market')) || [];
+      const lotIndex = marketItems.findIndex(l => l.id === lotId);
+      if (lotIndex === -1) return;
+
+      const lot = marketItems[lotIndex];
+      if (state.coins < lot.price) {
+        alert("❌ Недостаточно монет!");
+        return;
+      }
+
+      state.coins -= lot.price;
+      if (!state.inventory.includes(lot.itemId)) {
+        state.inventory.push(lot.itemId);
+      }
+
+      marketItems.splice(lotIndex, 1);
+      localStorage.setItem('starvault_market', JSON.stringify(marketItems));
+
+      saveState();
+      renderMarket();
+      alert("🎉 Покупка прошла успешно!");
+    }
+
+    // ЛИДЕРБОРД
     function renderLeaders() {
       const list = document.getElementById('leaderList');
-      list.innerHTML = `
-        <div class="leader-row">
+      const myName = document.getElementById('uName').innerText;
+
+      let leaders = [{ name: myName, coins: state.coins, items: state.inventory, isMe: true }];
+
+      list.innerHTML = leaders.map((player, idx) => `
+        <div class="leader-row" style="${player.isMe ? 'border-color: var(--accent-cyan);' : ''}">
           <div class="leader-left">
-            <span class="rank-num rank-1">#1</span>
+            <span class="rank-num rank-${idx + 1}">#${idx + 1}</span>
             <div>
-              <div style="font-weight:800; font-size:14px;">@alex_ghost</div>
+              <div style="font-weight:800; font-size:14px;">@${player.name} ${player.isMe ? '(Вы)' : ''}</div>
               <div class="trophy-mini-list">
-                <img src="IMG_20260720_115724.png" class="trophy-mini-img">
-                <img src="IMG_20260720_115823.png" class="trophy-mini-img">
+                ${player.items.map(itemId => {
+                  const it = ITEMS.find(i => i.id === itemId);
+                  return `<img src="${it.img}" class="trophy-mini-img">`;
+                }).join('')}
               </div>
             </div>
           </div>
-          <div style="font-weight:900; color:var(--accent-gold)">45,000 🪙</div>
+          <div style="font-weight:900; color:var(--accent-gold)">${player.coins.toLocaleString()} 🪙</div>
         </div>
-      `;
+      `).join('');
     }
 
     function claimMining() {
@@ -781,11 +891,11 @@
         saveState();
         alert(`💰 Собрано ${earned} монет!`);
       } else {
-        alert("⏱️ Монеты еще накопились! Загляни чуть позже.");
+        alert("⏱️ Монеты пока не накопились, зайдите позже!");
       }
     }
 
-    // СТАРТ
+    // СТАРТ ИНИЦИАЛИЗАЦИИ
     saveState();
     renderSafes();
   </script>

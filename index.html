@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-  <title>StarVault - Ultimate PVP</title>
+  <title>StarVault - Settings & PVP</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,10 +81,15 @@
     .safes-grid, .items-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .items-grid { grid-template-columns: repeat(3, 1fr); }
 
-    .safe-card, .item-card, .pvp-card {
+    .safe-card, .item-card, .pvp-card, .setting-row {
       background: var(--card-bg); border: 1px solid var(--glass-border);
       border-radius: 16px; padding: 12px; display: flex; flex-direction: column;
       align-items: center; text-align: center; position: relative;
+    }
+
+    .setting-row {
+      flex-direction: row; justify-content: space-between; align-items: center;
+      padding: 16px; margin-bottom: 10px; text-align: left;
     }
 
     .safe-img, .item-img { width: 80px; height: 80px; object-fit: contain; margin: 8px 0; }
@@ -122,9 +127,26 @@
       border-radius: 14px; padding: 12px; margin-bottom: 8px; display: flex;
       align-items: center; justify-content: space-between;
     }
+
+    /* Switcher Toggle */
+    .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 24px;
+      border: 1px solid var(--glass-border);
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px;
+      left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--accent-cyan); }
+    input:checked + .slider:before { transform: translateX(21px); }
   </style>
 </head>
 <body>
+
+  <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=cyberpunk-2099-10701.mp3"></audio>
 
   <header>
     <div class="user-badge">
@@ -167,9 +189,26 @@
     <div id="marketList"></div>
   </main>
 
-  <main class="tab-page" id="page-leaders">
-    <div class="section-title"><span>Зал Славы</span></div>
-    <div id="leaderList"></div>
+  <main class="tab-page" id="page-settings">
+    <div class="section-title"><span>Настройки</span></div>
+    
+    <div class="setting-row">
+      <div>
+        <div style="font-weight:700; font-size:14px">🎵 Фоновая музыка</div>
+        <div style="font-size:10px; color:var(--text-sub)">Атмосферный киберпанк саундтрек</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="musicToggle" onchange="toggleMusic(this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <div style="font-weight:700; font-size:14px">⏱️ Игровое время</div>
+        <div style="font-size:10px; color:var(--text-sub)" id="settingsPlaytime">Зафиксировано: 0 мин</div>
+      </div>
+    </div>
   </main>
 
   <div class="game-overlay" id="gameModal">
@@ -203,7 +242,7 @@
     <div class="nav-item" onclick="switchTab('pvp', this)"><span>⚔️</span><span>PVP</span></div>
     <div class="nav-item" onclick="switchTab('inventory', this)"><span>🎒</span><span>Багаж</span></div>
     <div class="nav-item" onclick="switchTab('market', this)"><span>🏪</span><span>Рынок</span></div>
-    <div class="nav-item" onclick="switchTab('leaders', this)"><span>🏆</span><span>Топ</span></div>
+    <div class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span><span>Опции</span></div>
   </nav>
     <script>
     // TELEGRAM INIT
@@ -216,7 +255,7 @@
       }
     }
 
-    // СПИСОК УРОВНЕЙ И ИГРОВЫХ БОКСОВ
+    // СПИСОК СЕЙФОВ
     const VAULTS = [
       { id: 1, name: "🪵 Сундук", img: "IMG_20260719_180634.png", mode: "logic", cost: 20, len: 3, attempts: 8, reward: 50, dropId: 1, dropRate: 0.35 },
       { id: 2, name: "🟤 Чугунный", img: "IMG_20260719_181100.png", mode: "logic", cost: 50, len: 3, attempts: 8, reward: 120, dropId: 2, dropRate: 0.30 },
@@ -229,7 +268,7 @@
       { id: 9, name: "💎 Куб", img: "IMG_20260719_183425.png", mode: "time", cost: 1200, len: 5, time: 25, reward: 3500, dropId: 9, dropRate: 0.05 }
     ];
 
-    // УСКОРЕННЫЕ ПРЕДМЕТЫ КОЛЛЕКЦИИ
+    // УСКОРЕННЫЕ ПРЕДМЕТЫ
     const ITEMS = [
       { id: 1, name: "Стетоскоп", img: "IMG_20260720_115622.png", income: 10 },
       { id: 2, name: "Отмычка", img: "IMG_20260720_115636.png", income: 25 },
@@ -242,17 +281,35 @@
       { id: 9, name: "Мастер-Карта", img: "IMG_20260720_115823.png", income: 2500 }
     ];
 
-    // СОСТОЯНИЕ (ПУСТОЙ ИНВЕНТАРЬ НА СТАРТЕ)
+    // СОСТОЯНИЕ ИГРОКА
     let state = JSON.parse(localStorage.getItem('starvault_state')) || {
       coins: 500,
       inventory: [],
       playTimeSeconds: 0,
-      lastMiningTime: Date.now()
+      lastMiningTime: Date.now(),
+      musicOn: false
     };
 
     function saveState() {
       localStorage.setItem('starvault_state', JSON.stringify(state));
       document.getElementById('uBalance').innerText = state.coins.toLocaleString();
+    }
+
+    // ФОНОВАЯ МУЗЫКА
+    function toggleMusic(enabled) {
+      const audio = document.getElementById('bgMusic');
+      state.musicOn = enabled;
+      saveState();
+      if (enabled) {
+        audio.play().catch(() => {});
+      } else {
+        audio.pause();
+      }
+    }
+
+    // ИНИЦИАЛИЗАЦИЯ МУЗЫКИ ПРИ ЗАГРУЗКЕ
+    if (state.musicOn) {
+      document.getElementById('musicToggle').checked = true;
     }
 
     // ТАЙМЕР ВРЕМЕНИ В ИГРЕ
@@ -264,17 +321,11 @@
       if (hours > 0) timeStr = `${hours} ч ${mins % 60} мин`;
       document.getElementById('uPlaytime').innerText = `В игре: ${timeStr}`;
       
+      const settingsTimer = document.getElementById('settingsPlaytime');
+      if (settingsTimer) settingsTimer.innerText = `Зафиксировано: ${timeStr}`;
+
       if (state.playTimeSeconds % 10 === 0) saveState();
     }, 1000);
-          // ТЕКУЩАЯ СЕССИЯ
-    let activeBox = null;
-    let targetCode = "";
-    let currentInput = "";
-    let gameTimer = null;
-    let secondsLeft = 0;
-    let attemptsLeft = 0;
-    let isPvpGame = false;
-    let pvpBet = 0;
 
     // СМЕНА ВКЛАДОК
     function switchTab(tabId, el) {
@@ -285,9 +336,18 @@
 
       if (tabId === 'inventory') renderInventory();
       if (tabId === 'market') renderMarket();
-      if (tabId === 'leaders') renderLeaders();
       if (tabId === 'pvp') renderPvp();
     }
+
+    // ИГРОВЫЕ ПЕРЕМЕННЫЕ
+    let activeBox = null;
+    let targetCode = "";
+    let currentInput = "";
+    let gameTimer = null;
+    let secondsLeft = 0;
+    let attemptsLeft = 0;
+    let isPvpGame = false;
+    let pvpBet = 0;
 
     // РЕНДЕР СЕЙФОВ
     function renderSafes() {
@@ -377,7 +437,6 @@
         if (gameTimer) clearInterval(gameTimer);
 
         if (isPvpGame) {
-          // Выигрыш в PVP за вычетом 10% комиссии
           const winAmount = Math.floor(pvpBet * 2 * 0.9);
           state.coins += winAmount;
           saveState();
@@ -428,7 +487,7 @@
       document.getElementById('gameModal').classList.remove('active');
     }
 
-    // ИНВЕНТАРЬ И СТАКИ (x2, x3)
+    // ИНВЕНТАРЬ
     function renderInventory() {
       const grid = document.getElementById('inventoryGrid');
       document.getElementById('collCount').innerText = `${state.inventory.length} / 9`;
@@ -454,7 +513,7 @@
       document.getElementById('passiveIncome').innerText = `+${totalIncome} 🪙/час`;
     }
 
-    // МАРКЕТ С 10% КОМИССИЕЙ
+    // МАРКЕТ
     function tradeItem(itemId) {
       const item = ITEMS.find(i => i.id === itemId);
       const invIndex = state.inventory.findIndex(i => i.id === itemId);
@@ -547,23 +606,43 @@
       alert("🎉 Покупка совершена!");
     }
 
-    // КОНСТРУКТОР PVP ДУЭЛЕЙ
+    // PVP ДУЭЛИ С ЛИМИТАМИ И ПРОВЕРКАМИ
     function createPvpMatch() {
       const code = prompt("Придумайте секретный код (3-5 цифр):", "1234");
-      if (!code || isNaN(parseInt(code))) {
-        alert("❌ Некорректный код!");
+      if (!code || isNaN(parseInt(code)) || code.length < 3 || code.length > 5) {
+        alert("❌ Код должен содержать от 3 до 5 цифр!");
         return;
       }
 
       const mode = confirm("ОК — На Попытки | Отмена — На Время") ? "logic" : "time";
-      const limitStr = prompt(mode === "logic" ? "Укажите количество попыток:" : "Укажите время в секундах:", "5");
-      const limit = parseInt(limitStr);
+      
+      let limit = 0;
+      if (mode === "logic") {
+        const limitStr = prompt("Укажите число попыток (от 3 до 15):", "5");
+        limit = parseInt(limitStr);
+        if (isNaN(limit) || limit < 3 || limit > 15) {
+          alert("❌ Попытки должны быть в пределе от 3 до 15!");
+          return;
+        }
+      } else {
+        const limitStr = prompt("Укажите время в секундах (от 10 до 120):", "30");
+        limit = parseInt(limitStr);
+        if (isNaN(limit) || limit < 10 || limit > 120) {
+          alert("❌ Время должно быть в пределе от 10 до 120 секунд!");
+          return;
+        }
+      }
 
-      const betStr = prompt("Укажите ставку в монетах:", "200");
+      const betStr = prompt("Укажите ставку в монетах (от 50 до 50,000):", "200");
       const bet = parseInt(betStr);
 
-      if (isNaN(bet) || bet <= 0 || bet > state.coins) {
-        alert("❌ Недостаточно монет или неверная ставка!");
+      if (isNaN(bet) || bet < 50 || bet > 50000) {
+        alert("❌ Ставка должна быть от 50 до 50,000 монет!");
+        return;
+      }
+
+      if (bet > state.coins) {
+        alert("❌ У вас недостаточно монет для такой ставки!");
         return;
       }
 
@@ -674,34 +753,6 @@
         alert(`👁️ Вы наблюдатель. Код дуэли был: ${match.code}`);
         renderPvp();
       }
-    }
-
-    // ЛИДЕРБОРД
-    function renderLeaders() {
-      const list = document.getElementById('leaderList');
-      const myName = document.getElementById('uName').innerText;
-
-      const mins = Math.floor((state.playTimeSeconds || 0) / 60);
-      const hours = Math.floor(mins / 60);
-      let timeStr = `${mins}м`;
-      if (hours > 0) timeStr = `${hours}ч ${mins % 60}м`;
-
-      let leaders = [
-        { name: myName, coins: state.coins, timeStr: timeStr, isMe: true }
-      ];
-
-      list.innerHTML = leaders.map((player, idx) => `
-        <div class="leader-row" style="${player.isMe ? 'border-color: var(--accent-cyan);' : ''}">
-          <div style="display:flex; align-items:center; gap:10px">
-            <span style="font-weight:900; color:var(--accent-gold)">#${idx + 1}</span>
-            <div>
-              <div style="font-weight:800; font-size:13px">@${player.name} ${player.isMe ? '(Вы)' : ''}</div>
-              <div style="font-size:10px; color:var(--accent-cyan)">⏱️ В игре: ${player.timeStr}</div>
-            </div>
-          </div>
-          <div style="font-weight:900; color:var(--accent-gold)">${player.coins.toLocaleString()} 🪙</div>
-        </div>
-      `).join('');
     }
 
     function claimMining() {

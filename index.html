@@ -4,7 +4,267 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Взлом Сейфов</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ОБЩИЕ СТИЛИ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f111a;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 480px;
+      background: #1a1d2e;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #2a2e45;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      color: #00f2fe;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .balance-board {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      background: #252942;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #ffcc00;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ВЫБОР РЕЖИМА */
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      background: #252942;
+      border: 2px solid transparent;
+      color: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .mode-btn small {
+      font-size: 11px;
+      font-weight: normal;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    .mode-btn.active {
+      border-color: #00f2fe;
+      background: #1e2942;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    /* КАРТОЧКИ КЕЙСОВ */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .case-card {
+      background: #252942;
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      border: 1px solid #333854;
+    }
+
+    .case-card:hover {
+      transform: translateY(-3px);
+      background: #2e3352;
+    }
+
+    .case-icon {
+      font-size: 32px;
+      margin-bottom: 5px;
+    }
+
+    .case-card h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .case-info {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .case-price {
+      font-size: 11px;
+      color: #ff5555;
+      font-weight: bold;
+    }
+
+    .case-reward {
+      font-size: 11px;
+      color: #4caf50;
+      font-weight: bold;
+    }
+
+    /* ИГРОВОЙ ЭКРАН */
+    .game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: #ff4757;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .status-bar {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      background: #252942;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      color: #00f2fe;
+    }
+
+    /* ИСТОРИЯ ПОПЫТОК (WORDLE) */
+    .history-container {
+      min-height: 180px;
+      max-height: 250px;
+      overflow-y: auto;
+      background: #121420;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .attempt-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .digit-box {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      color: #ffffff;
+      animation: pop 0.2s ease-in-out;
+    }
+
+    /* ПОДСВЕТКА WORDLE */
+    .digit-box.correct {
+      background-color: #2e7d32;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    }
+
+    .digit-box.wrong-place {
+      background-color: #f57f17;
+      box-shadow: 0 0 8px rgba(255, 235, 59, 0.4);
+    }
+
+    .digit-box.absent {
+      background-color: #37474f;
+      opacity: 0.6;
+    }
+
+    /* ВВОД КОДА */
+    .input-section {
+      display: flex;
+      gap: 10px;
+    }
+
+    #code-input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #333854;
+      background: #252942;
+      color: #fff;
+      font-size: 18px;
+      text-align: center;
+      letter-spacing: 4px;
+      outline: none;
+    }
+
+    #submit-btn {
+      background: #00c853;
+      border: none;
+      color: white;
+      padding: 0 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #submit-btn:hover {
+      background: #00e676;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
 
@@ -80,463 +340,195 @@
     </div>
 
   </div>
+    <script>
+    // CONFIGURATION
+    const CASE_TYPES = {
+      WOODEN: { name: "Деревянный сейф", cost: 50, reward: 150, digits: 2, logicAttempts: 6, speedTime: 25 },
+      IRON: { name: "Железный сейф", cost: 200, reward: 800, digits: 3, logicAttempts: 7, speedTime: 20 },
+      CYBER: { name: "Кибер-сейф", cost: 1000, reward: 5000, digits: 4, logicAttempts: 8, speedTime: 15 }
+    };
 
-  <script src="game.js"></script>
+    // GAME STATE
+    let userBalance = 500;
+    let currentMode = "logic";
+    let currentCase = null;
+    let secretCode = "";
+    let remainingAttempts = 0;
+    let remainingTime = 0;
+    let timerInterval = null;
+
+    // SELECT MODE
+    function selectMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+    }
+
+    // START GAME
+    function startGame(caseKey) {
+      const caseData = CASE_TYPES[caseKey];
+
+      if (userBalance < caseData.cost) {
+        alert("Недостаточно монет для взлома этого сейфа!");
+        return;
+      }
+
+      userBalance -= caseData.cost;
+      updateBalanceUI();
+
+      currentCase = caseData;
+      secretCode = generateCode(caseData.digits);
+      
+      document.getElementById('attempts-history').innerHTML = "";
+      document.getElementById('code-input').value = "";
+      document.getElementById('code-input').maxLength = caseData.digits;
+
+      document.getElementById('mode-selector').classList.add('hidden');
+      document.getElementById('case-selector').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+      document.getElementById('current-case-title').innerText = caseData.name;
+
+      if (currentMode === "logic") {
+        remainingAttempts = caseData.logicAttempts;
+        updateStatusUI(`Осталось попыток: ${remainingAttempts}`);
+      } else {
+        remainingTime = caseData.speedTime;
+        updateStatusUI(`⏱️ Осталось: ${remainingTime} сек.`);
+        
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          remainingTime--;
+          updateStatusUI(`⏱️ Осталось: ${remainingTime} сек.`);
+          if (remainingTime <= 0) {
+            clearInterval(timerInterval);
+            endGame(false, "Время вышло! Сейф заблокировался.");
+          }
+        }, 1000);
+      }
+    }
+
+    // MAKE ATTEMPT
+    function makeAttempt() {
+      const inputEl = document.getElementById('code-input');
+      const userGuess = inputEl.value.trim();
+
+      if (userGuess.length !== currentCase.digits) {
+        alert(`Код должен состоять из ${currentCase.digits} цифр!`);
+        return;
+      }
+
+      const checkResult = checkCode(secretCode, userGuess);
+      renderAttempt(checkResult);
+      inputEl.value = "";
+
+      const isWin = checkResult.every(item => item.status === "correct");
+      if (isWin) {
+        if (timerInterval) clearInterval(timerInterval);
+        userBalance += currentCase.reward;
+        updateBalanceUI();
+        endGame(true, ` СЕЙФ ВЗЛОМАН! Вы забрали ${currentCase.reward} 🪙`);
+        return;
+      }
+
+      if (currentMode === "logic") {
+        remainingAttempts--;
+        updateStatusUI(`Осталось попыток: ${remainingAttempts}`);
+
+        if (remainingAttempts <= 0) {
+          endGame(false, `Попытки закончились! Код был: ${secretCode}`);
+        }
+      }
+    }
+
+    // WORDLE ALGORITHM
+    function checkCode(secret, guess) {
+      const result = [];
+      const secretArr = secret.split('');
+      const guessArr = guess.split('');
+
+      for (let i = 0; i < guessArr.length; i++) {
+        if (guessArr[i] === secretArr[i]) {
+          result[i] = { digit: guessArr[i], status: "correct" };
+          secretArr[i] = null;
+        } else {
+          result[i] = null;
+        }
+      }
+
+      for (let i = 0; i < guessArr.length; i++) {
+        if (result[i] !== null) continue;
+
+        const indexInSecret = secretArr.indexOf(guessArr[i]);
+        if (indexInSecret !== -1) {
+          result[i] = { digit: guessArr[i], status: "wrong-place" };
+          secretArr[indexInSecret] = null;
+        } else {
+          result[i] = { digit: guessArr[i], status: "absent" };
+        }
+      }
+
+      return result;
+    }
+
+    // RENDER ATTEMPT ROW
+    function renderAttempt(result) {
+      const historyContainer = document.getElementById('attempts-history');
+      const row = document.createElement('div');
+      row.className = 'attempt-row';
+
+      result.forEach(item => {
+        const box = document.createElement('div');
+        box.className = `digit-box ${item.status}`;
+        box.innerText = item.digit;
+        row.appendChild(box);
+      });
+
+      historyContainer.appendChild(row);
+      historyContainer.scrollTop = historyContainer.scrollHeight;
+    }
+
+    // END GAME
+    function endGame(isWin, message) {
+      alert(message);
+      quitGame();
+    }
+
+    // QUIT / RESET
+    function quitGame() {
+      if (timerInterval) clearInterval(timerInterval);
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('mode-selector').classList.remove('hidden');
+      document.getElementById('case-selector').classList.remove('hidden');
+    }
+
+    // HELPERS
+    function generateCode(length) {
+      let code = "";
+      for (let i = 0; i < length; i++) {
+        code += Math.floor(Math.random() * 10).toString();
+      }
+      return code;
+    }
+
+    function updateBalanceUI() {
+      document.getElementById('user-balance').innerText = userBalance;
+    }
+
+    function updateStatusUI(text) {
+      document.getElementById('status-text').innerText = text;
+    }
+
+    // ENTER KEY & INIT
+    document.getElementById('code-input').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        makeAttempt();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateBalanceUI();
+    });
+  </script>
 </body>
 </html>
-/* Общие настройки */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-  background-color: #0f111a;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.game-container {
-  width: 100%;
-  max-width: 480px;
-  background: #1a1d2e;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid #2a2e45;
-}
-
-h1 {
-  text-align: center;
-  font-size: 24px;
-  color: #00f2fe;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
-}
-
-.balance-board {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  background: #252942;
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  color: #ffcc00;
-}
-
-.section {
-  margin-bottom: 20px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Выбор режима */
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.mode-btn {
-  flex: 1;
-  background: #252942;
-  border: 2px solid transparent;
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.mode-btn small {
-  font-size: 11px;
-  font-weight: normal;
-  color: #aaa;
-  margin-top: 4px;
-}
-
-.mode-btn.active {
-  border-color: #00f2fe;
-  background: #1e2942;
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-}
-
-/* Карточки кейсов */
-.cases-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.case-card {
-  background: #252942;
-  border-radius: 12px;
-  padding: 12px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
-  border: 1px solid #333854;
-}
-
-.case-card:hover {
-  transform: translateY(-3px);
-  background: #2e3352;
-}
-
-.case-icon {
-  font-size: 32px;
-  margin-bottom: 5px;
-}
-
-.case-card h4 {
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.case-info {
-  font-size: 11px;
-  color: #888;
-  margin-bottom: 8px;
-}
-
-.case-price {
-  font-size: 11px;
-  color: #ff5555;
-  font-weight: bold;
-}
-
-.case-reward {
-  font-size: 11px;
-  color: #4caf50;
-  font-weight: bold;
-}
-
-/* Игровой экран */
-.game-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.back-btn {
-  background: #ff4757;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.status-bar {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  background: #252942;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  color: #00f2fe;
-}
-
-/* История попыток Wordle */
-.history-container {
-  min-height: 180px;
-  max-height: 250px;
-  overflow-y: auto;
-  background: #121420;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.attempt-row {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.digit-box {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 6px;
-  color: #ffffff;
-  animation: pop 0.2s ease-in-out;
-}
-
-/* Цвета статусов Wordle */
-.digit-box.correct {
-  background-color: #2e7d32;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
-}
-
-.digit-box.wrong-place {
-  background-color: #f57f17;
-  box-shadow: 0 0 8px rgba(255, 235, 59, 0.4);
-}
-
-.digit-box.absent {
-  background-color: #37474f;
-  opacity: 0.6;
-}
-
-/* Ввод кода */
-.input-section {
-  display: flex;
-  gap: 10px;
-}
-
-#code-input {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #333854;
-  background: #252942;
-  color: #fff;
-  font-size: 18px;
-  text-align: center;
-  letter-spacing: 4px;
-  outline: none;
-}
-
-#submit-btn {
-  background: #00c853;
-  border: none;
-  color: white;
-  padding: 0 20px;
-  font-weight: bold;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#submit-btn:hover {
-  background: #00e676;
-}
-
-@keyframes pop {
-  0% { transform: scale(0.8); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-// CONFIGURATION
-const CASE_TYPES = {
-  WOODEN: { name: "Деревянный сейф", cost: 50, reward: 150, digits: 2, logicAttempts: 6, speedTime: 25 },
-  IRON: { name: "Железный сейф", cost: 200, reward: 800, digits: 3, logicAttempts: 7, speedTime: 20 },
-  CYBER: { name: "Кибер-сейф", cost: 1000, reward: 5000, digits: 4, logicAttempts: 8, speedTime: 15 }
-};
-
-// GAME STATE
-let userBalance = 500;
-let currentMode = "logic"; // "logic" или "speed"
-let currentCase = null;
-let secretCode = "";
-let remainingAttempts = 0;
-let remainingTime = 0;
-let timerInterval = null;
-
-// SELECT MODE
-function selectMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
-  });
-}
-
-// START GAME
-function startGame(caseKey) {
-  const caseData = CASE_TYPES[caseKey];
-
-  if (userBalance < caseData.cost) {
-    alert("Недостаточно монет для взлома этого сейфа!");
-    return;
-  }
-
-  // Списание стоимости
-  userBalance -= caseData.cost;
-  updateBalanceUI();
-
-  currentCase = caseData;
-  secretCode = generateCode(caseData.digits);
-  
-  // Очистка истории и инпута
-  document.getElementById('attempts-history').innerHTML = "";
-  document.getElementById('code-input').value = "";
-  document.getElementById('code-input').maxLength = caseData.digits;
-
-  // Настройка UI игрового экрана
-  document.getElementById('mode-selector').classList.add('hidden');
-  document.getElementById('case-selector').classList.add('hidden');
-  document.getElementById('game-screen').classList.remove('hidden');
-  document.getElementById('current-case-title').innerText = caseData.name;
-
-  // Запуск выбранного режима
-  if (currentMode === "logic") {
-    remainingAttempts = caseData.logicAttempts;
-    updateStatusUI(`Осталось попыток: ${remainingAttempts}`);
-  } else {
-    remainingTime = caseData.speedTime;
-    updateStatusUI(`⏱️ Осталось: ${remainingTime} сек.`);
-    
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      remainingTime--;
-      updateStatusUI(`⏱️ Осталось: ${remainingTime} сек.`);
-      if (remainingTime <= 0) {
-        clearInterval(timerInterval);
-        endGame(false, "Время вышло! Сейф заблокировался.");
-      }
-    }, 1000);
-  }
-}
-
-// MAKE ATTEMPT
-function makeAttempt() {
-  const inputEl = document.getElementById('code-input');
-  const userGuess = inputEl.value.trim();
-
-  if (userGuess.length !== currentCase.digits) {
-    alert(`Код должен состоять из ${currentCase.digits} цифр!`);
-    return;
-  }
-
-  // Проверка кода
-  const checkResult = checkCode(secretCode, userGuess);
-  renderAttempt(checkResult);
-  inputEl.value = "";
-
-  // Проверка на ПOБЕДУ
-  const isWin = checkResult.every(item => item.status === "correct");
-  if (isWin) {
-    if (timerInterval) clearInterval(timerInterval);
-    userBalance += currentCase.reward;
-    updateBalanceUI();
-    endGame(true, ` СЕЙФ ВЗЛОМАН! Вы забрали ${currentCase.reward} 🪙`);
-    return;
-  }
-
-  // Если режим «Логика», уменьшаем попытки
-  if (currentMode === "logic") {
-    remainingAttempts--;
-    updateStatusUI(`Осталось попыток: ${remainingAttempts}`);
-
-    if (remainingAttempts <= 0) {
-      endGame(false, `Попытки закончились! Код был: ${secretCode}`);
-    }
-  }
-}
-
-// WORDLE ALGORITHM
-function checkCode(secret, guess) {
-  const result = [];
-  const secretArr = secret.split('');
-  const guessArr = guess.split('');
-
-  // 1. Зелёные (на своих местах)
-  for (let i = 0; i < guessArr.length; i++) {
-    if (guessArr[i] === secretArr[i]) {
-      result[i] = { digit: guessArr[i], status: "correct" };
-      secretArr[i] = null;
-    } else {
-      result[i] = null;
-    }
-  }
-
-  // 2. Жёлтые (не на своих местах) и Серые (нет)
-  for (let i = 0; i < guessArr.length; i++) {
-    if (result[i] !== null) continue;
-
-    const indexInSecret = secretArr.indexOf(guessArr[i]);
-    if (indexInSecret !== -1) {
-      result[i] = { digit: guessArr[i], status: "wrong-place" };
-      secretArr[indexInSecret] = null;
-    } else {
-      result[i] = { digit: guessArr[i], status: "absent" };
-    }
-  }
-
-  return result;
-}
-
-// RENDER ATTEMPT ROW
-function renderAttempt(result) {
-  const historyContainer = document.getElementById('attempts-history');
-  const row = document.createElement('div');
-  row.className = 'attempt-row';
-
-  result.forEach(item => {
-    const box = document.createElement('div');
-    box.className = `digit-box ${item.status}`;
-    box.innerText = item.digit;
-    row.appendChild(box);
-  });
-
-  historyContainer.appendChild(row);
-  historyContainer.scrollTop = historyContainer.scrollHeight;
-}
-
-// END GAME
-function endGame(isWin, message) {
-  alert(message);
-  quitGame();
-}
-
-// QUIT / RESET
-function quitGame() {
-  if (timerInterval) clearInterval(timerInterval);
-  document.getElementById('game-screen').classList.add('hidden');
-  document.getElementById('mode-selector').classList.remove('hidden');
-  document.getElementById('case-selector').classList.remove('hidden');
-}
-
-// HELPERS
-function generateCode(length) {
-  let code = "";
-  for (let i = 0; i < length; i++) {
-    code += Math.floor(Math.random() * 10).toString();
-  }
-  return code;
-}
-
-function updateBalanceUI() {
-  document.getElementById('user-balance').innerText = userBalance;
-}
-
-function updateStatusUI(text) {
-  document.getElementById('status-text').innerText = text;
-}
-
-// Обработка Enter и авто-запуск
-document.getElementById('code-input').addEventListener('keypress', function (e) {
-  if (e.key === 'Enter') {
-    makeAttempt();
-  }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  updateBalanceUI();
-});

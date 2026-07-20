@@ -710,8 +710,9 @@
         </div>
     </div>
 
-</div>
+</div
 <script>
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 var userCoins = parseInt(localStorage.getItem('sv_coins')) || 100;
 var userStreak = parseInt(localStorage.getItem('sv_streak')) || 1;
 var lastClaimedDay = parseInt(localStorage.getItem('sv_last_claimed')) || 0;
@@ -724,7 +725,7 @@ var refEarned = parseInt(localStorage.getItem('sv_ref_earned')) || 0;
 
 var currentLeaderTab = 'coins';
 
-// ИГРОВЫЕ ПЕРЕМЕННЫЕ
+// ИГРОВЫЕ ПЕРЕМЕННЫЕ ВЗЛОМА
 var maxAttempts = 5;
 var remainingAttempts = 5;
 var currentSecretCode = [];
@@ -744,8 +745,11 @@ function saveProgress() {
 }
 
 function updateUI() {
-    document.getElementById('globalCoins').innerText = userCoins;
-    document.getElementById('streakDisplay').innerText = userStreak + " ДЕНЬ";
+    var coinsEl = document.getElementById('globalCoins');
+    if (coinsEl) coinsEl.innerText = userCoins;
+
+    var streakEl = document.getElementById('streakDisplay');
+    if (streakEl) streakEl.innerText = userStreak + " ДЕНЬ";
 
     if (document.getElementById('refCount')) document.getElementById('refCount').innerText = refCount;
     if (document.getElementById('refEarned')) document.getElementById('refEarned').innerText = refEarned;
@@ -779,18 +783,24 @@ function triggerHaptic(type) {
     }
 }
 
-/* КАСТОМНЫЕ ПЛАШКИ УВЕДОМЛЕНИЙ (ФИКС ЛАГА В 6-10 СЕКУНД) */
 function showToast(title, msg) {
     document.getElementById('toastTitle').innerText = title;
     document.getElementById('toastMsg').innerText = msg;
     document.getElementById('toastModal').style.display = 'flex';
 }
 
-document.getElementById('btnToastOk').onclick = function() {
-    document.getElementById('toastModal').style.display = 'none';
-};
+function showScreen(screenId) {
+    var screens = document.querySelectorAll('.screen');
+    screens.forEach(function(s) { s.style.display = 'none'; });
 
-/* ПОКУПКА В МАГАЗИНЕ */
+    var target = document.getElementById(screenId);
+    if (target) target.style.display = 'flex';
+
+    var settingsWrapper = document.getElementById('settingsWrapper');
+    if (settingsWrapper) settingsWrapper.classList.remove('open');
+}
+
+/* ФУНКЦИИ МАГАЗИНА И ПОКУПОК */
 function buyStarsPack(coinsAmount, starsCost) {
     triggerHaptic('success');
     userCoins += coinsAmount;
@@ -851,136 +861,6 @@ window.buyMiner = function(minerId, cost) {
     showToast("Майнер куплен", "🎉 Майнер успешно активирован!");
 };
 
-/* РЕНДЕР ЛИДЕРБОРДА */
-function renderLeaderboard() {
-    var isCoins = (currentLeaderTab === 'coins');
-    
-    var mockData = [
-        { name: "CyberGhost", val: isCoins ? 9500 : 180 },
-        { name: "Satoshi_N", val: isCoins ? 8200 : 155 },
-        { name: "VaultMaster", val: isCoins ? 6400 : 120 },
-        { name: "Alex_Vault", val: isCoins ? 5100 : 95 },
-        { name: "Hacker777", val: isCoins ? 4300 : 80 },
-        { name: "Shadow", val: isCoins ? 3800 : 65 },
-        { name: "Neo_Vault", val: isCoins ? 2900 : 50 }
-    ];
-
-    document.getElementById('p1-name').innerText = mockData[0].name;
-    document.getElementById('p1-val').innerText = mockData[0].val + (isCoins ? " 🪙" : " ч.");
-
-    document.getElementById('p2-name').innerText = mockData[1].name;
-    document.getElementById('p2-val').innerText = mockData[1].val + (isCoins ? " 🪙" : " ч.");
-
-    document.getElementById('p3-name').innerText = mockData[2].name;
-    document.getElementById('p3-val').innerText = mockData[2].val + (isCoins ? " 🪙" : " ч.");
-
-    var listEl = document.getElementById('leaderList');
-    listEl.innerHTML = "";
-
-    for (var i = 3; i < mockData.length; i++) {
-        var item = document.createElement('div');
-        item.className = 'leader-item';
-        item.innerHTML = 
-            '<div class="leader-rank">#' + (i + 1) + '</div>' +
-            '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
-            '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
-        listEl.appendChild(item);
-    }
-
-    document.getElementById('myRankPos').innerText = "#42";
-    document.getElementById('myRankVal').innerText = isCoins ? (userCoins + " 🪙") : (Math.floor(userTimeInGame / 60) + " ч.");
-}
-
-function switchLeaderTab(tab) {
-    currentLeaderTab = tab;
-    document.getElementById('tabCoins').classList.toggle('active', tab === 'coins');
-    document.getElementById('tabTime').classList.toggle('active', tab === 'time');
-    triggerHaptic('impact');
-    renderLeaderboard();
-}
-   <script>
-/* НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ С ЗАЩИТОЙ ОТ ПРИЗРАЧНЫХ КЛИКОВ (GHOST CLICK) */
-function showScreen(screenId) {
-    var screens = document.querySelectorAll('.screen');
-    screens.forEach(function(s) { s.style.display = 'none'; });
-
-    var target = document.getElementById(screenId);
-    if (target) {
-        target.style.display = 'flex';
-    }
-
-    var settingsWrapper = document.getElementById('settingsWrapper');
-    if (settingsWrapper) {
-        settingsWrapper.classList.remove('open');
-    }
-}
-
-// ПРИВЯЗКА КНОПОК
-document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
-document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
-document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
-document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
-
-// КНОПКИ НАЗАД
-document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
-document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
-
-// КНОПКА НАСТРОЕК И КУБКА ЛИДЕРБОРДА
-document.getElementById('triggerGear').onclick = function() {
-    triggerHaptic('impact');
-    document.getElementById('settingsWrapper').classList.toggle('open');
-};
-
-document.getElementById('btnCup').onclick = function() {
-    triggerHaptic('impact');
-    showScreen('leaderboardScreen');
-    renderLeaderboard();
-};
-
-document.getElementById('btnLang').onclick = function() {
-    triggerHaptic('impact');
-    showToast('Язык', 'Переключатель языка появится в следующем обновлении!');
-};
-
-document.getElementById('btnPromoCode').onclick = function() {
-    triggerHaptic('impact');
-    showToast('Промокод', 'Используйте код «TEST» в следующем обновлении!');
-};
-
-// ВЫБОР СЕЙФА И ЗАПУСК ИГРЫ
-document.querySelectorAll('.case-card').forEach(function(card) {
-    card.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON') return;
-
-        var caseId = card.getAttribute('data-id');
-        var price = parseInt(card.getAttribute('data-price'));
-        var jackpot = parseInt(card.getAttribute('data-jackpot'));
-
-        if (unlockedCases.indexOf(caseId) === -1) {
-            triggerHaptic('error');
-            showToast('Заблокировано', 'Сначала разблокируйте этот сейф!');
-            return;
-        }
-
-        if (userCoins < price) {
-            triggerHaptic('error');
-            showToast('Мало монет', 'Для взлома требуется: ' + price + ' 🪙');
-            return;
-        }
-
-        userCoins -= price;
-        saveProgress();
-        startVaultGame(caseId, jackpot);
-    });
-});
-
-// ЛОГИКА ВЗЛОМА СЕЙФА И БАРАБАНОВ
 function startVaultGame(caseId, jackpot) {
     currentJackpot = jackpot;
     remainingAttempts = maxAttempts;
@@ -1001,66 +881,9 @@ function startVaultGame(caseId, jackpot) {
     showScreen('gamePlayScreen');
 }
 
-// УПРАВЛЕНИЕ БАРАБАНАМИ (С ТАКТИЛЬНОЙ ОТДАЧЕЙ)
-document.querySelectorAll('.drum-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        var drumIdx = parseInt(btn.getAttribute('data-drum'));
-        var dir = parseInt(btn.getAttribute('data-dir'));
-
-        currentDrumValues[drumIdx] += dir;
-        if (currentDrumValues[drumIdx] > 9) currentDrumValues[drumIdx] = 1;
-        if (currentDrumValues[drumIdx] < 1) currentDrumValues[drumIdx] = 9;
-
-        document.getElementById('drum-' + drumIdx).innerText = currentDrumValues[drumIdx];
-        triggerHaptic('impact');
-    });
-});
-
-// ПРОВЕРКА ВВЕДЕННОГО КОДА
-document.getElementById('btnCheckCode').onclick = function() {
-    if (remainingAttempts <= 0) {
-        triggerHaptic('error');
-        showToast('Блокировка', 'У вас закончились попытки! Докупите попытки в магазине!');
-        return;
-    }
-
-    remainingAttempts--;
-    document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
-
-    var correctCount = 0;
-    for (var i = 0; i < 5; i++) {
-        if (currentDrumValues[i] === currentSecretCode[i]) {
-            correctCount++;
-        }
-    }
-
-    var radarEl = document.getElementById('radarDisplay');
-
-    if (correctCount === 5) {
-        triggerHaptic('success');
-        userCoins += currentJackpot;
-        saveProgress();
-        showToast('🎉 ПОБЕДА!', 'Вы успешно взломали сейф и забрали ' + currentJackpot + ' 🪙!');
-        showScreen('casesScreen');
-    } else if (correctCount >= 3) {
-        triggerHaptic('impact');
-        radarEl.innerText = "🔥 БЛИЗКО (" + correctCount + "/5)";
-        radarEl.style.color = "var(--radar-yellow)";
-    } else {
-        triggerHaptic('error');
-        radarEl.innerText = "❌ ХОЛОДНО (" + correctCount + "/5)";
-        radarEl.style.color = "var(--radar-red)";
-    }
-
-    if (remainingAttempts <= 0 && correctCount < 5) {
-        triggerHaptic('error');
-        showToast('Сейф заблокирован', 'Попытки закончились! Код был: ' + currentSecretCode.join(''));
-    }
-};
-
-// ЕЖЕДНЕВНЫЙ КАЛЕНДАРЬ
 function renderDailyGrid() {
     var grid = document.getElementById('dailyGrid');
+    if (!grid) return;
     grid.innerHTML = "";
 
     for (var d = 1; d <= 10; d++) {
@@ -1093,23 +916,53 @@ function renderDailyGrid() {
     }
 }
 
-// ПАССИВНЫЙ ДОХОД И ТАЙМЕР В ИГРЕ
-setInterval(function() {
-    userTimeInGame += 5;
-    localStorage.setItem('sv_time_in_game', userTimeInGame);
+function renderLeaderboard() {
+    var isCoins = (currentLeaderTab === 'coins');
+    var mockData = [
+        { name: "CyberGhost", val: isCoins ? 9500 : 180 },
+        { name: "Satoshi_N", val: isCoins ? 8200 : 155 },
+        { name: "VaultMaster", val: isCoins ? 6400 : 120 },
+        { name: "Alex_Vault", val: isCoins ? 5100 : 95 },
+        { name: "Hacker777", val: isCoins ? 4300 : 80 }
+    ];
 
-    var income = 0;
-    if (userMiners.indexOf(1) !== -1) income += 5;
-    if (userMiners.indexOf(2) !== -1) income += 20;
-
-    if (income > 0) {
-        userCoins += income;
-        saveProgress();
+    if (document.getElementById('p1-name')) {
+        document.getElementById('p1-name').innerText = mockData[0].name;
+        document.getElementById('p1-val').innerText = mockData[0].val + (isCoins ? " 🪙" : " ч.");
+        document.getElementById('p2-name').innerText = mockData[1].name;
+        document.getElementById('p2-val').innerText = mockData[1].val + (isCoins ? " 🪙" : " ч.");
+        document.getElementById('p3-name').innerText = mockData[2].name;
+        document.getElementById('p3-val').innerText = mockData[2].val + (isCoins ? " 🪙" : " ч.");
     }
-}, 300000); // Каждые 5 минут
 
-// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАПУСКЕ
-window.onload = function() {
+    var listEl = document.getElementById('leaderList');
+    if (!listEl) return;
+    listEl.innerHTML = "";
+
+    for (var i = 3; i < mockData.length; i++) {
+        var item = document.createElement('div');
+        item.className = 'leader-item';
+        item.innerHTML = 
+            '<div class="leader-rank">#' + (i + 1) + '</div>' +
+            '<div class="leader-info"><div style="font-weight:700; font-size:12px;">' + mockData[i].name + '</div></div>' +
+            '<div class="leader-score">' + mockData[i].val + (isCoins ? " 🪙" : " ч.") + '</div>';
+        listEl.appendChild(item);
+    }
+
+    document.getElementById('myRankPos').innerText = "#42";
+    document.getElementById('myRankVal').innerText = isCoins ? (userCoins + " 🪙") : (Math.floor(userTimeInGame / 60) + " ч.");
+}
+
+function switchLeaderTab(tab) {
+    currentLeaderTab = tab;
+    document.getElementById('tabCoins').classList.toggle('active', tab === 'coins');
+    document.getElementById('tabTime').classList.toggle('active', tab === 'time');
+    triggerHaptic('impact');
+    renderLeaderboard();
+}
+
+/* ЗАПУСК ПОСЛЕ ПОЛНОЙ ЗАГРУЗКИ DOM */
+document.addEventListener("DOMContentLoaded", function() {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
@@ -1117,9 +970,133 @@ window.onload = function() {
             document.getElementById('userTag').innerText = window.Telegram.WebApp.initDataUnsafe.user.first_name;
         }
     }
-    updateUI();
-};
-</script>
 
+    updateUI();
+
+    // НАВИГАЦИЯ По КНОПКАМ
+    document.getElementById('btnToastOk').onclick = function() { document.getElementById('toastModal').style.display = 'none'; };
+    document.getElementById('btnGoToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+    document.getElementById('btnGoToShop').onclick = function() { triggerHaptic('impact'); showScreen('shopScreen'); };
+    document.getElementById('btnGoToDaily').onclick = function() { triggerHaptic('impact'); showScreen('dailyScreen'); renderDailyGrid(); };
+    document.getElementById('btnGoToPvp').onclick = function() { triggerHaptic('impact'); showScreen('pvpScreen'); };
+    document.getElementById('btnGoToAssets').onclick = function() { triggerHaptic('impact'); showScreen('assetsScreen'); };
+
+    // НАЗАД
+    document.getElementById('btnBackToMenuFromCases').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromShop').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromDaily').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromPvp').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToMenuFromAssets').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+    document.getElementById('btnBackToCases').onclick = function() { triggerHaptic('impact'); showScreen('casesScreen'); };
+    document.getElementById('btnBackToMenuFromLeaderboard').onclick = function() { triggerHaptic('impact'); showScreen('mainMenuScreen'); };
+
+    // ШЕСТЕРЕНКА И КУБОК
+    document.getElementById('triggerGear').onclick = function() {
+        triggerHaptic('impact');
+        document.getElementById('settingsWrapper').classList.toggle('open');
+    };
+
+    document.getElementById('btnCup').onclick = function() {
+        triggerHaptic('impact');
+        showScreen('leaderboardScreen');
+        renderLeaderboard();
+    };
+
+    document.getElementById('btnLang').onclick = function() {
+        triggerHaptic('impact');
+        showToast('Язык', 'Переключатель языка появится в следующем обновлении!');
+    };
+
+    document.getElementById('btnPromoCode').onclick = function() {
+        triggerHaptic('impact');
+        showToast('Промокод', 'Используйте промокоды из нашего канала!');
+    };
+
+    // ВЫБОР КЕЙСА
+    document.querySelectorAll('.case-card').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') return;
+
+            var caseId = card.getAttribute('data-id');
+            var price = parseInt(card.getAttribute('data-price'));
+            var jackpot = parseInt(card.getAttribute('data-jackpot'));
+
+            if (unlockedCases.indexOf(caseId) === -1) {
+                triggerHaptic('error');
+                showToast('Заблокировано', 'Сначала разблокируйте этот сейф!');
+                return;
+            }
+
+            if (userCoins < price) {
+                triggerHaptic('error');
+                showToast('Мало монет', 'Для взлома требуется: ' + price + ' 🪙');
+                return;
+            }
+
+            userCoins -= price;
+            saveProgress();
+            startVaultGame(caseId, jackpot);
+        });
+    });
+
+    // БАРАБАНЫ
+    document.querySelectorAll('.drum-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var drumIdx = parseInt(btn.getAttribute('data-drum'));
+            var dir = parseInt(btn.getAttribute('data-dir'));
+
+            currentDrumValues[drumIdx] += dir;
+            if (currentDrumValues[drumIdx] > 9) currentDrumValues[drumIdx] = 1;
+            if (currentDrumValues[drumIdx] < 1) currentDrumValues[drumIdx] = 9;
+
+            document.getElementById('drum-' + drumIdx).innerText = currentDrumValues[drumIdx];
+            triggerHaptic('impact');
+        });
+    });
+
+    // ПРОВЕРКА КОДА
+    document.getElementById('btnCheckCode').onclick = function() {
+        if (remainingAttempts <= 0) {
+            triggerHaptic('error');
+            showToast('Блокировка', 'У вас закончились попытки! Докупите попытки в магазине!');
+            return;
+        }
+
+        remainingAttempts--;
+        document.getElementById('attemptsDisplay').innerText = remainingAttempts + "/" + maxAttempts;
+
+        var correctCount = 0;
+        for (var i = 0; i < 5; i++) {
+            if (currentDrumValues[i] === currentSecretCode[i]) {
+                correctCount++;
+            }
+        }
+
+        var radarEl = document.getElementById('radarDisplay');
+
+        if (correctCount === 5) {
+            triggerHaptic('success');
+            userCoins += currentJackpot;
+            saveProgress();
+            showToast('🎉 ПОБЕДА!', 'Вы успешно взломали сейф и забрали ' + currentJackpot + ' 🪙!');
+            showScreen('casesScreen');
+        } else if (correctCount >= 3) {
+            triggerHaptic('impact');
+            radarEl.innerText = "🔥 БЛИЗКО (" + correctCount + "/5)";
+            radarEl.style.color = "var(--radar-yellow)";
+        } else {
+            triggerHaptic('error');
+            radarEl.innerText = "❌ ХОЛОДНО (" + correctCount + "/5)";
+            radarEl.style.color = "var(--radar-red)";
+        }
+
+        if (remainingAttempts <= 0 && correctCount < 5) {
+            triggerHaptic('error');
+            showToast('Сейф заблокирован', 'Попытки закончились! Код был: ' + currentSecretCode.join(''));
+        }
+    };
+});
+</script>
 </body>
 </html>
+
